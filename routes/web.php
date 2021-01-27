@@ -36,8 +36,6 @@ Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('{category}', 'ShopController@index')->name('index');
     Route::get('{category}/{product}', 'ShopController@single')->name('single');
     Route::get('single-ajax', 'ShopController@singleAjax')->name('single-ajax');
-    // Route::post('cart', 'ShopController@cart')->name('cart');
-    Route::get('checkout', 'ShopController@checkout')->name('checkout');
 });
 
 Route::prefix('cart')->name('cart.')->group(function () {
@@ -45,6 +43,13 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('store', 'CartController@store')->name('store');
     Route::put('update/{id}', 'CartController@update')->name('update');
     Route::delete('destroy/{id}', 'CartController@destroy')->name('destroy');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('{order}', 'CheckoutController@index')->name('index');
+        Route::post('store', 'CheckoutController@store')->name('store');
+    });
 });
 
 Route::prefix('news')->name('news.')->group(function () {

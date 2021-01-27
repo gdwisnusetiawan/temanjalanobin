@@ -34,12 +34,6 @@ class ShopController extends Controller
         return view('shop.single-ajax');
     }
 
-    public function cart(Request $request)
-    {
-        // $cart = $request->cart ?? $request->keys()[0] ?? false;
-        
-    }
-
     public function checkout(Request $request)
     {
         $checkout = $request->checkout ?? $request->keys()[0] ?? false;

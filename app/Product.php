@@ -42,6 +42,7 @@ class Product extends Model
 
     public function getPriceFormatAttribute()
     {
-        return 'Rp'.number_format($this->price,2,',','.');
+        // return 'Rp'.number_format($this->price,2,',','.');
+        return Functions::formatCurrency($this->price);
     }
 }

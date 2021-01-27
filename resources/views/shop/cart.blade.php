@@ -46,7 +46,11 @@
                         @endphp
                         <tr id="product-{{ $product->id }}">
                             <td class="cart-product-remove">
-                                <a href="#"><i class="fa fa-times"></i></a>
+                            <form method="POST" action="{{ route('cart.destroy', $product->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-rounded btn-xs" onclick="deleteCart(this.form)"><i class="fa fa-times"></i></button>
+                            </form>
                             </td>
                             <td class="cart-product-thumbnail">
                                 <a href="#">
@@ -64,14 +68,15 @@
                                 <div class="quantity">
                                     <form method="POST" action="{{ route('cart.update', $product->id) }}">
                                         @csrf
-                                        <input type="button" class="minus" value="-" onclick="updateCart(this, -1)">
+                                        @method('PUT')
+                                        <input type="button" class="minus" value="-" onclick="updateCart(this.form, -1, '{{ $product->id }}')">
                                         <input type="text" class="qty" name="quantity" value="{{ $quantity }}">
-                                        <input type="button" class="plus" value="+" onclick="updateCart(this, 1)">
+                                        <input type="button" class="plus" value="+" onclick="updateCart(this.form, 1, '{{ $product->id }}')">
                                     </form>
                                 </div>
                             </td>
                             <td class="cart-product-subtotal">
-                                <span class="amount total">{{ $functions->formatCurrency('Rp', $total) }}</span>
+                                <span class="amount total">{{ $functions->formatCurrency($total) }}</span>
                             </td>
                         </tr>
                         @endforeach
@@ -122,7 +127,7 @@
                                         <strong>Cart Subtotal</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="subtotal">{{ $functions->formatCurrency('Rp', session('cart')['summary']['subtotal']) }}</span>
+                                        <span class="amount" id="subtotal">{{ $functions->formatCurrency(session('cart')['summary']['subtotal']) }}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -146,13 +151,17 @@
                                         <strong>Total</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount color lead" id="total"><strong>{{ $functions->formatCurrency('Rp', session('cart')['summary']['total']) }}</strong></span>
+                                        <span class="amount color lead" id="total"><strong>{{ $functions->formatCurrency(session('cart')['summary']['total']) }}</strong></span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ route('shop.checkout') }}" class="btn icon-left float-right"><span>Proceed to Checkout</span></a>
+                    <!-- <a href="{{ route('checkout.checkout') }}" class="btn icon-left float-right"><span>Proceed to Checkout</span></a> -->
+                    <form method="POST" action="{{ route('checkout.store') }}">
+                        @csrf
+                        <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -182,50 +191,25 @@
 @push('scripts')
 <script>
 $(document).ready(function(){
-    var quantitiy = 0;
-    $('.plus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-
-        // Get the field name
-        var quantity = parseInt($('#quantity').val());
-        
-        // Increment
-        $('#quantity').val(quantity + 1);
-        // calculatePrice($('#quantity').val());
-    });
-
-    $('.minus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-
-        // Get the field name
-        var quantity = parseInt($('#quantity').val());
-        
-        // Decrement
-        if(quantity > 1){
-            $('#quantity').val(quantity - 1);
-        }
-        // calculatePrice($('#quantity').val());
-    });
-
-    $('#quantity').change(function(){
-        // min quantity is 1
-        if($(this).val() < 1) {
-            $(this).val(1);
-        }
-        
-        // calculatePrice($(this).val());
-    });
-
     @php $totalstock = 0 @endphp
     @if($totalstock <= 0)
         $('#add-cart').prop('disabled', true);
     @endif
-    
 });
 
-function updateCart(form) {
+function updateQuantity(id, qty) {
+    // Get the field name
+    var elemQuantity = $('#product-'+id).find('.qty');
+    // Increment Decrement
+    var quantity = parseInt(elemQuantity.val()) + qty;
+    if(quantity < 1) {
+        quantity = 1;
+    }
+    elemQuantity.val(quantity);
+}
+
+function updateCart(form, qty, id) {
+    updateQuantity(id, qty);
     var formData = $(form).serializeArray();
     $.ajax({
         type: $(form).attr('method'),
@@ -233,15 +217,47 @@ function updateCart(form) {
         dataType: 'json',
         data: formData,
         success: function(data) {
-            $('subtotal').html(data.subtotal);
-            $('shipping').html(data.shipping);
-            $('coupon').html(data.coupun);
-            $('total').html(data.total);
-            $('product-'+data.id).find('.qty').val(data.quantity);
-            $('product-'+data.id).find('.total').val(data.total);
-            notify(data.message, data.type);
+            // console.log(data);
+            $('#subtotal').html(formatCurrency('Rp', data.summary.subtotal));
+            $('#shipping').html(data.summary.shipping);
+            $('#coupon').html('-'+data.summary.coupon+'%');
+            $('#total').html(formatCurrency('Rp', data.summary.total));
+            Object.values(data.list).forEach(function (item, index) {
+                $('#product-'+item.product.id).find('.qty').val(item.quantity);
+                $('#product-'+item.product.id).find('.total').html(formatCurrency('Rp', item.total));
+            });
+            // notify(data.message, data.type);
+        },
+        error: function(error) {
+            console.log(error);
         }
     });
+}
+
+function deleteCart(form) {
+    var formData = $(form).serializeArray();
+    $.ajax({
+        type: $(form).attr('method'),
+        url: $(form).attr('action'),
+        dataType: 'json',
+        data: formData,
+        success: function(data) {
+            // console.log(data);
+            $('#product-'+data.id).remove();
+            $('#subtotal').html(formatCurrency('Rp', data.summary.subtotal));
+            $('#shipping').html(data.summary.shipping);
+            $('#coupon').html('-'+data.summary.coupon+'%');
+            $('#total').html(formatCurrency('Rp', data.summary.total));
+            notify(data.message, data.type);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function formatCurrency(currency, nominal) {
+    return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
 }
 
 function calculatePrice(quantity) {

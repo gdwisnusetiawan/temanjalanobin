@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Suborder;
+use App\Order;
+use App\Helpers\Functions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -14,7 +18,6 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->session()->get('cart'));
         // session()->forget('cart');
         return view('shop.cart');
     }
@@ -94,16 +97,18 @@ class CartController extends Controller
         if(isset($cart['list'][$id])) {
             $cart['list'][$id]['quantity'] = $request->quantity;
             $cart['list'][$id]['total'] = $cart['list'][$id]['product']->price * $request->quantity;
-            session()->put('cart', $cart);
         }
         $total = collect($cart['list'])->sum('total');
         $cart['summary'] = [
             "subtotal" => $total,
-            "coupun" => 20,
+            "coupon" => 20,
             "total" => $total - round($total * 20 / 100, 2)
         ];
-        session()->flash('success', 'Cart updated successfully');
-        return response()->json($data);
+        session()->put('cart', $cart);
+
+        $cart['message'] = 'Cart updated successfully';
+        $cart['type'] = 'success';
+        return response()->json($cart);
     }
 
     /**
@@ -117,8 +122,18 @@ class CartController extends Controller
         $cart = session()->get('cart');
         if(isset($cart['list'][$id])) {
             unset($cart['list'][$id]);
+            $total = collect($cart['list'])->sum('total');
+            $cart['summary'] = [
+                "subtotal" => $total,
+                "coupon" => 20,
+                "total" => $total - round($total * 20 / 100, 2)
+            ];
             session()->put('cart', $cart);
         }
-        session()->flash('success', 'Product removed successfully');
+
+        $cart['id'] = $id;
+        $cart['message'] = 'Product removed successfully';
+        $cart['type'] = 'success';
+        return response()->json($cart);
     }
 }

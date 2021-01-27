@@ -82,7 +82,7 @@ class Functions
         return Str::words(strip_tags(htmlspecialchars_decode($paragraph)), 20, ' . . .');
     }
 
-    public static function formatCurrency($currency, $price)
+    public static function formatCurrency($price, $currency = 'Rp')
     {
         return $currency.number_format($price,2,',','.');
     }
