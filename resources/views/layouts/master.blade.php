@@ -4,15 +4,16 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="author" content="INSPIRO">
-	<meta name="description" content="Themeforest Template Polo, html template">
+    <meta name="author" content="WEBIDUS">
+	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else tutoya e-commerce, webidus digital marketing and technology @endif">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{ asset('polo-5/images/favicon.png') }}">   
+    <link rel="icon" type="image/png" href="{{ asset($config->favicon) }}">   
     <!-- Document title -->
-    <title>Tutoya | Today's Modern e-Commerce</title>
+    <title>{{ $config->title ?? config('app.name', 'Tutoya') }} | @hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif</title>
     <!-- Stylesheets & Fonts -->
     <link href="{{ asset('polo-5/css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('polo-5/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('polo-5/css/custom.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <!--Pageloader plugin files-->
     <link href="{{ asset('polo-5/plugins/pageloader/pageloader.css') }}" rel="stylesheet">
@@ -20,11 +21,15 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/settings.css') }}" media="screen" />
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/layers.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/navigation.css') }}">
-
+    <style>
+        .cart-product-quantity .qty {
+            max-width: 60px;
+        }
+    </style>
     @stack('styles')
 </head>
 
-<body data-icon="2">
+<body data-icon="{{ $loader }}">
     <!-- Body Inner -->
     <div class="body-inner">
         <!-- Topbar -->
@@ -44,6 +49,10 @@
         <!-- end: Footer -->
 
     </div>
+    <!-- Whatsapp float -->
+    <a id="whatsappFloat" href="https://wa.me/62{{ $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
+        <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
+    </a>
     <!-- Scroll top -->
     <a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>
     <!--Plugins-->
@@ -75,7 +84,6 @@
     @stack('scripts')
 
     <script type="text/javascript">
-        var tpj = jQuery;
         function loading() {
             $(".body-inner").fadeOut("slow");
 
@@ -106,8 +114,140 @@
             }, 3000);
         }
 
+        // Bootstrap Notify Generator
+        function notify(message, title, icon, options = null) {
+            var content = {};
+            if(options == null) {
+                var options = {
+                    url: false,
+                    spacing: 10,
+                    offsetX: 30,
+                    offsetY: 30,
+                    mouseOver: true,
+                    type: 'success',
+                    dismiss: true,
+                    timer: 2000,
+                    newsetOnTop: true,
+                    progressBar: false,
+                    delay: 1000,
+                    zindex: 10000,
+                    animateEnter: 'fadeInDown',
+                    animateExit: 'fadeOutDown',
+                    position: 'top-right'
+                }
+            }
+            var elemURL = options.url,
+                elemSpacing = options.spacing,
+                elemOffsetX = options.offsetX,
+                elemOffsetY = options.offsetY,
+                elemMouseOver = options.mouseOver,
+                elemType = options.type,
+                elemAllowDismiss = options.dismiss,
+                elemTimer = options.timer,
+                elemNewestOnTop = options.newsetOnTop,
+                elemPorgressBar = options.progressBar,
+                elemDelay = options.delay,
+                elemZindex = options.zindex,
+                elemAnimateEnter = options.animateEnter,
+                elemAnimateExit = options.animateExit,
+                elemPosition = options.position;
+            content.message = message ?? 'Message';
+            content.title = title ?? 'Notification';
+            if(title.toLowerCase() == 'success') {
+                icon = 'fas fa-check-circle';
+                elemType = 'success';
+            }
+            else if(title.toLowerCase() == 'danger' || title.toLowerCase() == 'error') {
+                icon = 'fas fa-times-circle';
+                elemType = 'danger';
+            }
+            else if(title.toLowerCase() == 'warning') {
+                icon = 'fas fa-exclamation-circle';
+                elemType = 'warning';
+            }
+            else if(title.toLowerCase() == 'info') {
+                icon = 'fas fa-info-circle';
+                elemType = 'info';
+            }
+            content.icon = icon ?? '';
+            if (elemURL) {
+                content.url = "{{ url('/') }}";
+            }
+            var notify = $.notify(content, {
+                spacing: elemSpacing,
+                mouse_over: elemMouseOver,
+                type: elemType,
+                allow_dismiss: elemAllowDismiss,
+                timer: elemTimer,
+                newest_on_top: elemNewestOnTop,
+                showProgressbar: elemPorgressBar,
+                placement: {
+                    from: elemPosition.split("-")[0],
+                    align: elemPosition.split("-")[1]
+                },
+                template: '<div data-notify="container" class="bootstrap-notify col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                    '<div class="p-progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                    '</div>',
+                offset: {
+                    x: elemOffsetX,
+                    y: elemOffsetY
+                },
+                delay: elemDelay,
+                z_index: elemZindex,
+                animate: {
+                    enter: 'animated ' + elemAnimateEnter,
+                    exit: 'animated ' + elemAnimateExit
+                }
+            });
+            if ($('#notify_progress_bar').prop('checked')) {
+                notify.update('title', '<strong>Saving</strong>');
+                notify.update('message', 'Creating user.');
+                notify.update('progress', 0);
+                setTimeout(function () {
+                    notify.update('message', 'Adding data.');
+                    notify.update('type', 'success');
+                    notify.update('progress', 25);
+                }, 1000);
+                setTimeout(function () {
+                    notify.update('message', 'Updating profile.');
+                    notify.update('type', 'success');
+                    notify.update('progress', 50);
+                }, 2000);
+                setTimeout(function () {
+                    notify.update('message', 'Creating account.');
+                    notify.update('type', 'success');
+                    notify.update('progress', 75);
+                }, 3000);
+                setTimeout(function () {
+                    notify.update('message', '<strong>Checking</strong> for errors.');
+                    notify.update('type', 'success');
+                    notify.update('progress', 85);
+                }, 4000);
+                setTimeout(function () {
+                    notify.update('message', '<strong>Completed</strong>.');
+                    notify.update('type', 'success');
+                    notify.update('progress', 100);
+                }, 4000);
+            }
+        }
+        var tpj = jQuery;
+
         var revapi33;
         tpj(document).ready(function () {
+            @if(session('notify'))
+                notify("{{ session('notify')['message'] }}", "{{ session('notify')['type'] }}");
+            @endif
+            // notify("Testing", "Success");
+            // notify("Testing", "Danger");
+            // notify("Testing", "Warning");
+            // notify("Testing", "Info");
             // loading();
             if (tpj("#rev_slider_33_1").revolution == undefined) {
                 revslider_showDoubleJqueryError("#rev_slider_33_1");

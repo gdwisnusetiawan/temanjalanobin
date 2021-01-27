@@ -122,20 +122,20 @@ var INSPIRO = {},
         if ($window.scrollTop() > scrollOffset) {
           if ($body.hasClass("frame")) {
             $scrollTop.css({
-              "bottom": "46px",
+              "bottom": "96px",
               "opacity": 1,
               "z-index": 199
             })
           } else {
             $scrollTop.css({
-              "bottom": "26px",
+              "bottom": "76px",
               "opacity": 1,
               "z-index": 199
             })
           }
         } else {
           $scrollTop.css({
-            bottom: "16px",
+            bottom: "66px",
             opacity: 0
           })
         }

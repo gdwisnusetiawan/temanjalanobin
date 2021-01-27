@@ -1,5 +1,8 @@
 @extends('layouts.master')
 
+@section('meta-description', strip_tags(htmlspecialchars_decode($page->description)))
+@section('title', $page->title)
+
 @section('content')
 <!-- Page Content -->
 <section id="page-content" class="sidebar-right">
@@ -12,41 +15,42 @@
                     <!-- Post single item-->
                     <div class="post-item">
                         <div class="post-item-wrap">
-                            @if($type == 'slider')
-                            <div class="carousel dots-inside arrows-visible" data-items="1" data-lightbox="gallery">
-                                <a href="{{ asset('polo-5/images/blog/16.jpg') }}" data-lightbox="gallery-image">
-                                    <img alt="image" src="{{ asset('polo-5/images/blog/16.jpg') }}">
-                                </a>
-                                <a href="{{ asset('polo-5/images/blog/11.jpg') }}" data-lightbox="gallery-image">
-                                    <img alt="image" src="{{ asset('polo-5/images/blog/11.jpg') }}">
-                                </a>
-                            </div>
-                            @elseif($type == 'video')
-                            <div class="post-video">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/dA8Smj5tZOQ" frameborder="0" allowfullscreen></iframe>
-                            </div>
-                            @elseif($type == 'audio')
+                            @if($page->media['type'] == 'audio')
                             <div class="post-audio">
                                 <a href="#">
                                     <img alt="" src="{{ asset('polo-5/images/blog/audio-bg.jpg') }}">
                                 </a>
                                 <audio class="video-js vjs-default-skin" controls preload="false" data-setup="{}">
-                                    <source src="{{ asset('polo-5/audio/beautiful-optimist.mp3') }}" type="audio/mp3" />
+                                    <source src="{{ $page->media['url'] }}" type="audio/mp3" />
                                 </audio>
                             </div>
-                            @else
-                            <div class="post-image">
-                                <a href="#">
-                                    <img alt="" src="{{ asset('polo-5/images/blog/1.jpg') }}">
-                                </a>
+                            @elseif($page->media['type'] == 'video')
+                            <div class="post-video">
+                                <iframe width="560" height="315" src="{{ $page->media['url'] }}" frameborder="0" allowfullscreen></iframe>
                             </div>
+                            @else
+                                @if(count($page->media['url']) > 1)
+                                <div class="carousel dots-inside arrows-visible" data-items="1" data-lightbox="gallery">
+                                    @foreach($page->media['url'] as $media)
+                                    <a href="{{ $media }}" data-lightbox="gallery-image">
+                                        <img alt="image" src="{{ $media }}">
+                                    </a>
+                                    @endforeach
+                                </div>
+                                @else
+                                <div class="post-image">
+                                    <a href="#">
+                                        <img alt="" src="{{ $page->media['url'][0] }}">
+                                    </a>
+                                </div>
+                                @endif
                             @endif
                             <div class="post-item-description">
-                                <h2>Standard post with a single image</h2>
+                                <h2>{{ $page->title }}</h2>
                                 <div class="post-meta">
-                                    <span class="post-meta-date"><i class="fa fa-calendar-o"></i>Jan 21, 2017</span>
-                                    <span class="post-meta-comments"><a href=""><i class="fa fa-comments-o"></i>33 Comments</a></span>
-                                    <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>Lifestyle, Magazine</a></span>
+                                    <span class="post-meta-date"><i class="fa fa-calendar-o"></i>{{ $page->datetime_format }}</span>
+                                    <!-- <span class="post-meta-comments"><a href=""><i class="fa fa-comments-o"></i>33 Comments</a></span> -->
+                                    <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>News</a></span>
                                     <div class="post-meta-share">
                                         <a class="btn btn-xs btn-slide btn-facebook" href="#">
                                             <i class="fab fa-facebook-f"></i>
@@ -66,31 +70,28 @@
                                         </a>
                                     </div>
                                 </div>
-                                <p>Curabitur pulvinar euismod ante, ac sagittis ante posuere ac. Vivamus luctus commodo dolor porta feugiat. Fusce at velit id ligula pharetra laoreet. Ut nec metus a mi ullamcorper hendrerit. Nulla facilisi. Pellentesque sed nibh a quam accumsan dignissim quis quis urna. The most happiest time of the day!. Praesent id dolor dui, dapibus gravida elit. Donec consequat laoreet sagittis. Suspendisse ultricies ultrices viverra. Morbi rhoncus laoreet tincidunt. Mauris interdum convallis metus.M</p>
-                                <div class="blockquote">
-                                    <p>The world is a dangerous place to live; not because of the people who are evil, but because of the people who don't do anything about it.</p>
-                                    <small>by <cite>Albert Einstein</cite></small>
-                                </div>
-                                <p> The most happiest time of the day!. Praesent id dolor dui, dapibus gravida elit. Donec consequat laoreet sagittis. Suspendisse ultricies ultrices viverra. Morbi rhoncus laoreet tincidunt. Mauris interdum convallis metus. Suspendisse vel lacus est, sit amet tincidunt erat. Etiam purus sem, euismod eu vulputate eget, porta quis sapien. Donec tellus est, rhoncus vel scelerisque id, iaculis eu nibh.</p>
-                                <p>Donec posuere bibendum metus. Quisque gravida luctus volutpat. Mauris interdum, lectus in dapibus molestie, quam felis sollicitudin mauris, sit amet tempus velit lectus nec lorem. Nullam vel mollis neque. The most happiest time of the day!. Nullam vel enim dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed tincidunt accumsan massa id viverra. Sed sagittis, nisl sit amet imperdiet convallis, nunc tortor consequat tellus, vel molestie neque nulla non ligula. Proin tincidunt tellus ac porta volutpat. Cras mattis congue lacus id bibendum. Mauris ut sodales libero. Maecenas feugiat sit amet enim in accumsan.</p>
-                                <p>Duis vestibulum quis quam vel accumsan. Nunc a vulputate lectus. Vestibulum eleifend nisl sed massa sagittis vestibulum. Vestibulum pretium blandit tellus, sodales volutpat sapien varius vel. Phasellus tristique cursus erat, a placerat tellus laoreet eget. Fusce vitae dui sit amet lacus rutrum convallis. Vivamus sit amet lectus venenatis est rhoncus interdum a vitae velit.</p>
+                                <p>{!! htmlspecialchars_decode($page->content) !!}</p>
                             </div>
-                            <div class="post-tags">
+                            <!-- <div class="post-tags">
                                 <a href="#">Life</a>
                                 <a href="#">Sport</a>
                                 <a href="#">Tech</a>
                                 <a href="#">Travel</a>
-                            </div>
+                            </div> -->
                             <div class="post-navigation">
-                                <a href="blog-single-slider.html" class="post-prev">
-                                    <div class="post-prev-title"><span>Previous Post</span>Post with a slider and lightbox</div>
+                                @if($prev_page)
+                                <a href="{{ route('page.show', [$prev_page->multipage->slug, $prev_page->slug]) }}" class="post-prev">
+                                    <div class="post-prev-title"><span>Previous Post</span>{{ $prev_page->title }}</div>
                                 </a>
-                                <a href="blog-masonry-3.html" class="post-all">
+                                @endif
+                                <a href="{{ route('page.index', $page->multipage->slug) }}" class="post-all">
                                     <i class="icon-grid"> </i>
                                 </a>
-                                <a href="blog-single-video.html" class="post-next">
-                                    <div class="post-next-title"><span>Next Post</span>Post with YouTube Video</div>
+                                @if($next_page)
+                                <a href="{{ route('page.show', [$next_page->multipage->slug, $next_page->slug]) }}" class="post-next">
+                                    <div class="post-next-title"><span>Next Post</span>{{ $next_page->title }}</div>
                                 </a>
+                                @endif
                             </div>
                         </div>
                     </div>

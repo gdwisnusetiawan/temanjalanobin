@@ -6,13 +6,13 @@
     <div class="container">
         <div class="page-title">
             <h1>Shop</h1>
-            <span>Minuman Diet</span>
+            <span>{{ $category->title }}</span>
         </div>
         <div class="breadcrumb">
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Shop</a></li>
-                <li class="active"><a href="#">Minumean Diet</a></li>
+                <li class="active"><a href="#">{{ $category->title }}</a></li>
             </ul>
         </div>
     </div>
@@ -23,10 +23,10 @@
     <div class="container">
         <div class="row">
             <!-- Content-->
-            <div class="content col-lg-9">
+            <div class="content col-lg-12">
                 <div class="row m-b-20">
                     <div class="col-lg-6 p-t-10 m-b-20">
-                        <h3 class="m-b-20">Minuman Diet</h3>
+                        <h3 class="m-b-20">{{ $category->title }}</h3>
                         <p>Lorem ipsum dolor sit amet. Accusamus, sit, exercitationem, consequuntur, assumenda iusto eos commodi alias.</p>
                     </div>
                     <div class="col-lg-3">
@@ -62,12 +62,46 @@
                 </div>
                 <!--Product list-->
                 <div class="shop">
-                    <div class="grid-layout grid-3-columns" data-item="grid-item">
+                    <div class="grid-layout grid-4-columns" data-item="grid-item">
+                        @foreach($products as $product)
                         <div class="grid-item">
                             <div class="product">
                                 <div class="product-image">
-                                    <a href="{{ route('shop.single') }}"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/1.jpg') }}"></a>
-                                    <!-- <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/10.jpg') }}"></a> -->
+                                    <a href="{{ route('shop.single', [$category, $product]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" style="object-fit: cover"></a>
+                                    <a href="#"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
+                                    <span class="product-new">NEW</span>
+                                    <!-- <span class="product-hot">HOT</span> -->
+                                    <span class="product-wishlist">
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                    </span>
+                                    <div class="product-overlay">
+                                        <a href="{{ route('shop.single-ajax') }}" data-lightbox="ajax">Quick View</a>
+                                    </div>
+                                </div>
+                                <div class="product-description">
+                                    <div class="product-category">{{ $product->category_model->title }}</div>
+                                    <div class="product-title">
+                                        <h3><a href="{{ route('shop.single', [$category, $product]) }}">{{ $product->title }}</a></h3>
+                                    </div>
+                                    <div class="product-title">{{ $product->price_format }}</div>
+                                    <!-- <div class="product-price" style="float: none; display: block">{{ $product->price_format }}</div> -->
+                                    <div class="product-rate">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-half-o"></i>
+                                    </div>
+                                    <div class="product-reviews"><a href="#">6 customer reviews</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <!-- <div class="grid-item">
+                            <div class="product">
+                                <div class="product-image">
+                                    <a href=""><img alt="Shop product image!" src="{{ asset('polo-5/images/blog/1.jpg') }}" style="object-fit: cover"></a>
+                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/blog/1.jpg') }}"></a>
                                     <span class="product-new">NEW</span>
                                     <span class="product-wishlist">
                                         <a href="#"><i class="fa fa-heart"></i></a>
@@ -77,11 +111,11 @@
                                     </div>
                                 </div>
                                 <div class="product-description">
-                                    <div class="product-category">Women</div>
+                                    <div class="product-category">{{ $product->category_model->title }}</div>
                                     <div class="product-title">
-                                        <h3><a href="#">Bolt Sweatshirt</a></h3>
+                                        <h3><a href="#">{{ $product->title }}</a></h3>
                                     </div>
-                                    <div class="product-price"><ins>$15.00</ins>
+                                    <div class="product-price"><ins>{{ $product->price }}</ins>
                                     </div>
                                     <div class="product-rate">
                                         <i class="fa fa-star"></i>
@@ -94,277 +128,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/6.jpg') }}">
-                                    </a>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Women</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Consume Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$39.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">3 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/3.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/7.jpg') }}">
-                                    </a>
-                                    <span class="product-hot">HOT</span>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Man</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Logo Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$39.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">3 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/4.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/9.jpg') }}">
-                                    </a>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Women</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Cotton Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$22.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">5 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/5.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/11.jpg') }}">
-                                    </a>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Man</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Grey Sweatshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$39.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">5 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/6.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}">
-                                    </a>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Women</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Pocket Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price">
-                                        <del>$19.00</del><ins>$15.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">5 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/7.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/3.jpg') }}">
-                                    </a>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Man</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Dark Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$26.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">5 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/8.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/1.jpg') }}">
-                                    </a>
-                                    <span class="product-sale">SALE</span>
-                                    <span class="product-sale-off">50% Off</span>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Women</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Nature Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price">
-                                        <del>$19.00</del><ins>$15.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">5 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/11.jpg') }}">
-                                    </a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/5.jpg') }}">
-                                    </a>
-                                    <span class="product-hot">HOT</span>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">Man</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">Logo Tshirt</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>$39.00</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">3 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                     <hr>
                     <!-- Pagination -->
@@ -382,122 +146,9 @@
                 <!--End: Product list-->
             </div>
             <!-- end: Content-->
+            
             <!-- Sidebar-->
-            <div class="sidebar col-lg-3">
-                <!--widget newsletter-->
-                <div class="widget clearfix widget-archive">
-                    <h4 class="widget-title">Product categories</h4>
-                    <ul class="list list-lines">
-                        <li><a href="#">Bags</a> <span class="count">(6)</span>
-                        </li>
-                        <li><a href="#">Jeans</a> <span class="count">(8)</span>
-                        </li>
-                        <li><a href="#">Shoes</a> <span class="count">(7)</span>
-                        </li>
-                        <li><a href="#">Sweaters</a> <span class="count">(7)</span>
-                        </li>
-                        <li><a href="#">T-Shirts</a> <span class="count">(9)</span>
-                        </li>
-                        <li><a href="#">Tops</a> <span class="count">(10)</span>
-                        </li>
-                        <li><a href="#">Women</a> <span class="count">(25)</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="widget clearfix widget-shop">
-                    <h4 class="widget-title">Latest Products</h4>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/10.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Bolt Sweatshirt</a></h3>
-                            </div>
-                            <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/6.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Consume Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/7.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Man</div>
-                            <div class="product-title">
-                                <h3><a href="#">Logo Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="widget clearfix widget-tags">
-                    <h4 class="widget-title">Tags</h4>
-                    <div class="tags">
-                        <a href="#">Design</a>
-                        <a href="#">Portfolio</a>
-                        <a href="#">Digital</a>
-                        <a href="#">Branding</a>
-                        <a href="#">HTML</a>
-                        <a href="#">Clean</a>
-                        <a href="#">Peace</a>
-                        <a href="#">Love</a>
-                        <a href="#">CSS3</a>
-                        <a href="#">jQuery</a>
-                    </div>
-                </div>
-                <div class="widget clearfix widget-newsletter">
-                    <form class="form-inline" method="get" action="#">
-                        <h4 class="widget-title">Subscribe for Latest Offers</h4>
-                        <small>Subscribe to our Newsletter to get Sales Offers &amp; Coupon Codes etc.</small>
-                        <div class="input-group">
-                            <input type="email" placeholder="Enter your Email" class="form-control required email" name="widget-subscribe-form-email" aria-required="true">
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn"><i class="fa fa-paper-plane"></i></button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            
             <!-- end: Sidebar-->
         </div>
     </div>

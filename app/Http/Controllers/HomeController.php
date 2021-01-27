@@ -25,8 +25,13 @@ class HomeController extends Controller
     {
         // http error
         // abort(404);
-        
+
         return view('home');
+    }
+
+    public function welcome()
+    {
+        return view('welcome');
     }
 
     public function about()

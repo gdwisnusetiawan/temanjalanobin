@@ -6,3 +6,75 @@
  <link href="css/custom.css" rel="stylesheet">
 
 */
+
+/* ----------------------------------------------------------------
+Whatsapp float
+-----------------------------------------------------------------*/
+#whatsappFloat {
+    z-index: 1;
+    opacity: 1;
+    position: fixed;
+    text-align: center;
+    line-height: 12px !important;
+    right: 26px;
+    bottom: 26px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 100px;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(37, 211, 102, 1);
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: opacity 0.3s, bottom 0.5s, box-shadow 0.3s cubic-bezier(0.55, 0, 0.1, 1), background-color 0.1s linear;
+    background-color: rgba(37, 211, 102, 1) !important;
+    overflow: hidden;
+  }
+  #whatsappFloat i {
+    line-height: 39px !important;
+    width: 39px !important;
+    height: 39px !important;
+    font-size: 16px !important;
+    top: 0px !important;
+    left: 0px !important;
+    text-align: center !important;
+    position: relative;
+    z-index: 10;
+    background-color: transparent !important;
+    transform: translate(0, 0px);
+    transition: transform 0.2s ease;
+  }
+  #whatsappFloat:hover {
+    transition: box-shadow 0.3s cubic-bezier(0.55, 0, 0.1, 1), background-color 0.05s linear 0.25s;
+    background-color: transparent !important;
+  }
+  #whatsappFloat:hover i {
+    transform: translate(0, -39px) !important;
+  }
+  #whatsappFloat:after, #whatsappFloat:before {
+    display: block;
+    content: ' ';
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #128C7E; /* #25D366 */
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+    border-radius: 100px;
+  }
+  #whatsappFloat:before {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: scale(1);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    opacity: 0;
+    z-index: 2;
+  }
+  #whatsappFloat:hover:after {
+    transform: scale(1);
+  }
+  #whatsappFloat:active:before {
+    opacity: 1;
+  }

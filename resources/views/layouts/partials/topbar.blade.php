@@ -1,6 +1,9 @@
 <div id="topbar" class="d-none d-xl-block d-lg-block topbar-fullwidth">
     <div class="container">
-        <div class="row">
+        <marquee behavior="scroll" direction="left" scrollamount="4" class="dark">Welcome to Tutoya</marquee>
+        <!-- <div class="row">
+            <div class="col-md-12">
+            </div>
             <div class="col-md-6">
                 <ul class="top-menu">
                     <li><a href="#">About</a></li>
@@ -24,6 +27,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

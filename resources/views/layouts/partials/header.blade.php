@@ -1,8 +1,15 @@
-<header id="header" class="dark submenu-light">
+<header id="header" class="dark submenu-light header-logo-center">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
-            <div id="logo"> <a href="index.html"><span class="logo-default">TUTOYA</span><span class="logo-dark">TUTOYA</span></a> </div>
+            <div id="logo">
+                <a href="{{ url('/') }}">
+                    <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
+                    <!-- <span class="logo-dark">Tutoya</span> -->
+                    <img src="{{ asset($config->logo) }}" alt="logo-tutoya-dark" class="logo-default">
+                    <img src="{{ asset($config->logo_dark) }}" alt="logo-tutoya-dark" class="logo-dark">
+                </a>
+            </div>
             <!--End: Logo-->
             <!-- Search -->
             <div id="search"><a id="btn-search-close" class="btn-search-close" aria-label="Close search form"><i class="icon-x"></i></a>
@@ -15,7 +22,7 @@
             <div class="header-extras">
                 <ul>
                     <li> <a id="btn-search" href="#"> <i class="icon-search"></i></a> </li>
-                    <li> <a id="btn-search" href="{{ route('shop.cart') }}"> <i class="icon-shopping-cart"></i></a> </li>
+                    <li> <a id="btn-search" href="{{ route('cart.index') }}"> <i class="icon-shopping-cart"></i></a> </li>
                     <li>
                         <div class="p-dropdown"> <a href="#"><i class="icon-globe"></i><span>EN</span></a>
                             <ul class="p-dropdown-content">
@@ -34,8 +41,57 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
+                        <!-- left menu -->
                         <ul>
-                            <li class="{{ request()->is('/') ? 'current' : '' }}"><a href="{{ url('/') }}">Home</a></li>
+                            @foreach($menus[0] as $menu)
+                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->url }}">{{ $menu->title }}</a>
+                                    @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
+                                    <ul class="dropdown-menu">
+                                        @foreach($menu->submenus as $submenu)
+                                            <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                    @elseif($menu->isMegaMenu())
+                                    <ul class="dropdown-menu">
+                                        <li class="mega-menu-content">
+                                            <div class="row">
+                                                @if($menu->isContains('title', ['belanja', 'shop']))
+                                                    @foreach($subcategories as $subcategory)
+                                                    <div class="col-lg-2-5">
+                                                        <ul>
+                                                            <li class="mega-menu-title">{{ $subcategory->name }}</li>
+                                                            @foreach($subcategory->categories as $category)
+                                                            <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    @endforeach
+                                                @else
+                                                    @foreach($menu->submenus->chunk(8) as $submenus)
+                                                    <div class="col-lg-2-5">
+                                                        <ul>
+                                                            <!-- <li class="mega-menu-title">Submenu</li> -->
+                                                            @foreach($submenus as $submenu)
+                                                            <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    @endforeach
+                                                @endif
+                                                <div class="col-lg-2-5 p-l-0">
+                                                    <h4 class="text-theme">BIG SALE<small>Up to</small></h4>
+                                                    <h2 class="text-lg text-theme lh80 m-b-30">70%</h2>
+                                                    <p class="m-b-0">The most happiest time of the day!. Morbi sagittis, sem quis ipsum dolor sit amet lacinia faucibus.</p><a class="btn btn-shadow btn-rounded btn-block m-t-10">SHOP NOW!</a><small class="t300">
+                                                        <p class="text-center m-0"><em>* Limited time Offer</em></p>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    @endif
+                                </li>
+                            @endforeach
+                            <!-- <li class="{{ request()->is('/') ? 'current' : '' }}"><a href="{{ url('/') }}">Home</a></li>
                             <li class="dropdown mega-menu-item {{ request()->is('shop*') ? 'current' : '' }}"><a href="#">Shop</a>
                                 <ul class="dropdown-menu">
                                     <li class="mega-menu-content">
@@ -43,53 +99,53 @@
                                             <div class="col-lg-2-5">
                                                 <ul>
                                                     <li class="mega-menu-title">Category A</li>
-                                                    <li><a href="{{ route('shop.index') }}">Minuman Diet</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 1</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 2</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 3</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 4</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 5</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 6</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 7</a></li>
+                                                    <li><a href="#">Minuman Diet</a></li>
+                                                    <li><a href="#">Sub Category 1</a></li>
+                                                    <li><a href="#">Sub Category 2</a></li>
+                                                    <li><a href="#">Sub Category 3</a></li>
+                                                    <li><a href="#">Sub Category 4</a></li>
+                                                    <li><a href="#">Sub Category 5</a></li>
+                                                    <li><a href="#">Sub Category 6</a></li>
+                                                    <li><a href="#">Sub Category 7</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-lg-2-5">
                                                 <ul>
                                                     <li class="mega-menu-title">Category B</li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 1</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 2</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 3</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 4</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 5</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 6</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 7</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 8</a></li>
+                                                    <li><a href="#">Sub Category 1</a></li>
+                                                    <li><a href="#">Sub Category 2</a></li>
+                                                    <li><a href="#">Sub Category 3</a></li>
+                                                    <li><a href="#">Sub Category 4</a></li>
+                                                    <li><a href="#">Sub Category 5</a></li>
+                                                    <li><a href="#">Sub Category 6</a></li>
+                                                    <li><a href="#">Sub Category 7</a></li>
+                                                    <li><a href="#">Sub Category 8</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-lg-2-5">
                                                 <ul>
                                                     <li class="mega-menu-title">Category C</li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 1</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 2</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 3</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 4</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 5</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 6</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 7</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 8</a></li>
+                                                    <li><a href="#">Sub Category 1</a></li>
+                                                    <li><a href="#">Sub Category 2</a></li>
+                                                    <li><a href="#">Sub Category 3</a></li>
+                                                    <li><a href="#">Sub Category 4</a></li>
+                                                    <li><a href="#">Sub Category 5</a></li>
+                                                    <li><a href="#">Sub Category 6</a></li>
+                                                    <li><a href="#">Sub Category 7</a></li>
+                                                    <li><a href="#">Sub Category 8</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-lg-2-5">
                                                 <ul>
                                                     <li class="mega-menu-title">Category D</li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 1</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 2</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 3</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 4</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 5</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 6</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 7</a></li>
-                                                    <li><a href="{{ route('shop.index') }}">Sub Category 8</a></li>
+                                                    <li><a href="#">Sub Category 1</a></li>
+                                                    <li><a href="#">Sub Category 2</a></li>
+                                                    <li><a href="#">Sub Category 3</a></li>
+                                                    <li><a href="#">Sub Category 4</a></li>
+                                                    <li><a href="#">Sub Category 5</a></li>
+                                                    <li><a href="#">Sub Category 6</a></li>
+                                                    <li><a href="#">Sub Category 7</a></li>
+                                                    <li><a href="#">Sub Category 8</a></li>
                                                 </ul>
                                             </div>
                                             <div class="col-lg-2-5 p-l-0">
@@ -104,14 +160,31 @@
                                 </ul>
                             </li>
                             <li class="{{ request()->is('about*') ? 'current' : '' }}"><a href="{{ route('about') }}">About Us</a></li>
-                            <li class="{{ request()->is('news*') ? 'current' : '' }}"><a href="{{ route('news.index') }}">News</a></li>
-                            <li class="{{ request()->is('faq*') ? 'current' : '' }}"><a href="{{ route('faq') }}">FAQ</a></li>
-                            <li class="{{ request()->is('contact*') ? 'current' : '' }}"><a href="{{ route('contact') }}">Contact</a></li>
+                            <li class="{{ request()->is('news*') ? 'current' : '' }}"><a href="{{ route('news.index') }}">News</a></li> -->
+                        </ul>
+                        <!-- right menu -->
+                        <ul>
+                            <!-- <li class="{{ request()->is('faq*') ? 'current' : '' }}"><a href="{{ route('faq') }}">FAQ</a></li>
+                            <li class="{{ request()->is('contact*') ? 'current' : '' }}"><a href="{{ route('contact') }}">Contact</a></li> -->
+                            @foreach($menus[1] as $menu)
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->url }}">{{ $menu->title }}</a>
+                                    @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
+                                    <ul class="dropdown-menu">
+                                        @foreach($menu->submenus as $submenu)
+                                            <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                    @endif
+                                </li>
+                            @endforeach
                             @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
                             @else
                             <li class="dropdown"><a href="#">{{ auth()->user()->name }}</a>
                                 <ul class="dropdown-menu">
+                                    <li><a href="">Dashboard</a></li>
+                                    <li><a href="">History</a></li>
+                                    <li><hr></li>
                                     <li><a href="">Account Settings</a></li>
                                     <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

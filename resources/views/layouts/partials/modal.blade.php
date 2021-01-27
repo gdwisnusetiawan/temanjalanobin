@@ -1,7 +1,7 @@
 @switch($modal_type)
     @case(0)
         <!-- Modal -->
-        <div id="modal-auto-open" class="modal modal-auto-open text-center cookie-notify" data-delay="3000" data-cookie-enabled="true" data-cookie-name="cookieName2020">
+        <div id="modal-auto-open" class="modal modal-auto-open text-center cookie-notify" data-delay="3000" data-cookie-enabled="true" data-cookie-name="cookieModal2021" data-cookie-expire="1">
             <h2 class="modal-title">Say hello to our team</h2>
             <p>Our creators love hearing from you and seeing how you’ve used our template. Show your appreciation by tweeting, sharing and following us! This is a simple Modal with text and it will be showed after the
                 pre-defined delay once the pages is loaded.</p>
