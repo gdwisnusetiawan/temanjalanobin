@@ -24,12 +24,19 @@ Route::get('/modal', function () {
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
-Route::get('welcome', 'HomeController@welcome')->name('welcome');
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('about', 'HomeController@about')->name('about');
 Route::get('contact', 'HomeController@contact')->name('contact');
 Route::get('faq', 'HomeController@faq')->name('faq');
 Route::get('distributor', 'HomeController@distributor')->name('distributor');
+
+Route::middleware('auth')->group(function () {
+    Route::get('welcome', 'HomeController@welcome')->name('welcome');
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('{order}', 'CheckoutController@index')->name('index');
+        Route::post('store', 'CheckoutController@store')->name('store');
+    });
+});
 
 Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
@@ -43,13 +50,6 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('store', 'CartController@store')->name('store');
     Route::put('update/{id}', 'CartController@update')->name('update');
     Route::delete('destroy/{id}', 'CartController@destroy')->name('destroy');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::prefix('checkout')->name('checkout.')->group(function () {
-        Route::get('{order}', 'CheckoutController@index')->name('index');
-        Route::post('store', 'CheckoutController@store')->name('store');
-    });
 });
 
 Route::prefix('news')->name('news.')->group(function () {
