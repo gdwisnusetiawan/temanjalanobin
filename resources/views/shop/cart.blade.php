@@ -157,7 +157,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <a href="{{ route('checkout.checkout') }}" class="btn icon-left float-right"><span>Proceed to Checkout</span></a> -->
                     <form method="POST" action="{{ route('checkout.store') }}">
                         @csrf
                         <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
