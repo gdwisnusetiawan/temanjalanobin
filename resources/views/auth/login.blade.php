@@ -23,8 +23,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 offset-4">
-                <div class="panel ">
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-body">
                         <h3>{{ __('Login') }}</h3>
                         <form method="POST" action="{{ route('login') }}" class="form-validate">
                             @csrf
@@ -70,6 +70,16 @@
                 <p class="small">Don't have an account yet? 
                     <a href="{{ route('register') }}">Register New Account</a>
                 </p>
+                <hr>
+                <div class="text-center">
+                    <p>or login with</p>
+                    <a href="{{ route('login.provider', 'google') }}" class="btn btn-danger">
+                        <i class="fab fa-google m-r-5"></i> Google
+                    </a>
+                    <a class="btn btn-facebook">
+                        <i class="fab fa-facebook-f m-r-5"></i> Facebook
+                    </a>
+                </div>
             </div>
         </div>
     </div>

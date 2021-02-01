@@ -21,7 +21,9 @@ Route::get('/modal', function () {
     return view('modal');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.provider');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index')->name('home');
@@ -30,19 +32,24 @@ Route::get('contact', 'HomeController@contact')->name('contact');
 Route::get('faq', 'HomeController@faq')->name('faq');
 Route::get('distributor', 'HomeController@distributor')->name('distributor');
 
-Route::middleware('auth')->group(function () {
-    Route::get('welcome', 'HomeController@welcome')->name('welcome');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('', 'HomeController@dashboard')->name('index');
+        Route::get('welcome', 'HomeController@welcome')->name('welcome');
+        Route::get('transaction', 'HomeController@welcome')->name('transaction');
+    });
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('{order}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
     });
 });
 
-Route::prefix('shop')->name('shop.')->group(function () {
+Route::prefix('collections')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
     Route::get('{category}', 'ShopController@index')->name('index');
-    Route::get('{category}/{product}', 'ShopController@single')->name('single');
+    Route::get('{category}/products/{product}', 'ShopController@single')->name('single');
     Route::get('single-ajax', 'ShopController@singleAjax')->name('single-ajax');
+    Route::get('pricing/{product}', 'ShopController@pricing')->name('pricing');
 });
 
 Route::prefix('cart')->name('cart.')->group(function () {

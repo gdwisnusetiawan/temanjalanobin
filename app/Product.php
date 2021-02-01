@@ -40,9 +40,40 @@ class Product extends Model
         return Functions::media($this);
     }
 
-    public function getPriceFormatAttribute()
+    public function getRealPriceAttribute()
     {
-        // return 'Rp'.number_format($this->price,2,',','.');
         return Functions::formatCurrency($this->price);
+    }
+
+    public function getPriceFormat($quantity = 1)
+    {
+        return Functions::formatCurrency($this->getUserPrice($quantity));
+    }
+
+    public function getUserPrice($quantity)
+    {
+        if(auth()->check() && auth()->user()->pricing($this->id)->isNotEmpty())
+        {
+            $user_pricing = auth()->user()->pricing($this->id);
+            $pricing = $user_pricing->where('startamount', '<=', $quantity)->where('endamount', '>=', $quantity)->first();
+            if($pricing == null) {
+                $endamount = $user_pricing->max('endamount');
+                $startamount = $user_pricing->min('startamount');
+                if($quantity >= $endamount) {
+                    $price = $user_pricing->where('endamount', '>=', $endamount)->first()->price;
+                }
+                elseif($quantity <= $startamount) {
+                    $price = $user_pricing->where('startamount', '<=', $startamount)->first()->price;
+                }
+            }
+            else {
+                $price = $pricing->price;
+            }
+        }
+        else
+        {
+            $price = $this->price;
+        }
+        return $price;
     }
 }

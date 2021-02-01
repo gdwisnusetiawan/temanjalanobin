@@ -62,20 +62,20 @@
                 </div>
                 <!--Product list-->
                 <div class="shop">
-                    <div class="grid-layout grid-4-columns" data-item="grid-item">
+                    <div class="row">
                         @foreach($products as $product)
-                        <div class="grid-item">
+                        <div class="col-lg-3 col-md-6">
                             <div class="product">
                                 <div class="product-image">
-                                    <a href="{{ route('shop.single', [$category, $product]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" style="object-fit: cover"></a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
+                                    <a href="{{ route('shop.single', [$category, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
+                                    <a href="#" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
                                     <span class="product-new">NEW</span>
                                     <!-- <span class="product-hot">HOT</span> -->
                                     <span class="product-wishlist">
                                         <a href="#"><i class="fa fa-heart"></i></a>
                                     </span>
                                     <div class="product-overlay">
-                                        <a href="{{ route('shop.single-ajax') }}" data-lightbox="ajax">Quick View</a>
+                                        <!-- <a href="{{ route('shop.single-ajax') }}" data-lightbox="ajax">Quick View</a> -->
                                     </div>
                                 </div>
                                 <div class="product-description">
@@ -83,8 +83,13 @@
                                     <div class="product-title">
                                         <h3><a href="{{ route('shop.single', [$category, $product]) }}">{{ $product->title }}</a></h3>
                                     </div>
-                                    <div class="product-title">{{ $product->price_format }}</div>
-                                    <!-- <div class="product-price" style="float: none; display: block">{{ $product->price_format }}</div> -->
+                                    <div class="product-title">
+                                        @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty())
+                                            <del><small>{{ $product->real_price }}</small></del>
+                                        @endif
+                                        {{ $product->getpriceFormat(1) }}
+                                    </div>
+                                    <!-- <div class="product-price" style="float: none; display: block">{{ $product->getpriceFormat(1) }}</div> -->
                                     <div class="product-rate">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>

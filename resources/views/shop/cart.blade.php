@@ -62,7 +62,7 @@
                                 <p>{!! htmlspecialchars_decode($product->description) !!}</p>
                             </td>
                             <td class="cart-product-price">
-                                <span class="amount">{{ $product->price_format }}</span>
+                                <span class="amount">{{ $product->getPriceFormat($quantity) }}</span>
                             </td>
                             <td class="cart-product-quantity">
                                 <div class="quantity">
@@ -217,13 +217,14 @@ function updateCart(form, qty, id) {
         data: formData,
         success: function(data) {
             // console.log(data);
-            $('#subtotal').html(formatCurrency('Rp', data.summary.subtotal));
+            $('#subtotal').html(formatCurrency(data.summary.subtotal));
             $('#shipping').html(data.summary.shipping);
             $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#total').html(formatCurrency('Rp', data.summary.total));
+            $('#total').html(formatCurrency(data.summary.total));
             Object.values(data.list).forEach(function (item, index) {
                 $('#product-'+item.product.id).find('.qty').val(item.quantity);
-                $('#product-'+item.product.id).find('.total').html(formatCurrency('Rp', item.total));
+                $('#product-'+item.product.id).find('.cart-product-price .amount').html(formatCurrency(item.price));
+                $('#product-'+item.product.id).find('.total').html(formatCurrency(item.total));
             });
             // notify(data.message, data.type);
         },
@@ -251,36 +252,6 @@ function deleteCart(form) {
         },
         error: function(error) {
             console.log(error);
-        }
-    });
-}
-
-function formatCurrency(currency, nominal) {
-    return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
-}
-
-function calculatePrice(quantity) {
-    $.ajax({
-        type: 'POST',
-        url: '../script/getPricing.php',
-        dataType: 'json',
-        data: { 
-            actorid: 0,
-            productid: 0,
-            quantity: quantity 
-        },
-        success: function(data) {
-            let totalPrice = 0;
-            if(data !== null) {
-                totalPrice = data.price * quantity;
-            }
-            else {
-                let price = 0;
-                totalPrice = price * quantity;
-            }
-            let priceFormatted = 'Rp'+totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".");
-            $('.product-price').html('<ins>'+priceFormatted+'</ins>');
-            // console.log(data);
         }
     });
 }

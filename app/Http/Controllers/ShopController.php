@@ -15,6 +15,8 @@ class ShopController extends Controller
         $category = Category::where('title', $title)->first();
         $products = $category->products;
 
+        // dd((asset('/img/'.$products[0]->image1)));
+
         return view('shop.index', compact('category', 'products'));
     }
 
@@ -38,5 +40,12 @@ class ShopController extends Controller
     {
         $checkout = $request->checkout ?? $request->keys()[0] ?? false;
         return view('shop.checkout', compact('checkout'));
+    }
+
+    public function pricing(Request $request, $id)
+    {
+        $price = Product::find($id)->getUserPrice($request->quantity);
+        // $price = Product::find($id)->getUserPrice(11);
+        return response()->json($price);
     }
 }

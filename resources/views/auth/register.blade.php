@@ -40,8 +40,17 @@
                             @enderror
                         </div>
                         <div class="col-lg-6 form-group">
+                            <label class="sr-only">{{ __('Phone Number') }}</label>
+                            <input type="text" placeholder="{{ __('Phone Number') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
+                            @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12 form-group">
                             <label class="sr-only">{{ __('E-Mail Address') }}</label>
-                            <input type="text" placeholder="{{ __('E-Mail Address') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autocomplete="email">
+                            <input type="email" placeholder="{{ __('E-Mail Address') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autocomplete="email">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -62,9 +71,30 @@
                             <input type="password" placeholder="{{ __('Confirm Password') }}" class="form-control" id="password-confirm" name="password_confirmation" required autocomplete="new-password">
                         </div>
                         <div class="col-lg-12 form-group">
-                            <button type="submit" class="btn">{{ __('Register') }} </button>
+                            <div id="g-recaptcha"></div>
+                            @error('g-recaptcha-response')
+                                <small class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </small>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <button type="submit" class="btn">
+                                {{ __('Register') }}
+                                <span class="spinner-border spinner-border-sm mb-1" role="status" id="message-spinner" style="display: none"></span>
+                            </button>
                             <button type="button" class="btn btn-danger m-l-10">Cancel</button>
                         </div>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <p>or register with</p>
+                        <a href="{{ route('login.provider', 'google') }}" class="btn btn-danger">
+                            <i class="fab fa-google m-r-5"></i> Google
+                        </a>
+                        <a class="btn btn-facebook">
+                            <i class="fab fa-facebook-f m-r-5"></i> Facebook
+                        </a>
                     </div>
                 </form>
             </div>
@@ -73,3 +103,54 @@
 </section>
 <!-- end: Section -->
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    var messageCaptcha;
+    var onloadCallback = function() {
+        messageCaptcha = grecaptcha.render('g-recaptcha', {
+            'sitekey' : '{{ env("reCAPTCHA_SITE_KEY") }}'
+        });
+    };
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+            async defer>
+</script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    function submitForm(e, spinner, captchaId) {
+        // $(e).preventDefault();
+        $.ajax({
+            type: $(e).attr("method"),
+            url: $(e).attr("action"),
+            data: $(e).serialize(),
+            dataType: 'json',
+            beforeSend: function() {
+                $(spinner).toggle('display');
+            },
+            success: function (data) {
+                $(spinner).toggle('display');
+                $(e)[0].reset();
+                if(data.success) {
+                    toastr.success(data.success, 'Success').css('width','480px');
+                    $('.success-message').html(data.success);
+                }
+                else {
+                    toastr.error(data.error, 'Failed').css('width','480px');
+                    $('.failed-message').html(data.error);
+                }
+                grecaptcha.reset(captchaId);
+                // console.log(data);
+            },
+            error: function (data) {
+                // console.log(data);
+            }
+        });
+    }
+</script>
+@endpush

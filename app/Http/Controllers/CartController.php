@@ -11,6 +11,17 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    protected function summary($cart)
+    {
+        $total = collect($cart['list'])->sum('total');
+        $total_quantity = collect($cart['list'])->sum('quantity');
+        return [
+            'subtotal' => $total,
+            'coupon' => 20,
+            'total' => $total - round($total * 20 / 100, 2),
+            'total_quantity' => $total_quantity
+        ];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -31,43 +42,17 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $product = Product::find($request->product_id);
+        $price = $product->getUserPrice($request->quantity);
         $cart = session()->get('cart');
-        // if cart is empty then this the first product
-        if(!$cart) {
-            $cart['list'] = [
-                    $product->id => [
-                        "product" => $product,
-                        "quantity" => $request->quantity,
-                        "total" => $product->price * $request->quantity
-                    ]
-            ];
-            $total = collect($cart['list'])->sum('total');
-            $cart['summary'] = [
-                "subtotal" => $total,
-                "coupon" => 20,
-                "total" => $total - round($total * 20 / 100, 2)
-            ];
-            session()->put('cart', $cart);
-            return redirect()->back()->with('notify', ['message' => 'Product added to cart successfully', 'type' => 'success']);
-        }
-        // if cart not empty then check if this product exist then increment quantity
-        if(isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] = $request->quantity;
-            session()->put('cart', $cart);
-            return redirect()->back()->with('notify', ['message' => 'Product added to cart successfully', 'type' => 'success']);
-        }
-        // if item not exist in cart then add to cart with quantity = 1
+        
         $cart['list'][$product->id] = [
-            "product" => $product,
-            "quantity" => $request->quantity,
-            "total" => $product->price * $request->quantity
+            'product' => $product,
+            'price' => $price,
+            'quantity' => $request->quantity,
+            'total' => $price * $request->quantity
         ];
-        $total = collect($cart['list'])->sum('total');
-        $cart['summary'] = [
-            "subtotal" => $total,
-            "coupon" => 20,
-            "total" => $total - round($total * 20 / 100, 2)
-        ];
+
+        $cart['summary'] = $this->summary($cart);
         session()->put('cart', $cart);
         return redirect()->back()->with('notify', ['message' => 'Product added to cart successfully', 'type' => 'success']);
     }
@@ -95,15 +80,13 @@ class CartController extends Controller
  
         $cart = session()->get('cart');
         if(isset($cart['list'][$id])) {
+            $price = Product::find($id)->getUserPrice($request->quantity);
+            $cart['list'][$id]['price'] = $price;
             $cart['list'][$id]['quantity'] = $request->quantity;
-            $cart['list'][$id]['total'] = $cart['list'][$id]['product']->price * $request->quantity;
+            $cart['list'][$id]['total'] = $price * $request->quantity;
         }
-        $total = collect($cart['list'])->sum('total');
-        $cart['summary'] = [
-            "subtotal" => $total,
-            "coupon" => 20,
-            "total" => $total - round($total * 20 / 100, 2)
-        ];
+
+        $cart['summary'] = $this->summary($cart);
         session()->put('cart', $cart);
 
         $cart['message'] = 'Cart updated successfully';
@@ -122,12 +105,8 @@ class CartController extends Controller
         $cart = session()->get('cart');
         if(isset($cart['list'][$id])) {
             unset($cart['list'][$id]);
-            $total = collect($cart['list'])->sum('total');
-            $cart['summary'] = [
-                "subtotal" => $total,
-                "coupon" => 20,
-                "total" => $total - round($total * 20 / 100, 2)
-            ];
+
+            $cart['summary'] = $this->summary($cart);
             session()->put('cart', $cart);
         }
 

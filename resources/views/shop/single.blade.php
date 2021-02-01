@@ -24,7 +24,11 @@
                         <div class="product-title">
                             <h3><a href="#">{{ $product->title }}</a></h3>
                         </div>
-                        <div class="product-price"><ins>{{ $product->price_format }}</ins>
+                        <div class="product-price" id="product-price">
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty())
+                                <del>{{ $product->real_price }}</del>
+                            @endif
+                            <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
                         <div class="product-rate">
                             <i class="fa fa-star"></i>
@@ -89,9 +93,12 @@
                             <h6>Select quantity</h6>
                             <div class="cart-product-quantity">
                                 <div class="quantity m-l-5">
-                                    <input type="button" class="minus" value="-">
-                                    <input type="text" class="qty" id="quantity" name="quantity" value="1" form="form-cart">
-                                    <input type="button" class="plus" value="+">
+                                    <form method="GET" action="{{ route('shop.pricing', $product->id) }}" id="form-quantity">
+                                        @csrf
+                                        <input type="button" class="minus" value="-" onclick="updateQuantity(this.form, -1)">
+                                        <input type="text" class="qty" id="quantity" name="quantity" value="1" form="form-cart">
+                                        <input type="button" class="plus" value="+" onclick="updateQuantity(this.form, 1)">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -465,71 +472,49 @@
 @push('scripts')
 <script>
 $(document).ready(function(){
-    var quantitiy = 0;
-    $('.plus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-
-        // Get the field name
-        var quantity = parseInt($('#quantity').val());
-        
-        // Increment
-        $('#quantity').val(quantity + 1);
-        // calculatePrice($('#quantity').val());
-    });
-
-    $('.minus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-
-        // Get the field name
-        var quantity = parseInt($('#quantity').val());
-        
-        // Decrement
-        if(quantity > 1){
-            $('#quantity').val(quantity - 1);
-        }
-        // calculatePrice($('#quantity').val());
-    });
-
-    $('#quantity').change(function(){
-        // min quantity is 1
-        if($(this).val() < 1) {
-            $(this).val(1);
-        }
-        
-        // calculatePrice($(this).val());
-    });
-
     @php $totalstock = 0 @endphp
     @if($totalstock <= 0)
         $('#add-cart').prop('disabled', true);
     @endif
     
+    $('#quantity').change(function () {
+        if($(this).val() < 1) {
+            $(this).val(1);
+        }
+        calculatePrice($('#form-quantity'), parseInt($(this).val()));
+    });
 });
 
-function calculatePrice(quantity) {
+function updateQuantity(form, qty) {
+    // Get the field name
+    var elemQuantity = $('#quantity');
+    // Increment Decrement
+    var quantity = parseInt(elemQuantity.val()) + qty;
+    if(quantity < 1) {
+        quantity = 1;
+    }
+    elemQuantity.val(quantity);
+    // return quantity;
+    calculatePrice(form, quantity);
+}
+
+function calculatePrice(form, qty) {
+    // let quantity = updateQuantity(qty);
+    let quantity = qty;
+    var formData = $(form).serializeArray();
+    formData.push({name: "quantity", value: quantity});
     $.ajax({
-        type: 'POST',
-        url: '../script/getPricing.php',
+        type: $(form).attr('method'),
+        url: $(form).attr('action'),
         dataType: 'json',
-        data: { 
-            actorid: @json($product->id),
-            productid: @json($product->id),
-            quantity: quantity 
-        },
+        data: formData,
         success: function(data) {
-            let totalPrice = 0;
-            if(data !== null) {
-                totalPrice = data.price * quantity;
-            }
-            else {
-                let price = @json($product->price);
-                totalPrice = price * quantity;
-            }
-            let priceFormatted = 'Rp'+totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".");
-            $('.product-price').html('<ins>'+priceFormatted+'</ins>');
-            // console.log(data);
+            let totalPrice = data * quantity;
+            let priceFormatted = formatCurrency(totalPrice);
+            $('#product-price').html('<ins>'+priceFormatted+'</ins>');
+        },
+        error: function(error) {
+            console.log(error);
         }
     });
 }

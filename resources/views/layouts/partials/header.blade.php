@@ -22,7 +22,17 @@
             <div class="header-extras">
                 <ul>
                     <li> <a id="btn-search" href="#"> <i class="icon-search"></i></a> </li>
-                    <li> <a id="btn-search" href="{{ route('cart.index') }}"> <i class="icon-shopping-cart"></i></a> </li>
+                    <li>
+                        <a id="btn-notifcation" href="{{ route('cart.index') }}"> 
+                            <i class="icon-shopping-cart"></i>
+                            @if(session('cart'))
+                                <span class="badge badge-light">{{ session('cart')['summary']['total_quantity'] }}</span>
+                            @endif
+                        </a> 
+                    </li>
+                    <!-- <li><a class="btn">
+                        <i class="icon-shopping-cart"></i> <span class="badge badge-light">4</span>
+                    </a></li> -->
                     <li>
                         <div class="p-dropdown"> <a href="#"><i class="icon-globe"></i><span>EN</span></a>
                             <ul class="p-dropdown-content">
@@ -44,7 +54,7 @@
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
-                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->url }}">{{ $menu->title }}</a>
+                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->submenus->count() > 0 ? $menu->url : '' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
@@ -180,9 +190,18 @@
                             @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
                             @else
-                            <li class="dropdown"><a href="#">{{ auth()->user()->name }}</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="">Dashboard</a></li>
+                            <li class="dropdown">
+                                <a href="#">
+                                    <!-- {{ auth()->user()->name }} -->
+                                    <img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm">
+                                </a>
+                                <ul class="dropdown-menu active">
+                                    <li class="text-center">
+                                        <img src="{{ auth()->user()->avatar }}" class="avatar avatar-lg">
+                                        <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a>
+                                    </li>
+                                    <li><hr></li>
+                                    <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                                     <li><a href="">History</a></li>
                                     <li><hr></li>
                                     <li><a href="">Account Settings</a></li>

@@ -1,28 +1,50 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+<!-- Page title -->
+<section id="page-title" data-bg-parallax="{{ asset('polo-5/images/parallax/5.jpg') }}">
+    <div class="container">
+        <div class="page-title">
+            <h1>Email Verification</h1>
+            <span>Email verification page</span>
+        </div>
+        <div class="breadcrumb">
+            <ul>
+                <li><a href="{{ url('/') }}">Home</a></li>
+                <!-- <li><a href="#">Pages</a></li> -->
+                <li class="active"><a href="#">Email Verification</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<!-- end: Page title -->
+<!-- Section -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ __('Verify Your Email Address') }}</h3>
+                        @if (session('resent'))
+                            <div class="alert alert-success" role="alert">
+                                {{ __('A fresh verification link has been sent to your email address.') }}
+                            </div>
+                        @endif
 
-                <div class="card-body">
-                    @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
-                        </div>
-                    @endif
-
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                    </form>
+                        <p>{{ __('Before proceeding, please check your email for a verification link.') }}
+                        {{ __('If you did not receive the email') }},</p>
+                        <form method="POST" action="{{ route('verification.resend') }}" class="form-validate">
+                            @csrf
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block">{{ __('click here to request another') }}</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!-- end: Section -->
 @endsection

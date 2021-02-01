@@ -2,82 +2,31 @@
 
 @section('content')
 @include('layouts.partials.modal')
-<!-- SECTION REVOLUTION SLIDER -->
-<div id="slider" class="bg-light">
-
-<div id="rev_slider_33_1_wrapper" class="bg-light rev_slider_wrapper fullwidthbanner-container" data-alias="polo-shop-v2" style="margin:0px auto;background-color:transparent;padding:0px;margin-top:0px;margin-bottom:0px;">
-    <!-- START REVOLUTION SLIDER 5.1 fullwidth mode -->
-    <div id="rev_slider_33_1" class="rev_slider fullwidthabanner" style="display:none;" data-version="5.1">
-        <ul>
-            <!-- SLIDE  -->
-            <li data-index="rs-140" data-transition="slideup" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="" data-rotate="0" data-saveperformance="off" data-title="BIG SALE" data-description="">
-                <!-- MAIN IMAGE -->
-                <img src="{{ asset('polo-5/homepages/shop-v2/images/slider/dummy.png') }}" style='background-color:#f4f4f4' alt="" width="482" height="800" data-lazyload="polo-5/homepages/shop-v2/images/slider/transparent.png" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
-                <!-- LAYERS -->
-
-                <!-- LAYER NR. 1 -->
-                <div class="tp-caption   tp-resizeme" id="slide-140-layer-17" data-x="['left','left','left','left']" data-hoffset="['-148','-137','-110','-219']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['-99','-138','-6','-190']" data-width="none" data-height="none" data-whitespace="nowrap" data-transform_idle="o:1;" data-transform_in="x:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;s:2360;e:Power3.easeInOut;" data-transform_out="opacity:0;s:300;s:300;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="0" data-responsive_offset="on" style="z-index: 5;"><img src="polo-5/homepages/shop-v2/images/slider/dummy.png" alt="" width="714" height="800" data-ww="['714px','714px','582.8025','582.8025']" data-hh="['800px','800px','653','653']" data-lazyload="polo-5/homepages/shop-v2/images/slider/2.png" data-no-retina>
-                </div>
-
-                <!-- LAYER NR. 2 -->
-                <div class="tp-caption Fashion-BigDisplay   tp-resizeme" id="slide-140-layer-18" data-x="['right','right','right','center']" data-hoffset="['233','114','67','96']" data-y="['top','top','top','top']" data-voffset="['206','123','194','60']" data-fontsize="['24','24','24','16']" data-width="['345','345','345','259']" data-height="none" data-whitespace="normal" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2660;e:Power4.easeInOut;" data-transform_out="opacity:0;s:300;e:Power2.easeInOut;s:300;e:Power2.easeInOut;" data-start="0" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 6; min-width: 345px; max-width: 345px; white-space: normal; font-size: 24px; color: rgba(51, 51, 51, 1.00);text-align:center;">
-                    Check out this weekend!
-                </div>
-
-                <!-- LAYER NR. 3 -->
-                <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-140-layer-1" data-x="['right','center','center','center']" data-hoffset="['102','222','151','98']" data-y="['middle','middle','middle','middle']" data-voffset="['-40','-76','-67','-69']" data-fontsize="['120','100','90','60']" data-lineheight="['70','70','70','50']" data-width="['576','none','none','none']" data-height="none" data-whitespace="['normal','nowrap','nowrap','nowrap']" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2570;e:Power4.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="320" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 7; min-width: 576px; max-width: 576px; white-space: normal; font-size: 120px; color: rgba(51, 51, 51, 1.00);">
-                    BIG SALE
-                </div>
-
-                <!-- LAYER NR. 4 -->
-                <div class="tp-caption NotGeneric-SubTitle   tp-resizeme" id="slide-140-layer-4" data-x="['right','center','center','center']" data-hoffset="['159','229','162','97']" data-y="['middle','middle','middle','middle']" data-voffset="['31','-8','0','-11']" data-width="['470','none','none','301']" data-height="['none','none','none','35']" data-whitespace="['normal','nowrap','nowrap','normal']" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2180;e:Power4.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="930" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 8; min-width: 470px; max-width: 470px; white-space: normal; color: rgba(51, 51, 51, 1.00);text-align:center;">
-                    Up to 70% sale on all fall/winter clothes.
-                </div>
-
-                <!-- LAYER NR. 5 -->
-                <div class="tp-caption Fashion-BigDisplay   tp-resizeme" id="slide-140-layer-11" data-x="['right','right','right','right']" data-hoffset="['334','214','170','91']" data-y="['top','top','top','top']" data-voffset="['400','310','369','220']" data-width="none" data-height="none" data-whitespace="nowrap" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:1610;e:Power4.easeInOut;" data-transform_out="opacity:0;s:300;s:300;" data-start="1590" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 9; white-space: nowrap;"><a href="#" class="btn btn-outline btn-dark"><span>Shop now</span></a>
-                </div>
-            </li>
-            <!-- SLIDE  -->
-            <li data-index="rs-141" data-transition="slideup" data-slotamount="default" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="" data-rotate="0" data-saveperformance="off" data-title="NEW COLLECTION" data-description="">
-                <!-- MAIN IMAGE -->
-                <img src="{{ asset('polo-5/homepages/shop-v2/images/slider/dummy.png') }}" style='background-color:#f4f4f4' alt="" width="482" height="800" data-lazyload="polo-5/homepages/shop-v2/images/slider/transparent.png" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina>
-                <!-- LAYERS -->
-
-                <!-- LAYER NR. 1 -->
-                <div class="tp-caption   tp-resizeme" id="slide-141-layer-17" data-x="['right','right','right','right']" data-hoffset="['10','10','10','-6']" data-y="['bottom','bottom','bottom','bottom']" data-voffset="['-136','-136','-136','-30']" data-width="none" data-height="none" data-whitespace="nowrap" data-transform_idle="o:1;" data-transform_in="x:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;s:1500;e:Power3.easeInOut;" data-transform_out="opacity:0;s:300;s:300;" data-mask_in="x:0px;y:0px;s:inherit;e:inherit;" data-start="0" data-responsive_offset="on" style="z-index: 5;"><img src="polo-5/homepages/shop-v2/images/slider/dummy.png" alt="" width="482" height="800" data-ww="['482px','482px','482px','282.9715762273902']" data-hh="['800px','800px','800px','470']" data-lazyload="polo-5/homepages/shop-v2/images/slider/1.png" data-no-retina>
-                </div>
-
-                <!-- LAYER NR. 2 -->
-                <div class="tp-caption Fashion-BigDisplay   tp-resizeme" id="slide-141-layer-18" data-x="['left','left','left','left']" data-hoffset="['19','19','19','21']" data-y="['top','top','top','top']" data-voffset="['117','117','117','38']" data-fontsize="['24','24','24','18']" data-width="345" data-height="none" data-whitespace="normal" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:1110;e:Power4.easeInOut;" data-transform_out="opacity:0;s:300;e:Power2.easeInOut;s:300;e:Power2.easeInOut;" data-start="1520" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 6; min-width: 345px; max-width: 345px; white-space: normal; font-size: 24px; color: rgba(51, 51, 51, 1.00);">
-                    Summer Collection
-                </div>
-
-                <!-- LAYER NR. 3 -->
-                <div class="tp-caption NotGeneric-Title   tp-resizeme" id="slide-141-layer-1" data-x="['left','center','center','center']" data-hoffset="['10','-183','-183','-94']" data-y="['middle','middle','middle','middle']" data-voffset="['-96','-93','-99','-46']" data-fontsize="['120','70','70','45']" data-lineheight="['110','70','70','50']" data-width="['577','none','375','252']" data-height="['195','none','191','164']" data-whitespace="['normal','nowrap','normal','normal']" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:960;e:Power4.easeInOut;" data-transform_out="y:[100%];s:680;e:Power2.easeInOut;s:680;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1790" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 7; min-width: 577px; max-width: 577px; max-width: 195px; max-width: 195px; white-space: normal; font-size: 120px; line-height: 110px; color: rgba(51, 51, 51, 1.00);">
-                    NEW COLLECTION
-                </div>
-
-                <!-- LAYER NR. 4 -->
-                <div class="tp-caption NotGeneric-SubTitle   tp-resizeme" id="slide-141-layer-4" data-x="['left','center','center','center']" data-hoffset="['10','-209','-151','-82']" data-y="['middle','middle','middle','middle']" data-voffset="['95','-7','18','68']" data-fontsize="['13','13','13','11']" data-width="['470','565','430','273']" data-height="['none','none','none','162']" data-whitespace="normal" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:1050;e:Power4.easeInOut;" data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;" data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1880" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 8; min-width: 470px; max-width: 470px; white-space: normal; color: rgba(51, 51, 51, 1.00);">
-                    Say hello to the smartest and most flexible bootstrap template. Polo is an powerful
-                    template that can build any type of websites, and quite possibly the only one you will
-                    ever need.
-                </div>
-
-                <!-- LAYER NR. 5 -->
-                <div class="tp-caption Fashion-BigDisplay   tp-resizeme" id="slide-141-layer-11" data-x="['left','left','left','left']" data-hoffset="['9','23','25','22']" data-y="['top','top','top','top']" data-voffset="['505','346','428','331']" data-width="none" data-height="none" data-whitespace="nowrap" data-transform_idle="o:1;" data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:1130;e:Power4.easeInOut;" data-transform_out="opacity:0;s:300;s:300;" data-start="1970" data-splitin="none" data-splitout="none" data-responsive_offset="on" style="z-index: 9; white-space: nowrap;"><a href="#" class="btn btn-outline btn-dark"><span>Shop now</span></a>
-                </div>
-            </li>
-        </ul>
-        <div class="tp-static-layers">
+<!-- Inspiro Slider -->
+<div id="slider" class="inspiro-slider slider-fullscreen dots-creative" data-height-xs="360">
+    <!-- Slide -->
+    @foreach($sliders as $slider)
+    <div class="slide kenburns" style="background-image:url({{ $slider->image }});">
+        <div class="bg-overlay"></div>
+        <div class="container">
+            <div class="slide-captions text-light {{ $slider->textpos }}">
+                <!-- Captions -->
+                <span class="strong">TUTOYA</span>
+                <h2 class="text-dark">{{ $slider->slidertxt }}</h2>
+                @if($slider->button1 != null)
+                <a class="btn" href="{{ $slider->sliderlink1 }}" target="{{ $slider->target1 }}">{{ $slider->button1 }}</a>
+                @endif
+                @if($slider->button2 != null)
+                <a class="btn btn-light" href="{{ $slider->sliderlink2 }}" target="{{ $slider->target2 }}">{{ $slider->button2 }}</a>
+                @endif
+                <!-- end: Captions -->
+            </div>
         </div>
-        <div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
     </div>
+    @endforeach
+    <!-- end: Slide -->
 </div>
-<!-- END REVOLUTION SLIDER -->
-</div>
-<!-- END SECTION REVOLUTION SLIDER -->
+<!--end: Inspiro Slider -->
 
 <!-- BOXES -->
 <section>

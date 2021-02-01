@@ -29,6 +29,7 @@ class Functions
 
     public static function media($model)
     {
+        $img_folder = '/img/';
         $table_columns = Functions::tableColumns($model);
         $image_count = collect($table_columns)->filter(function ($value, $key) {
             return Str::contains($value, 'image');
@@ -36,10 +37,10 @@ class Functions
         $images = [];
         for ($i=1; $i <= $image_count; $i++) {
             if(Str::startsWith($model->{'image'.$i}, 'http')) {
-                $images = $model->{'image'.$i};
+                $images[] = $model->{'image'.$i};
             }
-            elseif(is_file(asset($model->{'image'.$i}))) {
-                $images = asset($model->{'image'.$i});
+            elseif(is_file(public_path().($img_folder.$model->{'image'.$i}))) {
+                $images[] = asset($img_folder.$model->{'image'.$i});
             }
         }
         if($model->video != null) {
@@ -48,7 +49,7 @@ class Functions
                 $media['url'] = $model->video;
             }
             else {
-                $media['url'] = is_file(asset($model->video)) ? asset($model->video) : '';
+                $media['url'] = is_file(public_path().($model->video)) ? asset($model->video) : '';
             }
         }
         elseif($model->audio != null) {
@@ -57,7 +58,7 @@ class Functions
                 $media['url'] = $model->audio;
             }
             else {
-                $media['url'] = is_file(asset($model->audio)) ? asset($model->audio) : '';
+                $media['url'] = is_file(public_path().($model->audio)) ? asset($model->audio) : '';
             }
         }
         elseif(count($images) > 0) {

@@ -5,8 +5,9 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -61,5 +62,22 @@ class User extends Authenticatable
     public function getNameAttribute()
     {
         return explode(' ', ($this->fullname))[0];
+    }
+
+    public function getAvatarAttribute()
+    {
+        if(Str::startsWith($this->avatarfile, 'http')) {
+            return $this->avatarfile;
+        }
+        else {
+            return is_file(public_path().'/img/'.$this->avatarfile) 
+                ? asset('img/'.$this->avatarfile) 
+                : 'https://ui-avatars.com/api/?name='.urlencode($this->fullname).'&color=7F9CF5&background=EBF4FF';
+        }
+    }
+
+    public function pricing($product_id)
+    {
+        return $this->hasMany('App\Pricing', 'actorid', 'actorid')->where('productid', $product_id)->get();
     }
 }

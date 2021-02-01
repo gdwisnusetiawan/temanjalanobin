@@ -37,7 +37,11 @@
         <!-- end: Topbar -->
 
         <!-- Header -->
-        @include('layouts.partials.header')
+        @if(request()->is('dashboard*'))
+            @include('layouts.partials.dashboard-header')
+        @else
+            @include('layouts.partials.header')
+        @endif
         <!-- end: Header -->
         
         <!-- Header -->
@@ -84,6 +88,10 @@
     @stack('scripts')
 
     <script type="text/javascript">
+        function formatCurrency(nominal, currency = 'Rp') {
+            return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
+        }
+
         function loading() {
             $(".body-inner").fadeOut("slow");
 
@@ -126,7 +134,7 @@
                     mouseOver: true,
                     type: 'success',
                     dismiss: true,
-                    timer: 2000,
+                    timer: 500,
                     newsetOnTop: true,
                     progressBar: false,
                     delay: 1000,
@@ -278,7 +286,7 @@
                             hide_onleave: true,
                             hide_delay: 200,
                             hide_delay_mobile: 1200,
-                            tmp: '<div class="tp-title-wrap"><span class="tp-arr-titleholder">Test</span></div>',
+                            // tmp: '<div class="tp-title-wrap"><span class="tp-arr-titleholder"></span></div>',
                             left: {
                                 h_align: "left",
                                 v_align: "center",

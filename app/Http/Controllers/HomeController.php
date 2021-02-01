@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,13 +26,19 @@ class HomeController extends Controller
     {
         // http error
         // abort(404);
+        $sliders = Slider::all();
 
-        return view('home');
+        return view('home', compact('sliders'));
     }
 
     public function welcome()
     {
         return view('welcome');
+    }
+
+    public function dashboard()
+    {
+        return view('dashboard');
     }
 
     public function about()
