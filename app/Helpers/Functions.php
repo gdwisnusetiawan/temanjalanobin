@@ -27,6 +27,11 @@ class Functions
         return Carbon::parse($datetime)->format('F jS, Y');
     }
 
+    public static function datetimeDiff($datetime)
+    {
+        return Carbon::parse($datetime)->diffForHumans();
+    }
+
     public static function media($model)
     {
         $img_folder = '/img/';
@@ -86,5 +91,19 @@ class Functions
     public static function formatCurrency($price, $currency = 'Rp')
     {
         return $currency.number_format($price,2,',','.');
+    }
+
+    public static function shareLink($url, $text = '')
+    {
+        $facebook = "https://www.facebook.com/sharer/sharer.php?u=$url";
+        $twitter = "https://twitter.com/intent/tweet?url=$url&text=$text";
+        $linkedin = "http://www.linkedin.com/shareArticle?mini=true&url=$url&title=$text";
+        $whatsapp = "https://wa.me/?text=$text $url";
+        return [
+            'facebook' => $facebook,
+            'twitter' => $twitter,
+            'linkedin' => $linkedin,
+            'whatsapp' => $whatsapp
+        ];
     }
 }

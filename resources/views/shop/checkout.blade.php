@@ -10,12 +10,9 @@
         </div>
         <div class="breadcrumb">
             <ul>
-                <li><a href="#">Home</a>
-                </li>
-                <li><a href="#">Shop</a>
-                </li>
-                <li class="active"><a href="#">Checkout</a>
-                </li>
+                <li><a href="#">Home</a></li>
+                <li><a href="{{ route('dashboard.order') }}">Transaction</a></li>
+                <li class="active"><a href="#">Checkout</a></li>
             </ul>
         </div>
     </div>

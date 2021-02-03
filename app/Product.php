@@ -24,6 +24,12 @@ class Product extends Model
     // {
     //     return $this->belongsTo('App\Category', 'category', 'id');
     // }
+
+
+    public function variants()
+    {
+        return $this->hasMany('App\Variant', 'product_id', 'id');
+    }
     
     public function getCategoryModelAttribute()
     {

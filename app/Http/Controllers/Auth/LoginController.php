@@ -58,44 +58,52 @@ class LoginController extends Controller
      */
     public function handleProviderCallback($provider)
     {
-        $google_user = Socialite::driver($provider)->user();
+        $socialite = Socialite::driver($provider)->user();
         
         // OAuth Two Providers
-        // $token = $google_user->token;
-        // $refreshToken = $google_user->refreshToken; // not always provided
-        // $expiresIn = $google_user->expiresIn;
+        // $token = $socialite->token;
+        // $refreshToken = $socialite->refreshToken; // not always provided
+        // $expiresIn = $socialite->expiresIn;
 
         // OAuth One Providers
-        // $token = $google_user->token;
-        // $tokenSecret = $google_user->tokenSecret;
+        // $token = $socialite->token;
+        // $tokenSecret = $socialite->tokenSecret;
 
         // All Providers
-        // $google_user->getId();
-        // $google_user->getNickname();
-        // $google_user->getName();
-        // $google_user->getEmail();
-        // $google_user->getAvatar();
+        // $socialite->getId();
+        // $socialite->getNickname();
+        // $socialite->getName();
+        // $socialite->getEmail();
+        // $socialite->getAvatar();
 
-        $user = User::where('email', $google_user->getEmail())->first();
+        $user = User::where('email', $socialite->getEmail())->first();
         if($user) {
-            if($user->gmailid == null) {
-                $user->gmailid = $google_user->getId();
+            if($provider == 'google' && $user->gmailid == null) {
+                $user->gmailid = $socialite->getId();
             }
-            $user->token = $google_user->token;
+            elseif($provider == 'facebook' && $user->facebookid == null) {
+                $user->facebookid = $socialite->getId();
+            }
+            $user->token = $socialite->token;
             $user->save();
         }
         else {
             $user = new User();
-            $user->fullname = $google_user->getName();
-            $user->email = $google_user->getEmail();
+            $user->fullname = $socialite->getName();
+            $user->email = $socialite->getEmail();
             // $user->password = $tokenSecret;
-            $user->token = $google_user->token;
-            $user->gmailid = $google_user->getId();
-            $user->avatarfile = $google_user->getAvatar();
+            $user->token = $socialite->token;
+            if($provider == 'google') {
+                $user->gmailid = $socialite->getId();
+            }
+            elseif($provider == 'facebook') {
+                $user->facebookid = $socialite->getId();
+            }
+            $user->avatarfile = $socialite->getAvatar();
             // $user->nohp = '';
             $user->save();
         }
         Auth::login($user);
-        return redirect()->intended('welcome');
+        return redirect()->intended('dashboard/welcome');
     }
 }

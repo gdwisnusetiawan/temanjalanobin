@@ -76,7 +76,7 @@
                     <a href="{{ route('login.provider', 'google') }}" class="btn btn-danger">
                         <i class="fab fa-google m-r-5"></i> Google
                     </a>
-                    <a class="btn btn-facebook">
+                    <a href="{{ route('login.provider', 'facebook') }}" class="btn btn-facebook">
                         <i class="fab fa-facebook-f m-r-5"></i> Facebook
                     </a>
                 </div>

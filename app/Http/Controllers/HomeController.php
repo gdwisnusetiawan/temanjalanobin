@@ -31,15 +31,15 @@ class HomeController extends Controller
         return view('home', compact('sliders'));
     }
 
-    public function welcome()
-    {
-        return view('welcome');
-    }
+    // public function welcome()
+    // {
+    //     return view('welcome');
+    // }
 
-    public function dashboard()
-    {
-        return view('dashboard');
-    }
+    // public function dashboard()
+    // {
+    //     return view('dashboard');
+    // }
 
     public function about()
     {

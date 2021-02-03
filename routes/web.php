@@ -24,19 +24,20 @@ Route::get('/modal', function () {
 Auth::routes(['verify' => true]);
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.provider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('register/{referal?}', 'Auth\RegisterController@showRegistrationForm');
 
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('about', 'HomeController@about')->name('about');
-Route::get('contact', 'HomeController@contact')->name('contact');
-Route::get('faq', 'HomeController@faq')->name('faq');
-Route::get('distributor', 'HomeController@distributor')->name('distributor');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('', 'HomeController@dashboard')->name('index');
-        Route::get('welcome', 'HomeController@welcome')->name('welcome');
-        Route::get('transaction', 'HomeController@welcome')->name('transaction');
+        Route::get('', 'DashboardController@index')->name('index');
+        Route::get('welcome', 'DashboardController@welcome')->name('welcome');
+        Route::prefix('transaction')->group(function () {
+            Route::get('order', 'DashboardController@order')->name('order');
+            Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
+        });
     });
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('{order}', 'CheckoutController@index')->name('index');

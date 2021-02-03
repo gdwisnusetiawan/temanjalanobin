@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::WELCOME;
 
     /**
      * Create a new controller instance.
@@ -76,11 +76,18 @@ class RegisterController extends Controller
         elseif(Str::startsWith($data['phone'], '62')) {
             $data['phone'] = '+'.$data['phone'];
         }
+        $user_referal = User::where('referalid', $data['referal'])->first();
+        session()->put('user_referal', $user_referal);
         return User::create([
             'fullname' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'nohp' => $data['phone']
         ]);
+    }
+
+    public function showRegistrationForm($referal = null)
+    {
+        return view('auth.register', compact('referal'));
     }
 }

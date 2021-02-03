@@ -2403,8 +2403,12 @@ var INSPIRO = {},
                             $(this.content).find("video").get(0).play();
                           }
                           cookieConfirm.click(function () {
+                            let expiresIn = new Date();
+                            let time = expiresIn.getTime();
+                            time += (elemCookieExpire) * 60 * 60 * 1000;
+                            expiresIn.setTime(time);
                             Cookies.set(elemCookieName, true, {
-                              expires: Number(elemCookieExpire)
+                              expires: expiresIn.toLocaleString("en-US", {timeZone: "Asia/Jakarta"})
                             })
                             $.magnificPopup.close();
                             cookieNotify.removeClass(modalShowClass);

@@ -6,6 +6,9 @@ use App\Menu;
 use App\Page;
 use App\Multipage;
 use App\Multisubpage;
+use App\DistributorLocation;
+use App\Helpers\Functions;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -18,6 +21,16 @@ class PageController extends Controller
         // })->orWhereHas('multipage', function (Builder $query) use ($slug) {
         //     $query->where('slug', $slug);
         // })->first();
+        if(Str::contains($slug, 'distributor')) {
+            $locations = DistributorLocation::with('distributors')->get();
+            return view('pages.distributor', compact('locations'));
+        }
+        if(Str::contains($slug, ['contact', 'kontak'])) {
+            return view('pages.contact');
+        }
+        if(Str::contains($slug, 'faq')) {
+            return view('pages.faq');
+        }
         $page = Page::where('slug', $slug)->where('is_active', true)->first() 
             ?? Multipage::with('submultipages')->where('slug', $slug)->where('is_active', true)->first();
         if(isset($page))
@@ -44,9 +57,13 @@ class PageController extends Controller
         $page = Multisubpage::where('slug', $slug)->where('is_active', true)->first();
         $prev_page = Multisubpage::where('id', '<', $page->id)->orderBy('id', 'desc')->first();
         $next_page = Multisubpage::where('id', '>', $page->id)->orderBy('id')->first();
+        $recents = Multipage::with('submultipages')->where('slug', $parent)->first()->submultipages->where('is_active', true)->sortBy('datetime')->take(3);
+        $populars = [];
+        $share_links = Functions::shareLink(url()->full());
+        // dd($recents);
         if(isset($page))
         {
-            return view('pages.submultiple', compact('page', 'prev_page', 'next_page'));
+            return view('pages.submultiple', compact('page', 'prev_page', 'next_page', 'recents', 'populars', 'share_links'));
         }
         else
         {

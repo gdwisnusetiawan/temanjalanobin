@@ -79,6 +79,14 @@ Whatsapp float
     opacity: 1;
 }
 
+button.btn.btn-whatsapp,
+.btn:not(.close):not(.mfp-close).btn-whatsapp,
+a.btn:not([href]):not([tabindex]).btn-whatsapp {
+  background-color: #25D366 !important;
+  color: #ffffff !important;
+  border-width: 0;
+}
+
 .product .product-image > a.link-fit,
 .product .product-image img.img-fit {
     height: 240px;

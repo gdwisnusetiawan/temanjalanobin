@@ -20,4 +20,9 @@ class Suborder extends Model
     {
         return Functions::formatCurrency($this->price);
     }
+
+    public function getTotalFormatAttribute()
+    {
+        return Functions::formatCurrency($this->price * $this->qty);
+    }
 }

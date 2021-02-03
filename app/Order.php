@@ -21,6 +21,11 @@ class Order extends Model
         return $this->hasMany('App\Suborder', 'invoiceno', 'invoiceno');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'uid', 'id');
+    }
+
     public function getSubtotalFormatAttribute()
     {
         return Functions::formatCurrency($this->price);
@@ -29,5 +34,15 @@ class Order extends Model
     public function getTotalFormatAttribute()
     {
         return Functions::formatCurrency($this->price - $this->discount);
+    }
+
+    public function getOrderdateFormatAttribute()
+    {
+        return Functions::datetimeFormat($this->orderdate);
+    }
+
+    public function getDuedateFormatAttribute()
+    {
+        return Functions::datetimeFormat($this->duedate);
     }
 }

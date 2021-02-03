@@ -28,6 +28,10 @@ class Footer extends Model
             $contents[$type][$i]['title'] = $this->{'title'.$i.'0'};
             $contents[$type][$i]['description'] = $this->{'description'.$i};
             for ($j=1; $j <= $columns; $j++) {
+                $location = $this->{'location'.$i.$j};
+                if(!Str::startsWith($location, 'http') && $location != null) {
+                    $location = route('page.index', $location);
+                }
                 $contents[$type][$i]['links'][$j] = [
                     'title' => $this->{'title'.$i.$j},
                     'location' => $this->{'location'.$i.$j},

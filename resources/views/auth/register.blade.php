@@ -26,6 +26,7 @@
                 <form method="POST" action="{{ route('register') }}" class="form-transparent-grey form-validate">
                     @csrf
                     <div class="row">
+                        <input type="hidden" name="referal" value="{{ $referal }}">
                         <div class="col-lg-12">
                             <h3>{{ __('Register') }}</h3>
                             <p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>

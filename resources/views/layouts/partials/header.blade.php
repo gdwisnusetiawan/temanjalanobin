@@ -54,7 +54,7 @@
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
-                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->submenus->count() > 0 ? $menu->url : '' }}">{{ $menu->title }}</a>
+                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->submenus->count() <= 0 ? $menu->url : '' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
@@ -168,14 +168,10 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="{{ request()->is('about*') ? 'current' : '' }}"><a href="{{ route('about') }}">About Us</a></li>
-                            <li class="{{ request()->is('news*') ? 'current' : '' }}"><a href="{{ route('news.index') }}">News</a></li> -->
+                            </li> -->
                         </ul>
                         <!-- right menu -->
                         <ul>
-                            <!-- <li class="{{ request()->is('faq*') ? 'current' : '' }}"><a href="{{ route('faq') }}">FAQ</a></li>
-                            <li class="{{ request()->is('contact*') ? 'current' : '' }}"><a href="{{ route('contact') }}">Contact</a></li> -->
                             @foreach($menus[1] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->url }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)

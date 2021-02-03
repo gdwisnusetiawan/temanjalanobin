@@ -32,6 +32,7 @@
                             <th class="cart-product-remove"></th>
                             <th class="cart-product-thumbnail">Product</th>
                             <th class="cart-product-name">Description</th>
+                            <th class="cart-product-name">Variant</th>
                             <th class="cart-product-price">Unit Price</th>
                             <th class="cart-product-quantity">Quantity</th>
                             <th class="cart-product-subtotal">Total</th>
@@ -42,6 +43,7 @@
                         @php 
                             $product = $cart['product'];
                             $quantity = $cart['quantity'];
+                            $variants = $cart['variants'] ?? null;
                             $total = $cart['total'];
                         @endphp
                         <tr id="product-{{ $product->id }}">
@@ -60,6 +62,15 @@
                             </td>
                             <td class="cart-product-description">
                                 <p>{!! htmlspecialchars_decode($product->description) !!}</p>
+                            </td>
+                            <td class="cart-product-description">
+                            @if($product->variants->isNotEmpty())
+                                <p>
+                                    @foreach($variants as $variant)
+                                        {{ ucfirst($variant) }} @if(!$loop->last) {{ ',' }} @endif
+                                    @endforeach
+                                </p>
+                            @endif
                             </td>
                             <td class="cart-product-price">
                                 <span class="amount">{{ $product->getPriceFormat($quantity) }}</span>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -23,12 +24,17 @@ class ShopController extends Controller
     public function single($category, $product)
     {
         $title = str_replace('-', ' ', $product);
-        $product = Product::whereRaw("LOWER(title) = '$title'")->first();
+        $category_title = str_replace('-', ' ', $category);
+        $product = Product::with('variants')->whereRaw("LOWER(title) = '$title'")->first();
+        $category = Category::whereRaw("LOWER(title) = '$category_title'")->first();
         if(!isset($product)) {
             request()->session()->flash('notify', ['message' => 'Product doesn\'t exists', 'type' => 'danger']);
             return redirect()->route('shop.index', [$category, $product]);
         }
-        return view('shop.single', compact('product'));
+        $variants = $product->variants;
+        $relateds = Product::where('category', $category->id)->where('id', '!=', $product->id)->limit(9)->get();
+        // dd($relateds);
+        return view('shop.single', compact('product', 'variants', 'relateds'));
     }
 
     public function singleAjax()

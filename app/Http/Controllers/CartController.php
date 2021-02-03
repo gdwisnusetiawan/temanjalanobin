@@ -30,6 +30,7 @@ class CartController extends Controller
     public function index(Request $request)
     {
         // session()->forget('cart');
+        // dd(session()->get('cart'));
         return view('shop.cart');
     }
 
@@ -51,6 +52,9 @@ class CartController extends Controller
             'quantity' => $request->quantity,
             'total' => $price * $request->quantity
         ];
+        foreach($product->variants as $variant) {
+            $cart['list'][$product->id]['variants'][$variant->input_name] = $request->get($variant->input_name);
+        }
 
         $cart['summary'] = $this->summary($cart);
         session()->put('cart', $cart);

@@ -6,6 +6,7 @@ use App\Config;
 use App\Footer;
 use App\Subcategory;
 use App\Helpers\Functions;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
+        date_default_timezone_set('Asia/Jakarta');
+
         $modal_type = rand(0,7);
         $modal_type = 0;
         $loader = 2;
@@ -34,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $subcategories = Subcategory::with('categories')->get();
-        // dd($subcategories);
+        // dd($menus[0][1]->submenus->isNotEmpty());
         view()->share([
             'modal_type' => $modal_type,
             'loader' => $loader,

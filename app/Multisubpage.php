@@ -26,6 +26,11 @@ class Multisubpage extends Model
         return Functions::datetimeFormat($this->datetime);
     }
 
+    public function getDatetimeDiffAttribute()
+    {
+        return Functions::datetimeDiff($this->datetime);
+    }
+
     public function getMediaAttribute()
     {
         return Functions::media($this);
@@ -35,4 +40,5 @@ class Multisubpage extends Model
     {
         return Functions::paragraphChunk($this->content);
     }
+
 }

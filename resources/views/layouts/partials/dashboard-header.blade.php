@@ -54,16 +54,15 @@
                         <!-- left menu -->
                         <ul>
                             <li class="{{ request()->is('/') ? 'current' : '' }}"><a href="{{ url('/') }}">Home</a></li>
-                            <li class="{{ request()->is('dashboard/') ? 'current' : '' }}"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                            <li class="{{ request()->is('dashboard') ? 'current' : '' }}"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                             <li class="{{ request()->is('dashboard/pengguna*') ? 'current' : '' }}"><a href="">Alih Pengguna</a></li>
                             <li class="{{ request()->is('dashboard/bonus*') ? 'current' : '' }}"><a href="">Bonus</a></li>
                         </ul>
                         <!-- right menu -->
                         <ul>
-                            <!-- <li class="{{ request()->is('contact*') ? 'current' : '' }}"><a href="{{ route('contact') }}">Contact</a></li> -->
                             <li class="{{ request()->is('dashboard/transaction*') ? 'current' : '' }}"><a href="">Riwayat Transaksi</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="">Pembelian Pribadi</a></li>
+                                    <li><a href="{{ route('dashboard.order') }}">Pembelian Pribadi</a></li>
                                     <li><a href="">Pendaftaran</a></li>
                                     <li><a href="">Redeem Voucher</a></li>
                                 </ul>

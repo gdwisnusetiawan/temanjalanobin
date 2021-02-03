@@ -30,15 +30,14 @@
                             @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <div class="product-rate">
+                        <!-- <div class="product-rate">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
                         </div>
-                        <div class="product-reviews"><a href="#">3 customer reviews</a>
-                        </div>
+                        <div class="product-reviews"><a href="#">3 customer reviews</a></div> -->
                         <div class="seperator m-b-10"></div>
                         <p>{!! htmlspecialchars_decode($product->description) !!}</p>
                         <div class="product-meta">
@@ -46,7 +45,7 @@
                         </div>
                         <div class="seperator m-t-20 m-b-10"></div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-3">
                         <!-- <div class="col-lg-6">
                             <h6>Select the size</h6>
                             <ul class="product-size">
@@ -77,18 +76,20 @@
                                 </li>
                             </ul>
                         </div> -->
-                        <!-- <div class="col-lg-6">
-                            <h6>Select the color</h6>
-                            <label class="sr-only">Color</label>
-                            <select style="padding:10px">
-                                <option value="">Select color…</option>
-                                <option value="">White</option>
-                                <option value="" selected="selected">Green</option>
-                                <option value="">Brown</option>
-                                <option value="">Yellow</option>
-                                <option value="">Pink</option>
+                        @foreach($variants as $variant)
+                        <div class="col-lg-6">
+                            <h6>Select the {{ $variant->title }}</h6>
+                            <label class="sr-only">{{ $variant->title }}</label>
+                            <select style="padding:10px" name="{{ $variant->input_name }}" required form="form-cart">
+                                <option value="" disabled>Select {{ $variant->title }}...</option>
+                                @foreach($variant->options_list as $option)
+                                    <option value="{{ $option }}">{{ ucfirst($option) }}</option>
+                                @endforeach
                             </select>
-                        </div> -->
+                        </div>
+                        @endforeach
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-lg-6">
                             <h6>Select quantity</h6>
                             <div class="cart-product-quantity">
@@ -124,9 +125,9 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="true"><i class="fa fa-info"></i>Additional
                             Info</a></a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false"><i class="fa fa-star"></i>Reviews</a></a>
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="tab-content" id="myTabContent3">
                     <div class="tab-pane fade active show" id="home3" role="tabpanel" aria-labelledby="home-tab">
@@ -167,7 +168,7 @@
                             </tbody>
                         </table> -->
                     </div>
-                    <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="tab-pane fade d-none" id="contact3" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="comments" id="comments">
                             <div class="comment_number">
                                 Reviews <span>(3)</span>
@@ -258,207 +259,38 @@
             <h4>Related Products you may be interested!</h4>
         </div>
         <div class="row">
+            @foreach($relateds->chunk(3) as $related)
             <div class="col-lg-4">
                 <div class="widget-shop">
+                    @foreach($related as $related_product)
                     <div class="product">
                         <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/10.jpg') }}" alt="Shop product image!">
-                            </a>
+                            <a href="{{ route('shop.single', [$related_product->category_model->slug, $related_product->slug]) }}"><img src="{{ $related_product->media['url'][0] }}" alt="Shop product image!"></a>
                         </div>
                         <div class="product-description">
-                            <div class="product-category">Women</div>
+                            <div class="product-category">{{ $related_product->category_model->title }}</div>
                             <div class="product-title">
-                                <h3><a href="#">Bolt Sweatshirt</a></h3>
+                                <h3><a href="{{ route('shop.single', [$related_product->category_model->slug, $related_product->slug]) }}">{{ $related_product->title }}</a></h3>
                             </div>
-                            <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
+                            <div class="product-price">
+                                @if(auth()->check() && auth()->user()->pricing($related_product->id)->isNotEmpty())
+                                    <del>{{ $related_product->real_price }}</del>
+                                @endif
+                                <ins>{{ $related_product->getpriceFormat(1) }}</ins>
                             </div>
-                            <div class="product-rate">
+                            <!-- <div class="product-rate">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star-half-o"></i>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/6.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Consume Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/7.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Man</div>
-                            <div class="product-title">
-                                <h3><a href="#">Logo Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="widget-shop">
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/11.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Man</div>
-                            <div class="product-title">
-                                <h3><a href="#">Logo Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/9.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Consume Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/3.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Man</div>
-                            <div class="product-title">
-                                <h3><a href="#">Logo Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="widget-shop">
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/1.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Bolt Sweatshirt</a></h3>
-                            </div>
-                            <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/2.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Women</div>
-                            <div class="product-title">
-                                <h3><a href="#">Consume Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="#"><img src="{{ asset('polo-5/images/shop/products/5.jpg') }}" alt="Shop product image!">
-                            </a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">Man</div>
-                            <div class="product-title">
-                                <h3><a href="#">Logo Tshirt</a></h3>
-                            </div>
-                            <div class="product-price"><ins>$39.00</ins>
-                            </div>
-                            <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>

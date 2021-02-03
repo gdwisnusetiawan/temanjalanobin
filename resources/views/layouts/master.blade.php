@@ -54,7 +54,7 @@
 
     </div>
     <!-- Whatsapp float -->
-    <a id="whatsappFloat" href="https://wa.me/62{{ $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
+    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referal')->nohp ?? $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
     <!-- Scroll top -->
@@ -90,6 +90,20 @@
     <script type="text/javascript">
         function formatCurrency(nominal, currency = 'Rp') {
             return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
+        }
+
+        function printPage(title) {
+            var printContents = document.getElementById('print-page').innerHTML;
+            var originalContents = document.body.innerHTML;
+            var originalTitle = document.title;
+            document.title = title;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+            document.title = originalTitle;
         }
 
         function loading() {

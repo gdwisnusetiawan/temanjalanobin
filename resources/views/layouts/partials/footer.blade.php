@@ -35,7 +35,7 @@
                                     <li><a href="#">Tutoya Update</a></li>
                                     <li><a href="#">Tutoya Gift</a></li>
                                     <li><a href="#">Newest Promo</a></li>
-                                    <li><a href="{{ route('distributor') }}">Distributor List</a></li>
+                                    <li><a href="#">Distributor List</a></li>
                                 </ul>
                             </div>
                         </div>

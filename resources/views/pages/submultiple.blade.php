@@ -52,22 +52,26 @@
                                     <!-- <span class="post-meta-comments"><a href=""><i class="fa fa-comments-o"></i>33 Comments</a></span> -->
                                     <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>News</a></span>
                                     <div class="post-meta-share">
-                                        <a class="btn btn-xs btn-slide btn-facebook" href="#">
+                                        <a href="{{ $share_links['facebook'] }}" target="_BLANK" class="btn btn-xs btn-slide btn-facebook" data-width="105">
                                             <i class="fab fa-facebook-f"></i>
                                             <span>Facebook</span>
                                         </a>
-                                        <a class="btn btn-xs btn-slide btn-twitter" href="#" data-width="100">
+                                        <a href="{{ $share_links['twitter'] }}" target="_BLANK"  class="btn btn-xs btn-slide btn-twitter" data-width="90">
                                             <i class="fab fa-twitter"></i>
                                             <span>Twitter</span>
                                         </a>
-                                        <a class="btn btn-xs btn-slide btn-instagram" href="#" data-width="118">
+                                        <a href="{{ $share_links['whatsapp'] }}" target="_BLANK" class="btn btn-xs btn-slide btn-whatsapp" data-width="105">
+                                            <i class="fab fa-whatsapp"></i>
+                                            <span>Whatsapp</span>
+                                        </a>
+                                        <a href="{{ $share_links['linkedin'] }}" target="_BLANK" class="btn btn-xs btn-slide btn-linkedin" data-width="95">
+                                            <i class="fab fa-linkedin"></i>
+                                            <span>LinkedIn</span>
+                                        </a>
+                                        <!-- <a class="btn btn-xs btn-slide btn-instagram" href="#" data-width="110">
                                             <i class="fab fa-instagram"></i>
                                             <span>Instagram</span>
-                                        </a>
-                                        <a class="btn btn-xs btn-slide btn-googleplus" href="mailto:#" data-width="80">
-                                            <i class="icon-mail"></i>
-                                            <span>Mail</span>
-                                        </a>
+                                        </a> -->
                                     </div>
                                 </div>
                                 <p>{!! htmlspecialchars_decode($page->content) !!}</p>
@@ -126,58 +130,30 @@
                         <div class="tab-content" id="tabs-posts-content">
                             <div class="tab-pane fade show active" id="popular" role="tabpanel" aria-labelledby="popular-tab">
                                 <div class="post-thumbnail-list">
+                                    @foreach($populars as $popular)
                                     <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/5.jpg') }}">
+                                        <img alt="" src="{{ $popular->media['url'][0] }}">
                                         <div class="post-thumbnail-content">
-                                            <a href="#">A true story, that never been told!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 6m ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Technology</span>
+                                            <a href="#">{{ $popular->title }}</a>
+                                            <span class="post-date"><i class="icon-clock"></i> {{ $popular->datetime_diff }}</span>
+                                            <span class="post-category"><i class="fa fa-tag"></i> Tag</span>
                                         </div>
                                     </div>
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/6.jpg') }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">Beautiful nature, and rare feathers!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 24h ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                                        </div>
-                                    </div>
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/7.jpg') }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">The most happiest time of the day!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 11h ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="recent" role="tabpanel" aria-labelledby="recent-tab">
                                 <div class="post-thumbnail-list">
+                                    @foreach($recents as $recent)
                                     <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/7.jpg') }}">
+                                        <img alt="" src="{{ $recent->media['url'][0] }}">
                                         <div class="post-thumbnail-content">
-                                            <a href="#">The most happiest time of the day!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 11h ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
+                                            <a href="#">{{ $recent->title }}</a>
+                                            <span class="post-date"><i class="icon-clock"></i> {{ $recent->datetime_diff }}</span>
+                                            <span class="post-category"><i class="fa fa-tag"></i> Tag</span>
                                         </div>
                                     </div>
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/8.jpg') }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">New costs and rise of the economy!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 11h ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                                        </div>
-                                    </div>
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ asset('polo-5/images/blog/thumbnail/6.jpg') }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">Beautiful nature, and rare feathers!</a>
-                                            <span class="post-date"><i class="icon-clock"></i> 24h ago</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
