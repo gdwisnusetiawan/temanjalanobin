@@ -96,7 +96,7 @@
                 </table>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <form class="form-inline">
                         <div class="input-group">
                             <input type="text" placeholder="Coupon Code" id="CouponCode" class="form-control">
@@ -106,7 +106,7 @@
                         </div>
                         <p class="small">Enter any valid coupon or promo code here to redeem your discount.</p>
                     </form>
-                </div>
+                </div> -->
                 <div class="col-lg-8 text-right">
                     <!-- <button type="button" class="btn">Update Card</button> -->
                 </div>
@@ -116,16 +116,30 @@
                 <div class="col-lg-6">
                     <h4>Calculate Shipping</h4>
                     <form class="row">
-                        <div class="col-lg-12 m-b-20">
+                        <div class="col-lg-6 m-b-20">
                             <select>
-                                <option value="ID">Indonesia</option>
+                                <option selected disabled>From</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6 m-b-20">
+                            <select>
+                                <option selected disabled>To</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-lg-6 form-group">
-                            <input type="text" placeholder="State / County" class="form-control">
+                            <!-- <label for="">Weight</label> -->
+                            <input type="number" placeholder="Weight" class="form-control">
                         </div>
                         <div class="col-lg-6  form-group">
-                            <input type="text" class="form-control" placeholder="Post Code / Zip">
+                            <label for=""></label>
+                            <!-- <input type="text" class="form-control" placeholder="Post Code / Zip"> -->
+                            <button class="btn">Calculate</button>
                         </div>
                     </form>
                 </div>
@@ -150,14 +164,14 @@
                                         <span class="amount" id="shipping">Free Shipping</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td class="cart-product-name">
                                         <strong>Coupon</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
                                         <span class="amount" id="coupon">-{{ session('cart')['summary']['coupon'] }}%</span>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td class="cart-product-name">
                                         <strong>Total</strong>
@@ -196,7 +210,7 @@
 <!-- end: SHOP CART EMPTY -->
 
 <!-- DELIVERY INFO -->
-@include('shop.delivery')
+<!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
 @endsection
 

@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $marquee = Marquee::first();
         $subcategories = Subcategory::with('categories')->get();
-        // dd($menus[1][2]->submenus);
+        // dd($menus[0][1]->submenus);
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
         // dd($user_referer);
         view()->share([

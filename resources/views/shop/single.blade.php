@@ -112,6 +112,11 @@
                                 <button type="submit" class="btn"><i class="icon-shopping-cart"></i> Add to cart</button>
                             </form>
                         </div>
+                        <div class="col-lg-6">
+                            <h6>Shop from</h6>
+                            <a class="btn" href="{{ route('cart.index') }}"><i class="icon-shopping-cart"></i> Shopee</a>
+                            <a class="btn" href="{{ route('cart.index') }}"><i class="icon-shopping-cart"></i> Tokopedia</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -265,8 +270,8 @@
             <div class="product">
                 <div class="product-image">
                     <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][0] }}" class="img-fit"></a>
-                    <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][0] }}" class="img-fit"></a>
-                    <span class="product-new">NEW</span>
+                    <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][1] ?? $related->media['url'][0] }}" class="img-fit"></a>
+                    <!-- <span class="product-new">NEW</span> -->
                     <span class="product-wishlist">
                         <a href="#"><i class="fa fa-heart"></i></a>
                     </span>
@@ -303,7 +308,7 @@
 <!-- end: SHOP WIDGET PRODUTCS -->
 
 <!-- DELIVERY INFO -->
-@include('shop.delivery')
+<!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
 @endsection
 

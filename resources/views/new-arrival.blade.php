@@ -6,13 +6,13 @@
     <div class="container">
         <div class="page-title">
             <h1>Shop</h1>
-            <span>{{ $category->title }}</span>
+            <span>New Arrival</span>
         </div>
         <div class="breadcrumb">
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Shop</a></li>
-                <li class="active"><a href="#">{{ $category->title }}</a></li>
+                <li class="active"><a href="#">New Arrival</a></li>
             </ul>
         </div>
     </div>
@@ -26,13 +26,13 @@
             <div class="content col-lg-12">
                 <!--Heading text-->
                 <div class="heading-text heading-line text-center m-b-80">
-                    <h4>{{ $category->title }}</h4>
+                    <h4>New Arrival</h4>
                 </div>
                 <!--end: Heading text-->
 
                 <!-- <div class="row m-b-20">
                     <div class="col-lg-6 p-t-10 m-b-20">
-                        <h3 class="m-b-20">{{ $category->title }}</h3>
+                        <h3 class="m-b-20">New Arrival</h3>
                         <p>Lorem ipsum dolor sit amet. Accusamus, sit, exercitationem, consequuntur, assumenda iusto eos commodi alias.</p>
                     </div>
                     <div class="col-lg-3">
@@ -73,8 +73,8 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="product">
                                 <div class="product-image">
-                                    <a href="{{ route('shop.single', [$category, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
-                                    <a href="{{ route('shop.single', [$category, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
+                                    <a href="{{ route('shop.single', [$product->category_model->slug, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
+                                    <a href="{{ route('shop.single', [$product->category_model->slug, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
                                     <!-- <span class="product-new">NEW</span> -->
                                     <!-- <span class="product-hot">HOT</span> -->
                                     <span class="product-wishlist">
@@ -87,7 +87,7 @@
                                 <div class="product-description">
                                     <!-- <div class="product-category">{{ $product->category_model->title }}</div> -->
                                     <div class="product-title">
-                                        <h3><a href="{{ route('shop.single', [$category, $product]) }}">{{ $product->title }}</a></h3>
+                                        <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product]) }}">{{ $product->title }}</a></h3>
                                     </div>
                                     <div class="product-title">
                                         @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty())
@@ -143,7 +143,7 @@
                     </div>
                     <!-- Load next portfolio items -->
                     <div id="pagination" class="infinite-scroll">
-                        <a href="{{ route('shop.index', $category->slug) }}"></a>
+                        <a href="{{ route('shop.index', $product->category_model->slug) }}"></a>
                     </div>
                     <!-- end:Load next portfolio items -->
 

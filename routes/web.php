@@ -28,7 +28,7 @@ Route::get('register/{referal?}', 'Auth\RegisterController@showRegistrationForm'
 
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index')->name('home');
-Route::get('about', 'HomeController@about')->name('about');
+// Route::get('new-arrival', 'HomeController@newArrival')->name('newArrival');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {

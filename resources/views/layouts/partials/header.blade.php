@@ -55,7 +55,7 @@
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
-                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->isMegaMenu() ? '#' : $menu->url }}">{{ $menu->title }}</a>
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->isMegaMenu() ? '#' : $menu->url }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
@@ -64,40 +64,13 @@
                                     </ul>
                                     @elseif($menu->isMegaMenu())
                                     <ul class="dropdown-menu">
-                                        <li class="mega-menu-content">
-                                            <div class="row">
-                                                @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
-                                                    @foreach($subcategories as $subcategory)
-                                                    <div class="col-lg-2-5">
-                                                        <ul>
-                                                            <li class="mega-menu-title">{{ $subcategory->name }}</li>
-                                                            @foreach($subcategory->categories as $category)
-                                                            <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                    @endforeach
-                                                @else
-                                                    @foreach($menu->submenus->chunk(8) as $submenus)
-                                                    <div class="col-lg-2-5">
-                                                        <ul>
-                                                            <!-- <li class="mega-menu-title">Submenu</li> -->
-                                                            @foreach($submenus as $submenu)
-                                                            <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                    @endforeach
-                                                @endif
-                                                <!-- <div class="col-lg-2-5 p-l-0">
-                                                    <h4 class="text-theme">BIG SALE<small>Up to</small></h4>
-                                                    <h2 class="text-lg text-theme lh80 m-b-30">70%</h2>
-                                                    <p class="m-b-0">The most happiest time of the day!. Morbi sagittis, sem quis ipsum dolor sit amet lacinia faucibus.</p><a class="btn btn-shadow btn-rounded btn-block m-t-10">SHOP NOW!</a><small class="t300">
-                                                        <p class="text-center m-0"><em>* Limited time Offer</em></p>
-                                                    </small>
-                                                </div> -->
-                                            </div>
-                                        </li>
+                                        @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
+                                            @foreach($subcategories as $subcategory)
+                                                @foreach($subcategory->categories as $category)
+                                                    <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
                                     </ul>
                                     @endif
                                 </li>
@@ -174,14 +147,14 @@
                         <!-- right menu -->
                         <!-- <ul> -->
                             @foreach($menus[1] as $menu)
-                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->isMegaMenu() ? '#' : $menu->url }}">{{ $menu->title }}</a>
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->isMegaMenu() ? '#' : $menu->url }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
                                             <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
                                         @endforeach
                                     </ul>
-                                    @elseif($menu->isMegaMenu())
+                                    @elseif(!$menu->isMegaMenu())
                                     <ul class="dropdown-menu">
                                         <li class="mega-menu-content">
                                             <div class="row">

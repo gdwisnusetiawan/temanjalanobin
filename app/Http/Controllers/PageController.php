@@ -7,6 +7,7 @@ use App\Page;
 use App\Multipage;
 use App\Multisubpage;
 use App\DistributorLocation;
+use App\Product;
 use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -21,6 +22,12 @@ class PageController extends Controller
         // })->orWhereHas('multipage', function (Builder $query) use ($slug) {
         //     $query->where('slug', $slug);
         // })->first();
+        
+        if(Str::contains($slug, ['new', 'arrival'])) {
+            $products = Product::where('special', true)->get();
+            return view('new-arrival', compact('products'));
+        }
+
         if(Str::contains($slug, 'distributor')) {
             $locations = DistributorLocation::with('distributors')->get();
             return view('pages.distributor', compact('locations'));

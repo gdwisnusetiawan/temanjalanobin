@@ -276,6 +276,6 @@
 @endif
 
 <!-- DELIVERY INFO -->
-@include('shop.delivery')
+<!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
 @endsection

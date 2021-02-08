@@ -31,7 +31,10 @@ class CartController extends Controller
     {
         // session()->forget('cart');
         // dd(session()->get('cart'));
-        return view('shop.cart');
+        $city_json = asset('data/city.json');
+        $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
+        // dd($cities);
+        return view('shop.cart', compact('cities'));
     }
 
     /**
