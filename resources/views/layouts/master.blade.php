@@ -7,7 +7,9 @@
     <meta name="author" content="WEBIDUS">
 	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else tutoya e-commerce, webidus digital marketing and technology @endif">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{ asset($config->favicon) }}">   
+    <link rel="icon" type="image/png" href="{{ asset($config->favicon) }}">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Document title -->
     <title>{{ $config->title ?? config('app.name', 'Tutoya') }} | @hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif</title>
     <!-- Stylesheets & Fonts -->
@@ -54,7 +56,7 @@
 
     </div>
     <!-- Whatsapp float -->
-    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referal')->nohp ?? $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
+    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
     <!-- Scroll top -->
@@ -62,6 +64,9 @@
     <!--Plugins-->
     <script src="{{ asset('polo-5/js/jquery.js') }}"></script>
     <script src="{{ asset('polo-5/js/plugins.js') }}"></script>
+    <!--Bootstrap Datetimepicker component-->
+    <script src="{{ asset('polo-5/plugins/moment/moment.min.js')}}"></script>
+    <script src="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.js') }}"></script>
     <!--Template functions-->
     <script src="{{ asset('polo-5/js/functions.js') }}"></script>
     <!-- jQuery Validate plugin files-->
@@ -90,6 +95,13 @@
     <script type="text/javascript">
         function formatCurrency(nominal, currency = 'Rp') {
             return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
+        }
+
+        function onSubmit(e) {
+            $('#button-spinner').show();
+            $('#button-submit .btn-text').html('Loading...');
+            $('#button-submit').prop('disabled', true);
+            $('#button-cancel').prop('disabled', true);
         }
 
         function printPage(title) {
@@ -148,7 +160,7 @@
                     mouseOver: true,
                     type: 'success',
                     dismiss: true,
-                    timer: 500,
+                    timer: 1000,
                     newsetOnTop: true,
                     progressBar: false,
                     delay: 1000,
@@ -266,7 +278,7 @@
             @if(session('notify'))
                 notify("{{ session('notify')['message'] }}", "{{ session('notify')['type'] }}");
             @endif
-            // notify("Testing", "Success");
+            // notify("testing", "Success");
             // notify("Testing", "Danger");
             // notify("Testing", "Warning");
             // notify("Testing", "Info");

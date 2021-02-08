@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h3>{{ __('Login') }}</h3>
-                        <form method="POST" action="{{ route('login') }}" class="form-validate">
+                        <form method="POST" action="{{ route('login') }}" class="form-validate" onsubmit="onSubmit()">
                             @csrf
                             <div class="form-group">
                                 <label class="sr-only">{{ __('E-Mail Address') }}</label>
@@ -55,7 +55,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn">{{ __('Login') }}</button>
+                                <button type="submit" class="btn" id="button-submit">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
+                                    <span class="btn-text">{{ __('Login') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>

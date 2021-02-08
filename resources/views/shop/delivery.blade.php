@@ -24,7 +24,7 @@
                     <div class="icon">
                         <a href="#"><i class="fa fa-history"></i></a>
                     </div>
-                    <h3>60 days money back guranty!</h3>
+                    <h3>60 days money back guarantee!</h3>
                     <p>Not happy with our product, feel free to return it, we will refund 100% your money!</p>
                 </div>
             </div>

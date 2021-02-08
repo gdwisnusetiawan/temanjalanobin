@@ -32,51 +32,51 @@
                             </div>
                             <div class="col-lg-12 form-group">
                                 <label class="sr-only">Country</label>
-                                <select>
+                                <select disabled>
                                     <option value="ID">Indonesia</option>
                                 </select>
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name" value="">
+                                <input type="text" class="form-control" placeholder="First Name" value="{{ $user->firstname }}" readonly>
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name" value="">
+                                <input type="text" class="form-control" placeholder="Last Name" value="{{ $user->lastname }}" readonly>
                             </div>
-                            <div class="col-lg-12 form-group">
+                            <!-- <div class="col-lg-12 form-group">
                                 <label class="sr-only">Company Name</label>
-                                <input type="text" class="form-control" placeholder="Company Name" value="">
-                            </div>
-                            <div class="col-lg-12 form-group">
-                                <label class="sr-only">Address</label>
-                                <input type="text" class="form-control" placeholder="Address" value="">
-                            </div>
-                            <div class="col-lg-6 form-group">
-                                <label class="sr-only">Apartment, suite, unit etc.</label>
-                                <input type="text" class="form-control" placeholder="Apartment, suite, unit etc." value="">
-                            </div>
+                                <input type="text" class="form-control" placeholder="Company Name" value="{{ $user->firstname }}" readonly>
+                            </div> -->
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">Town / City</label>
-                                <input type="text" class="form-control" placeholder="Town / City" value="">
+                                <input type="text" class="form-control" placeholder="Town / City" value="{{ $user->city }}" readonly>
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">State / County</label>
-                                <input type="text" class="form-control" placeholder="State / County" value="">
+                                <input type="text" class="form-control" placeholder="State / County" value="{{ $user->province }}" readonly>
                             </div>
                             <div class="col-lg-6 form-group">
+                                <label class="sr-only">Address</label>
+                                <input type="text" class="form-control" placeholder="Address" value="{{ $user->address }}" readonly>
+                            </div>
+                            <!-- <div class="col-lg-6 form-group">
+                                <label class="sr-only">Apartment, suite, unit etc.</label>
+                                <input type="text" class="form-control" placeholder="Apartment, suite, unit etc." value="{{ $user->firstname }}" readonly>
+                            </div> -->
+                            <div class="col-lg-6 form-group">
                                 <label class="sr-only">Postcode / Zip</label>
-                                <input type="text" class="form-control" placeholder="Postcode / Zip" value="">
+                                <input type="text" class="form-control" placeholder="Postcode / Zip" value="{{ $user->postcode }}" readonly>
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">Email</label>
-                                <input type="text" class="form-control" placeholder="Email" value="">
+                                <input type="text" class="form-control" placeholder="Email" value="{{ $user->email }}" readonly>
                             </div>
                             <div class="col-lg-6 form-group">
                                 <label class="sr-only">Phone</label>
-                                <input type="text" class="form-control" placeholder="Phone" value="">
+                                <input type="text" class="form-control" placeholder="Phone" value="{{ $user->nohp }}" readonly>
                             </div>
-                            <div class="col-lg-12 form-group">
+                            <!-- <div class="col-lg-12 form-group">
                                 <div class="panel panel-naked">
                                     <div class="panel-heading"><a href="#collapseThree" class="btn btn-outline btn-sm" data-toggle="collapse" class="collapsed" aria-expanded="false">Create an account?</a>
                                     </div>
@@ -91,10 +91,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <!-- <div class="col-lg-6">
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4 class="upper"><a href="#collapseFour" data-toggle="collapse" class="collapsed" aria-expanded="false"> Ship to a different address <i class="icon-arrow-down-circle"></i></a></h4>
@@ -154,7 +154,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </form>
             <div class="seperator"><i class="fa fa-credit-card"></i>
@@ -244,7 +244,7 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <a class="btn icon-left float-right mt-3" href="#"><span>Proceed to PayPal</span></a>
+                            <a href="{{ route('checkout.update', $order) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a>
                         </div>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
     </div>
 </section>
 <!-- end: SHOP CHECKOUT -->
-@else
+@elseif($order->orderstatus == 2)
 <!-- SHOP CHECKOUT COMPLETED -->
 <section id="shop-checkout-completed">
     <div class="container">
@@ -261,11 +261,13 @@
             <div class="text-center">
                 <h3>Congratulations! Your order is completed!</h3>
                 <p>Your order is number #123456. You can
-                    <a href="" class="text-underline">
+                    <a href="{{ route('dashboard.order') }}" class="text-underline">
                         <mark>view your order</mark>
                     </a> on your account page, when you are logged in.</p>
             </div>
+            @if(!auth()->check())
             <a href="{{ route('login') }}" class="btn icon-left m-r-10"><span>Go to login page</span></a>
+            @endif
             <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
         </div>
     </div>

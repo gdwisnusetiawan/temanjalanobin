@@ -63,7 +63,7 @@
                             <li class="{{ request()->is('dashboard/transaction*') ? 'current' : '' }}"><a href="">Riwayat Transaksi</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('dashboard.order') }}">Pembelian Pribadi</a></li>
-                                    <li><a href="">Pendaftaran</a></li>
+                                    <li><a href="{{ route('dashboard.user.registration', auth()->user()) }}">Pendaftaran</a></li>
                                     <li><a href="">Redeem Voucher</a></li>
                                 </ul>
                             </li>
@@ -82,9 +82,9 @@
                                     </li>
                                     <li><hr></li>
                                     <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                                    <li><a href="">History</a></li>
+                                    <li><a href="{{ route('dashboard.order') }}">History</a></li>
                                     <li><hr></li>
-                                    <li><a href="">Account Settings</a></li>
+                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Account Settings</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

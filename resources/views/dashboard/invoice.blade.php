@@ -19,11 +19,13 @@
         <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('dashboard.order') }}" class="btn btn-secondary"><i class="icon-chevron-left"></i> Back</a>
             <span>
-                <a href="{{ route('checkout.index', $order) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
+                @if($order->balance > 0)
+                    <a href="{{ route('checkout.index', $order) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
+                @endif
                 <button class="btn btn-outline" onclick="printPage('Invoice #{{ $order->invoiceno }}')"><i class="icon-printer"></i> Print</button>
             </span>
         </div>
-        @if($order->orderstatus == 1)
+        @if($order->orderstatus != null)
         <div class="card" id="print-page">
             <div class="card-header">
                 <div class="d-flex justify-content-between mb-3">
@@ -32,9 +34,10 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
-                        Office 149, 450 South Brand Brooklyn <br>
+                        <!-- Office 149, 450 South Brand Brooklyn <br>
                         San Diego County, CA 91905, USA <br>
-                        +1 (123) 456 7891, +44 (876) 543 2198
+                        +1 (123) 456 7891, +44 (876) 543 2198 -->
+                        Status: <span class="badge badge-warning">Belum Lunas</span>
                     </div>
                     <div>
                         Date Issued: {{ $order->orderdate_format }} <br>
@@ -55,10 +58,10 @@
                     <div>
                         <h5 class="card-title">Payment Details:</h5>
                         <!-- Total Due: <strong>Rp1.000.000</strong> -->
-                        <strong>PT. ABC</strong> <br>
-                        Jl. Mayjen Sungkono No.59 <br>
-                        billing@abc.id <br>
-                        0876543210 <br>
+                        <strong>{{ $distributor->name }}</strong> <br>
+                        {{ $distributor->address }} <br>
+                        {{ $distributor->email }} <br>
+                        {{ $distributor->telp }} <br>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -97,25 +100,27 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Transaction ID</th>
                                 <th scope="col">Transaction Date</th>
                                 <th scope="col">Gateway</th>
+                                <th scope="col">Transaction ID</th>
                                 <th scope="col">Total</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($order->payments as $payment)
                             <tr>
-                                <td>123</td>
-                                <td>12/12/2021</td>
-                                <td>BCA</td>
-                                <td>Rp7.000</td>
+                                <td>{{ $payment->date_format }}</td>
+                                <td>{{ $payment->merchant->name }}</td>
+                                <td>{{ $payment->transactionpaymentref }}</td>
+                                <td>{{ $payment->total_format }}</td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="d-flex justify-content-end mb-5">
                     <div>
-                        <strong>Balance:</strong> <span class="align-selft-end">Rp70.000</span> <br>
+                        <strong>Balance:</strong> <span class="align-selft-end">{{ $order->balance_format }}</span> <br>
                     </div>
                 </div>
                 <!-- <p class="card-text">With supporting text below as a natural lead-in to

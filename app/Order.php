@@ -26,6 +26,21 @@ class Order extends Model
         return $this->belongsTo('App\User', 'uid', 'id');
     }
 
+    public function payments()
+    {
+        return $this->hasMany('App\Payment', 'transactionno', 'invoiceno');
+    }
+
+    public function getGrandTotalAttribute()
+    {
+        return $this->price - $this->discount;
+    }
+
+    public function getBalanceAttribute()
+    {
+        return $this->grand_total - $this->payments->sum('transactionmount');
+    }
+
     public function getSubtotalFormatAttribute()
     {
         return Functions::formatCurrency($this->price);
@@ -33,7 +48,7 @@ class Order extends Model
 
     public function getTotalFormatAttribute()
     {
-        return Functions::formatCurrency($this->price - $this->discount);
+        return Functions::formatCurrency($this->grand_total);
     }
 
     public function getOrderdateFormatAttribute()
@@ -44,5 +59,10 @@ class Order extends Model
     public function getDuedateFormatAttribute()
     {
         return Functions::datetimeFormat($this->duedate);
+    }
+
+    public function getBalanceFormatAttribute()
+    {
+        return Functions::formatCurrency($this->balance);
     }
 }

@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         $marquee = Marquee::first();
         $subcategories = Subcategory::with('categories')->get();
         // dd($menus[1][2]->submenus);
+        $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
+        // dd($user_referer);
         view()->share([
             'modal_type' => $modal_type,
             'loader' => $loader,

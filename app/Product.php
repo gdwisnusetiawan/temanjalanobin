@@ -30,6 +30,11 @@ class Product extends Model
     {
         return $this->hasMany('App\Variant', 'product_id', 'id');
     }
+
+    public function distributor()
+    {
+        return $this->belongsTo('App\Distributor');
+    }
     
     public function getCategoryModelAttribute()
     {

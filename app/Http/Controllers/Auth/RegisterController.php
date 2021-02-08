@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use App\Rules\Captcha;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -76,13 +77,20 @@ class RegisterController extends Controller
         elseif(Str::startsWith($data['phone'], '62')) {
             $data['phone'] = '+'.$data['phone'];
         }
-        $user_referal = User::where('referalid', $data['referal'])->first();
-        session()->put('user_referal', $user_referal);
+        $user_referer = User::whereNotNull('referalid')->where('referalid', $data['referal'])->first();
+        if($user_referer) {
+            session()->put('user_referer', $user_referer);
+        }
         return User::create([
             'fullname' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'nohp' => $data['phone']
+            'nohp' => $data['phone'],
+            'actorid' => 1,
+            'registerdate' => Carbon::now(),
+            'accessdate' => Carbon::now(),
+            'ip' => request()->ip(),
+            'refbp' => $user_referer ? $user_referer->id : null
         ]);
     }
 

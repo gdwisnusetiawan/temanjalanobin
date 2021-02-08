@@ -27,7 +27,7 @@
                         <a id="btn-notifcation" href="{{ route('cart.index') }}"> 
                             <i class="icon-shopping-cart"></i>
                             @if(session('cart'))
-                                <span class="badge badge-light">{{ session('cart')['summary']['total_quantity'] }}</span>
+                                <span class="badge badge-light" id="cart-icon-quantity">{{ session('cart')['summary']['total_quantity'] }}</span>
                             @endif
                         </a> 
                     </li>

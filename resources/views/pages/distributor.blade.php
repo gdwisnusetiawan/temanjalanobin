@@ -33,7 +33,7 @@
                 <!-- <h4>Distributor</h4> -->
                 <div class="accordion">
                     @foreach($locations as $location)
-                    <div class="ac-item {{ $loop->first ? 'ac-active' : '' }}">
+                    <div class="ac-item">
                         <h5 class="ac-title" onclick="onLocationClick(this)">{{ strtoupper($location->city) }}</h5>
                         <div class="ac-content">
                             <ul class="list-group list-group-flush list-icon list-icon-arrow list-icon-colored">
@@ -77,14 +77,19 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
+    var latlngArray = [];
     locations.forEach(function (location) {
         location.distributors.forEach(function (distributor) {
+            latlngArray.push([distributor.lat, distributor.lon]);
             let marker = L.marker([distributor.lat, distributor.lon]).addTo(map);
             let popup = L.popup().setContent(`<h4>${distributor.name}</h4><span>${distributor.address}</span>`);
             marker.bindPopup(popup);
             marker.on('click', onMarkerClick);
         });
     });
+
+    var bounds = new L.LatLngBounds(latlngArray);
+    map.fitBounds(bounds);
 
     function onMarkerClick(e) {
         let popup = e.target.getPopup();
