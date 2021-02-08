@@ -38,17 +38,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('order', 'DashboardController@order')->name('order');
             Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
         });
+        Route::prefix('user')->name('user.')->group(function () {
+            Route::get('{user}', 'UserController@index')->name('index');
+            Route::put('update/{user}', 'UserController@update')->name('update');
+            Route::put('change-password/{user}', 'UserController@changePassword')->name('changePassword');
+            Route::put('billing/{user}', 'UserController@billing')->name('billing');
+            Route::get('registration/{user}', 'UserController@registration')->name('registration');
+            Route::put('register-business/{user}', 'UserController@registerBusiness')->name('registerBusiness');
+            Route::put('upload/{user}', 'UserController@upload')->name('upload');
+        });
     });
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('{order}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
+        Route::get('update/{order}', 'CheckoutController@update')->name('update');
     });
 });
 
 Route::prefix('collections')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
     Route::get('{category}', 'ShopController@index')->name('index');
-    Route::get('{category}/products/{product}', 'ShopController@single')->name('single');
+    Route::get('{category}/products/{product}/{referal?}', 'ShopController@single')->name('single');
     Route::get('single-ajax', 'ShopController@singleAjax')->name('single-ajax');
     Route::get('pricing/{product}', 'ShopController@pricing')->name('pricing');
 });

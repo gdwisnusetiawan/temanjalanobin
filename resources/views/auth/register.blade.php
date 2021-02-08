@@ -23,10 +23,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 center no-padding">
-                <form method="POST" action="{{ route('register') }}" class="form-transparent-grey form-validate">
+                <form method="POST" action="{{ route('register') }}" class="form-transparent-grey form-validate" onsubmit="onSubmit()">
                     @csrf
+                    <input type="hidden" name="referal" value="{{ $referal }}">
                     <div class="row">
-                        <input type="hidden" name="referal" value="{{ $referal }}">
                         <div class="col-lg-12">
                             <h3>{{ __('Register') }}</h3>
                             <p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
@@ -80,11 +80,11 @@
                             @enderror
                         </div>
                         <div class="col-lg-12 form-group">
-                            <button type="submit" class="btn">
-                                {{ __('Register') }}
-                                <span class="spinner-border spinner-border-sm mb-1" role="status" id="message-spinner" style="display: none"></span>
+                            <button type="submit" class="btn" id="button-submit">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
+                                <span class="btn-text">{{ __('Register') }}</span>
                             </button>
-                            <button type="button" class="btn btn-danger m-l-10">Cancel</button>
+                            <button type="button" class="btn btn-danger m-l-10" id="button-cancel">Cancel</button>
                         </div>
                     </div>
                     <hr>
@@ -118,40 +118,40 @@
             async defer>
 </script>
 <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    // $.ajaxSetup({
+    //     headers: {
+    //         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
 
-    function submitForm(e, spinner, captchaId) {
-        // $(e).preventDefault();
-        $.ajax({
-            type: $(e).attr("method"),
-            url: $(e).attr("action"),
-            data: $(e).serialize(),
-            dataType: 'json',
-            beforeSend: function() {
-                $(spinner).toggle('display');
-            },
-            success: function (data) {
-                $(spinner).toggle('display');
-                $(e)[0].reset();
-                if(data.success) {
-                    toastr.success(data.success, 'Success').css('width','480px');
-                    $('.success-message').html(data.success);
-                }
-                else {
-                    toastr.error(data.error, 'Failed').css('width','480px');
-                    $('.failed-message').html(data.error);
-                }
-                grecaptcha.reset(captchaId);
-                // console.log(data);
-            },
-            error: function (data) {
-                // console.log(data);
-            }
-        });
-    }
+    // function submitForm(e, spinner, captchaId) {
+    //     // $(e).preventDefault();
+    //     $.ajax({
+    //         type: $(e).attr("method"),
+    //         url: $(e).attr("action"),
+    //         data: $(e).serialize(),
+    //         dataType: 'json',
+    //         beforeSend: function() {
+    //             $(spinner).toggle('display');
+    //         },
+    //         success: function (data) {
+    //             $(spinner).toggle('display');
+    //             $(e)[0].reset();
+    //             if(data.success) {
+    //                 toastr.success(data.success, 'Success').css('width','480px');
+    //                 $('.success-message').html(data.success);
+    //             }
+    //             else {
+    //                 toastr.error(data.error, 'Failed').css('width','480px');
+    //                 $('.failed-message').html(data.error);
+    //             }
+    //             grecaptcha.reset(captchaId);
+    //             // console.log(data);
+    //         },
+    //         error: function (data) {
+    //             // console.log(data);
+    //         }
+    //     });
+    // }
 </script>
 @endpush

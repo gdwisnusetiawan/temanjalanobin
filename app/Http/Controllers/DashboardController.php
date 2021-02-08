@@ -26,6 +26,7 @@ class DashboardController extends Controller
     public function invoice(Order $order)
     {
         $user = $order->user;
-        return view('dashboard.invoice', compact('order', 'user'));
+        $distributor = $order->suborders->first()->product->distributor;
+        return view('dashboard.invoice', compact('order', 'user', 'distributor'));
     }
 }

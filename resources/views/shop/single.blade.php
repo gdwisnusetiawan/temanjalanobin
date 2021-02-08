@@ -258,40 +258,46 @@
         <div class="heading-text heading-line text-center">
             <h4>Related Products you may be interested!</h4>
         </div>
-        <div class="row">
-            @foreach($relateds->chunk(3) as $related)
-            <div class="col-lg-4">
-                <div class="widget-shop">
-                    @foreach($related as $related_product)
-                    <div class="product">
-                        <div class="product-image">
-                            <a href="{{ route('shop.single', [$related_product->category_model->slug, $related_product->slug]) }}"><img src="{{ $related_product->media['url'][0] }}" alt="Shop product image!"></a>
-                        </div>
-                        <div class="product-description">
-                            <div class="product-category">{{ $related_product->category_model->title }}</div>
-                            <div class="product-title">
-                                <h3><a href="{{ route('shop.single', [$related_product->category_model->slug, $related_product->slug]) }}">{{ $related_product->title }}</a></h3>
-                            </div>
-                            <div class="product-price">
-                                @if(auth()->check() && auth()->user()->pricing($related_product->id)->isNotEmpty())
-                                    <del>{{ $related_product->real_price }}</del>
-                                @endif
-                                <ins>{{ $related_product->getpriceFormat(1) }}</ins>
-                            </div>
-                            <!-- <div class="product-rate">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                            </div> -->
-                        </div>
+        <!--Shop products Carousel -->
+        <h4 class="mb-4">Shop products Carousel </h4>
+        <div class="carousel" data-items="3">
+            @foreach($relateds as $related)
+            <div class="product">
+                <div class="product-image">
+                    <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][0] }}" class="img-fit"></a>
+                    <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][0] }}" class="img-fit"></a>
+                    <span class="product-new">NEW</span>
+                    <span class="product-wishlist">
+                        <a href="#"><i class="fa fa-heart"></i></a>
+                    </span>
+                    <!-- <div class="product-overlay">
+                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
+                    </div> -->
+                </div>
+                <div class="product-description">
+                    <!-- <div class="product-category">Women</div> -->
+                    <div class="product-title">
+                        <h3><a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}">{{ $related->title }}</a></h3>
                     </div>
-                    @endforeach
+                    <div class="product-title">
+                        @if(auth()->check() && auth()->user()->pricing($related->id)->isNotEmpty())
+                            <del>{{ $related->real_price }}</del>
+                        @endif
+                        <ins>{{ $related->getpriceFormat(1) }}</ins>
+                    </div>
+                    <!-- <div class="product-rate">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                    </div> -->
+                    <!-- <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
                 </div>
             </div>
             @endforeach
         </div>
+        <!--end: Shop products Carousel -->
     </div>
 </section>
 <!-- end: SHOP WIDGET PRODUTCS -->
@@ -320,12 +326,17 @@ $(document).ready(function(){
 function updateQuantity(form, qty) {
     // Get the field name
     var elemQuantity = $('#quantity');
+    // let cartIcon = $('#cart-icon-quantity');
     // Increment Decrement
     var quantity = parseInt(elemQuantity.val()) + qty;
     if(quantity < 1) {
         quantity = 1;
+        cartIcon.hide();
     }
     elemQuantity.val(quantity);
+    // var cartQuantity = parseInt(cartIcon.html()) + quantity;
+    // cartIcon.html(cartQuantity);
+    // console.log(cartIcon, cartQuantity);
     // return quantity;
     calculatePrice(form, quantity);
 }

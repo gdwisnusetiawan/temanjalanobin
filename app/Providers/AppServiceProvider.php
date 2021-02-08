@@ -39,7 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $subcategories = Subcategory::with('categories')->get();
-        // dd($menus[0][1]->submenus->isNotEmpty());
+        $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
+        // dd($user_referer);
         view()->share([
             'modal_type' => $modal_type,
             'loader' => $loader,

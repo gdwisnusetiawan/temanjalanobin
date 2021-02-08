@@ -26,7 +26,7 @@
                         <a id="btn-notifcation" href="{{ route('cart.index') }}"> 
                             <i class="icon-shopping-cart"></i>
                             @if(session('cart'))
-                                <span class="badge badge-light">{{ session('cart')['summary']['total_quantity'] }}</span>
+                                <span class="badge badge-light" id="cart-icon-quantity">{{ session('cart')['summary']['total_quantity'] }}</span>
                             @endif
                         </a> 
                     </li>
@@ -198,9 +198,9 @@
                                     </li>
                                     <li><hr></li>
                                     <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                                    <li><a href="">History</a></li>
+                                    <li><a href="{{ route('dashboard.order') }}">History</a></li>
                                     <li><hr></li>
-                                    <li><a href="">Account Settings</a></li>
+                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Account Settings</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

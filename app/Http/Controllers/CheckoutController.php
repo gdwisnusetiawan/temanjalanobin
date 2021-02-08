@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Suborder;
+use App\Payment;
+use App\Transaction;
+use App\Merchant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,7 +14,8 @@ class CheckoutController extends Controller
 {
     public function index(Order $order)
     {
-        return view('shop.checkout', compact('order'));
+        $user = $order->user;
+        return view('shop.checkout', compact('order', 'user'));
     }
 
     public function store()
@@ -45,6 +49,40 @@ class CheckoutController extends Controller
             $suborder->save();
         }
         session()->forget('cart');
+        return redirect()->route('checkout.index', $order);
+    }
+
+    public function update(Request $request, Order $order)
+    {
+        $order->orderstatus = 2;
+        $order->save();
+
+        $merchant = Merchant::first();
+        $last_payment = Payment::orderBy('insertid', 'desc')->first();
+
+        $payment = new Payment();
+        $payment->user()->associate($order->user);
+        $payment->merchant()->associate($merchant);
+        $payment->order()->associate($order);
+        $payment->transactionmount = $order->price - $order->discount;
+        $payment->transactiondate = Carbon::now();
+        $payment->transactionexpire = Carbon::now()->addDays(7);
+        $payment->status = 1;
+        $payment->insertid = $last_payment->insertid + 1;
+        $payment->currency = 'rupiah';
+        $payment->save();
+
+        foreach($order->suborders as $suborder) {
+            $transaction = new Transaction();
+            $transaction->payment()->associate($payment);
+            $transaction->order()->associate($order);
+            $transaction->product()->associate($suborder->product);
+            $transaction->itemname = $suborder->product->title;
+            $transaction->quantity = $suborder->product->qty;
+            $transaction->price = $suborder->product->price;
+            $transaction->save();
+        }
+
         return redirect()->route('checkout.index', $order);
     }
 }
