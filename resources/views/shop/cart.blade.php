@@ -24,6 +24,7 @@
 <!-- SHOP CART -->
 <section id="shop-cart">
     <div class="container">
+        <!-- <h1 class="text-center mb-5">Shopping Cart</h1> -->
         <div class="shop-cart">
             <div class="table table-sm table-striped table-responsive">
                 <table class="table">
@@ -182,6 +183,7 @@
 <!-- SHOP CART EMPTY -->
 <section id="shop-cart">
     <div class="container">
+        <!-- <h1 class="text-center mb-5">Shopping Cart</h1> -->
         <div class="p-t-10 m-b-20 text-center">
             <div class="heading-text heading-line text-center">
                 <h4>Your cart is currently empty.</h4>

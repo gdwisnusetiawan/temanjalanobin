@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Page title -->
-<section id="page-title">
+<!-- <section id="page-title">
     <div class="container">
         <div class="page-title">
             <h1>Shop</h1>
@@ -16,7 +16,7 @@
             </ul>
         </div>
     </div>
-</section>
+</section> -->
 <!-- end: Page title -->
 <!-- Shop products -->
 <section id="page-content" class="sidebar-left">
@@ -24,7 +24,8 @@
         <div class="row">
             <!-- Content-->
             <div class="content col-lg-12">
-                <div class="row m-b-20">
+                <h1 class="text-center mb-5">{{ $category->title }}</h1>
+                <!-- <div class="row m-b-20">
                     <div class="col-lg-6 p-t-10 m-b-20">
                         <h3 class="m-b-20">{{ $category->title }}</h3>
                         <p>Lorem ipsum dolor sit amet. Accusamus, sit, exercitationem, consequuntur, assumenda iusto eos commodi alias.</p>
@@ -59,7 +60,7 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--Product list-->
                 <div class="shop">
                     <div class="row">
@@ -68,8 +69,8 @@
                             <div class="product">
                                 <div class="product-image">
                                     <a href="{{ route('shop.single', [$category, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
-                                    <a href="#" class="link-fit"><img src="{{ $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
-                                    <span class="product-new">NEW</span>
+                                    <a href="{{ route('shop.single', [$category, $product]) }}" class="link-fit"><img src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" alt="Shop product image!" class="img-fit"></a>
+                                    <!-- <span class="product-new">NEW</span> -->
                                     <!-- <span class="product-hot">HOT</span> -->
                                     <span class="product-wishlist">
                                         <a href="#"><i class="fa fa-heart"></i></a>
@@ -79,7 +80,7 @@
                                     </div>
                                 </div>
                                 <div class="product-description">
-                                    <div class="product-category">{{ $product->category_model->title }}</div>
+                                    <!-- <div class="product-category">{{ $product->category_model->title }}</div> -->
                                     <div class="product-title">
                                         <h3><a href="{{ route('shop.single', [$category, $product]) }}">{{ $product->title }}</a></h3>
                                     </div>
@@ -90,14 +91,14 @@
                                         {{ $product->getpriceFormat(1) }}
                                     </div>
                                     <!-- <div class="product-price" style="float: none; display: block">{{ $product->getpriceFormat(1) }}</div> -->
-                                    <div class="product-rate">
+                                    <!-- <div class="product-rate">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star-half-o"></i>
                                     </div>
-                                    <div class="product-reviews"><a href="#">6 customer reviews</a></div>
+                                    <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
                                 </div>
                             </div>
                         </div>
@@ -135,9 +136,15 @@
                             </div>
                         </div> -->
                     </div>
-                    <hr>
+                    <!-- Load next portfolio items -->
+                    <div id="pagination" class="infinite-scroll">
+                        <a href="{{ route('shop.index', $category->slug) }}"></a>
+                    </div>
+                    <!-- end:Load next portfolio items -->
+
+                    <!-- <hr> -->
                     <!-- Pagination -->
-                    <ul class="pagination">
+                    <!-- <ul class="pagination">
                         <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
                         <li class="page-item"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -145,7 +152,7 @@
                         <li class="page-item"><a class="page-link" href="#">4</a></li>
                         <li class="page-item"><a class="page-link" href="#">5</a></li>
                         <li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
-                    </ul>
+                    </ul> -->
                     <!-- end: Pagination -->
                 </div>
                 <!--End: Product list-->

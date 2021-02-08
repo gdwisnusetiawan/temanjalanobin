@@ -38,7 +38,7 @@
 
         <!-- Header -->
         @if(request()->is('dashboard*'))
-            @include('layouts.partials.dashboard-header')
+            @include('layouts.partials.header')
         @else
             @include('layouts.partials.header')
         @endif

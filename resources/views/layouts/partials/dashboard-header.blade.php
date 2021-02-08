@@ -1,4 +1,4 @@
-<header id="header" class="dark submenu-light header-logo-center">
+<header id="header" class="light">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
@@ -57,9 +57,9 @@
                             <li class="{{ request()->is('dashboard') ? 'current' : '' }}"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                             <li class="{{ request()->is('dashboard/pengguna*') ? 'current' : '' }}"><a href="">Alih Pengguna</a></li>
                             <li class="{{ request()->is('dashboard/bonus*') ? 'current' : '' }}"><a href="">Bonus</a></li>
-                        </ul>
+                        <!-- </ul> -->
                         <!-- right menu -->
-                        <ul>
+                        <!-- <ul> -->
                             <li class="{{ request()->is('dashboard/transaction*') ? 'current' : '' }}"><a href="">Riwayat Transaksi</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('dashboard.order') }}">Pembelian Pribadi</a></li>

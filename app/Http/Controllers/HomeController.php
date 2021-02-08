@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Slider;
+use App\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -27,8 +28,15 @@ class HomeController extends Controller
         // http error
         // abort(404);
         $sliders = Slider::all();
+        $products = Product::where('special', true)->get();
+        $top_rateds = Product::inRandomOrder()->limit(3)->get();
+        $on_sales = Product::inRandomOrder()->limit(3)->get();
+        $recommendeds = Product::inRandomOrder()->limit(3)->get();
+        $populars = Product::inRandomOrder()->limit(3)->get();
 
-        return view('home', compact('sliders'));
+        // dd((asset('/img/'.$products[0]->image1)));
+
+        return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars'));
     }
 
     // public function welcome()

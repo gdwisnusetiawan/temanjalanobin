@@ -29,7 +29,7 @@
 <!--end: Inspiro Slider -->
 
 <!-- BOXES -->
-<section>
+<!-- <section>
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
@@ -60,11 +60,11 @@
     </div>
 
 </div>
-</section>
+</section> -->
 <!-- end: BOXES -->
 
 <!-- DELIVERY INFO -->
-<section class="background-grey p-t-40 p-b-0">
+<!-- <section class="background-grey p-t-40 p-b-0">
 <div class="container">
     <div class="row">
         <div class="col-lg-4">
@@ -98,216 +98,48 @@
         </div>
     </div>
 </div>
-</section>
+</section> -->
 <!-- end: DELIVERY INFO -->
 
 <!-- Shop products CAROUSEL -->
 <section>
 <div class="container">
     <div class="heading-text heading-line text-center">
-        <h4>Shop products Carousel </h4>
+        <h4>Featured Products </h4>
     </div>
     <div class="carousel shop-products" data-margin="20" data-dots="false">
+        @foreach($products as $product)
         <div class="product">
             <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/1.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/10.jpg') }}">
-                </a>
-                <span class="product-new">NEW</span>
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="link-fit"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" class="img-fit"></a>
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" class="link-fit"></a>
+                <!-- <span class="product-new">NEW</span> -->
                 <span class="product-wishlist">
                     <a href="#"><i class="fa fa-heart"></i></a>
                 </span>
-                <div class="product-overlay">
+                <!-- <div class="product-overlay">
                     <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
+                </div> -->
             </div>
 
             <div class="product-description">
-                <div class="product-category">Women</div>
+                <!-- <div class="product-category">Women</div> -->
                 <div class="product-title">
-                    <h3><a href="#">Bolt Sweatshirt</a></h3>
+                    <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                 </div>
-                <div class="product-price"><ins>$15.00</ins>
-                </div>
-                <div class="product-rate">
+                <div class="product-title"><ins>{{ $product->getPriceFormat() }}</ins></div>
+                <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
+                <!-- <div class="product-rate">
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star-half-o"></i>
                 </div>
-                <div class="product-reviews"><a href="#">6 customer reviews</a>
-                </div>
+                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
             </div>
         </div>
-        <div class="product">
-            <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/6.jpg') }}">
-                </a>
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
-            </div>
-
-            <div class="product-description">
-                <div class="product-category">Women</div>
-                <div class="product-title">
-                    <h3><a href="#">Consume Tshirt</a></h3>
-                </div>
-                <div class="product-price"><ins>$39.00</ins>
-                </div>
-                <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
-                </div>
-                <div class="product-reviews"><a href="#">3 customer reviews</a>
-                </div>
-            </div>
-
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/3.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/7.jpg') }}">
-                </a>
-                <span class="product-hot">HOT</span>
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
-            </div>
-
-            <div class="product-description">
-                <div class="product-category">Man</div>
-                <div class="product-title">
-                    <h3><a href="#">Logo Tshirt</a></h3>
-                </div>
-                <div class="product-price"><ins>$39.00</ins>
-                </div>
-                <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
-                </div>
-                <div class="product-reviews"><a href="#">3 customer reviews</a>
-                </div>
-            </div>
-
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/4.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/9.jpg') }}">
-                </a>
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
-            </div>
-
-            <div class="product-description">
-                <div class="product-category">Women</div>
-                <div class="product-title">
-                    <h3><a href="#">Cotton Tshirt</a></h3>
-                </div>
-                <div class="product-price"><ins>$22.00</ins>
-                </div>
-                <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
-                </div>
-                <div class="product-reviews"><a href="#">5 customer reviews</a>
-                </div>
-            </div>
-
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/5.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/11.jpg') }}">
-                </a>
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
-            </div>
-
-            <div class="product-description">
-                <div class="product-category">Man</div>
-                <div class="product-title">
-                    <h3><a href="#">Grey Sweatshirt</a></h3>
-                </div>
-                <div class="product-price"><ins>$39.00</ins>
-                </div>
-                <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
-                </div>
-                <div class="product-reviews"><a href="#">5 customer reviews</a>
-                </div>
-            </div>
-
-        </div>
-        <div class="product">
-            <div class="product-image">
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/6.jpg') }}">
-                </a>
-                <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}">
-                </a>
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div>
-            </div>
-
-            <div class="product-description">
-                <div class="product-category">Women</div>
-                <div class="product-title">
-                    <h3><a href="#">Pocket Tshirt</a></h3>
-                </div>
-                <div class="product-price">
-                    <del>$19.00</del><ins>$15.00</ins>
-                </div>
-                <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                </div>
-                <div class="product-reviews"><a href="#">5 customer reviews</a>
-                </div>
-            </div>
-
-        </div>
+        @endforeach
     </div>
 </div>
 
@@ -315,313 +147,136 @@
 <!--END: Shop products CAROUSEL -->
 
 <!-- SHOP WIDGET PRODUTCS -->
-<section>
+<section class="pt-0">
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
-            <div class="heading-text heading-line">
+            <div class="mb-3">
                 <h4>Top Rated</h4>
             </div>
 
             <div class="widget-shop">
+                @foreach($top_rateds as $product)
                 <div class="product">
                     <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/10.jpg') }}">
-                        </a>
+                        <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
                     </div>
                     <div class="product-description">
-                        <div class="product-category">Women</div>
+                        <!-- <div class="product-category">Women</div> -->
                         <div class="product-title">
-                            <h3><a href="#">Bolt Sweatshirt</a></h3>
+                            <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
-                        <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
+                        <div class="product-price">
+                            <!-- <del>$30.00</del> -->
+                            <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <div class="product-rate">
+                        <!-- <div class="product-rate">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/6.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Women</div>
-                        <div class="product-title">
-                            <h3><a href="#">Consume Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/7.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Man</div>
-                        <div class="product-title">
-                            <h3><a href="#">Logo Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-
-                    </div>
-
-                </div>
+                @endforeach
             </div>
         </div>
         <div class="col-lg-3">
-            <div class="heading-text heading-line">
+            <div class="mb-3">
                 <h4>On Sale</h4>
             </div>
 
             <div class="widget-shop">
+                @foreach($on_sales as $product)
                 <div class="product">
                     <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/11.jpg') }}">
-                        </a>
+                        <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
                     </div>
-
                     <div class="product-description">
-                        <div class="product-category">Man</div>
+                        <!-- <div class="product-category">Women</div> -->
                         <div class="product-title">
-                            <h3><a href="#">Logo Tshirt</a></h3>
+                            <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
-                        <div class="product-price"><ins>$39.00</ins>
+                        <div class="product-price">
+                            <!-- <del>$30.00</del> -->
+                            <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <div class="product-rate">
+                        <!-- <div class="product-rate">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/9.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Women</div>
-                        <div class="product-title">
-                            <h3><a href="#">Consume Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/3.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Man</div>
-                        <div class="product-title">
-                            <h3><a href="#">Logo Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-
-                    </div>
-
-                </div>
+                @endforeach
             </div>
         </div>
         <div class="col-lg-3">
-            <div class="heading-text heading-line">
+            <div class="mb-3">
                 <h4>Recommended</h4>
             </div>
 
             <div class="widget-shop">
+                @foreach($recommendeds as $product)
                 <div class="product">
                     <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/1.jpg') }}">
-                        </a>
+                        <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
                     </div>
                     <div class="product-description">
-                        <div class="product-category">Women</div>
+                        <!-- <div class="product-category">Women</div> -->
                         <div class="product-title">
-                            <h3><a href="#">Bolt Sweatshirt</a></h3>
+                            <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
-                        <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
+                        <div class="product-price">
+                            <!-- <del>$30.00</del> -->
+                            <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <div class="product-rate">
+                        <!-- <div class="product-rate">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Women</div>
-                        <div class="product-title">
-                            <h3><a href="#">Consume Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/5.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Man</div>
-                        <div class="product-title">
-                            <h3><a href="#">Logo Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-
-                    </div>
-
-                </div>
+                @endforeach
 
             </div>
         </div>
         <div class="col-lg-3">
-            <div class="heading-text heading-line">
+            <div class="mb-3">
                 <h4>Popular</h4>
             </div>
 
             <div class="widget-shop">
+                @foreach($populars as $product)
                 <div class="product">
                     <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/4.jpg') }}">
-                        </a>
+                        <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}"></a>
                     </div>
                     <div class="product-description">
-                        <div class="product-category">Women</div>
+                        <!-- <div class="product-category">Women</div> -->
                         <div class="product-title">
-                            <h3><a href="#">Bolt Sweatshirt</a></h3>
+                            <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
-                        <div class="product-price"><del>$30.00</del><ins>$15.00</ins>
+                        <div class="product-price">
+                            <!-- <del>$30.00</del> -->
+                            <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <div class="product-rate">
+                        <!-- <div class="product-rate">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/13.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Women</div>
-                        <div class="product-title">
-                            <h3><a href="#">Consume Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="product">
-                    <div class="product-image">
-                        <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/8.jpg') }}">
-                        </a>
-                    </div>
-
-                    <div class="product-description">
-                        <div class="product-category">Women</div>
-                        <div class="product-title">
-                            <h3><a href="#">Logo Tshirt</a></h3>
-                        </div>
-                        <div class="product-price"><ins>$39.00</ins>
-                        </div>
-                        <div class="product-rate">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
-                        </div>
-
-                    </div>
-
-                </div>
+                @endforeach
 
             </div>
         </div>
@@ -633,17 +288,17 @@
 
 
 <!-- SUMMER SALE -->
-<section class="section-pattern p-t-60 p-b-30 text-center" style="background: url({{ asset('polo-5/images/pattern/pattern19.png') }})">
+<!-- <section class="section-pattern p-t-60 p-b-30 text-center" style="background: url({{ asset('polo-5/images/pattern/pattern19.png') }})">
 <div class="container">
     <h1><strong>Summer Sale</strong> Countdown</h1>
     <div class="countdown medium" data-countdown="2020/09/19 11:34:51" data-animate="fadeInUp"></div>
 </div>
-</section>
+</section> -->
 <!-- end: SUMMER SALE -->
 
 
 <!-- end: SHOP CATEGORIES -->
-<section>
+<!-- <section>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
@@ -695,6 +350,6 @@
         </div>
     </div>
 </div>
-</section>
+</section> -->
 <!-- end: SHOP CATEGORIES -->
 @endsection

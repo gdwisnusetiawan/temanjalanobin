@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-Route::prefix('collections')->name('shop.')->group(function () {
+Route::prefix('categories')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
     Route::get('{category}', 'ShopController@index')->name('index');
     Route::get('{category}/products/{product}', 'ShopController@single')->name('single');
