@@ -112,10 +112,10 @@
                                 <button type="submit" class="btn"><i class="icon-shopping-cart"></i> Add to cart</button>
                             </form>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <h6>Shop from</h6>
-                            <a class="btn" href="{{ route('cart.index') }}"><i class="icon-shopping-cart"></i> Shopee</a>
-                            <a class="btn" href="{{ route('cart.index') }}"><i class="icon-shopping-cart"></i> Tokopedia</a>
+                            <a class="btn btn-light" href="{{ $product->shopee_link }}" target="_BLANK"> <img src="{{ asset('img/logo/shopee-logo-3.png') }}" alt="shopee logo" style="max-height: 24px;"></a>
+                            <a class="btn btn-light" href="{{ $product->tokopedia_link }}" target="_BLANK"> <img src="{{ asset('img/logo/tokopedia-mascot.png') }}" alt="tokopedia logo" style="max-height: 24px"></a>
                         </div>
                     </div>
                 </div>

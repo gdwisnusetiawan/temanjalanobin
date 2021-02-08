@@ -142,8 +142,8 @@ class CartController extends Controller
                 'courier' => 'jne',
             ]);
         $result = json_decode($response->body())->rajaongkir->results;
-        $shipping = $result[0]->costs[0]->cost[0]->value;
-        // dd(($shipping));
+        $shipping = $result[0]->costs[0]->cost[0]->value ?? 0;
+        // dd(($result));
         $cart = session()->get('cart');
 
         $cart['summary'] = $this->summary($cart, $shipping);
@@ -152,5 +152,17 @@ class CartController extends Controller
         $cart['message'] = 'Cart updated successfully';
         $cart['type'] = 'success';
         return response()->json(['result' => $result, 'cart' => $cart]);
+    }
+
+    public function changeShipping(Request $request)
+    {
+        $cart = session()->get('cart');
+
+        $cart['summary'] = $this->summary($cart, $request->shipping);
+        session()->put('cart', $cart);
+
+        $cart['message'] = 'Cart updated successfully';
+        $cart['type'] = 'success';
+        return response()->json($cart);
     }
 }
