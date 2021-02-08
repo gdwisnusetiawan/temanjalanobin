@@ -115,9 +115,10 @@
                 <hr class="space">
                 <div class="col-lg-6">
                     <h4>Calculate Shipping</h4>
-                    <form class="row">
+                    <form method="POST" action="{{ route('cart.shipping') }}" class="row">
+                        @csrf
                         <div class="col-lg-6 m-b-20">
-                            <select>
+                            <select name="origin">
                                 <option selected disabled>From</option>
                                 @foreach($cities as $city)
                                     <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
@@ -125,7 +126,7 @@
                             </select>
                         </div>
                         <div class="col-lg-6 m-b-20">
-                            <select>
+                            <select name="destination">
                                 <option selected disabled>To</option>
                                 @foreach($cities as $city)
                                     <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
@@ -134,12 +135,12 @@
                         </div>
                         <div class="col-lg-6 form-group">
                             <!-- <label for="">Weight</label> -->
-                            <input type="number" placeholder="Weight" class="form-control">
+                            <input type="number" name="weight" placeholder="Weight" class="form-control">
                         </div>
                         <div class="col-lg-6  form-group">
                             <label for=""></label>
                             <!-- <input type="text" class="form-control" placeholder="Post Code / Zip"> -->
-                            <button class="btn">Calculate</button>
+                            <button type="button" class="btn" onclick="shippingCost(this.form)">Calculate</button>
                         </div>
                     </form>
                 </div>
@@ -245,7 +246,7 @@ function updateCart(form, qty, id) {
         success: function(data) {
             // console.log(data);
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
-            $('#shipping').html(data.summary.shipping);
+            $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#coupon').html('-'+data.summary.coupon+'%');
             $('#total').html(formatCurrency(data.summary.total));
             Object.values(data.list).forEach(function (item, index) {
@@ -271,11 +272,30 @@ function deleteCart(form) {
         success: function(data) {
             // console.log(data);
             $('#product-'+data.id).remove();
-            $('#subtotal').html(formatCurrency('Rp', data.summary.subtotal));
-            $('#shipping').html(data.summary.shipping);
+            $('#subtotal').html(formatCurrency(data.summary.subtotal));
+            $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#total').html(formatCurrency('Rp', data.summary.total));
+            $('#total').html(formatCurrency(data.summary.total));
             notify(data.message, data.type);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function shippingCost(form) {
+    var formData = $(form).serializeArray();
+    $.ajax({
+        type: $(form).attr('method'),
+        url: $(form).attr('action'),
+        dataType: 'json',
+        data: formData,
+        success: function(data) {
+            console.log(data);
+            $('#shipping').html(formatCurrency(data.cart.summary.shipping));
+            $('#total').html(formatCurrency(data.cart.summary.total));
+            // notify(data.message, data.type);
         },
         error: function(error) {
             console.log(error);
