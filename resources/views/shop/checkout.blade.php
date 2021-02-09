@@ -208,7 +208,7 @@
                                             <td class="cart-product-name">
                                                 <strong>Shipping</strong>
                                             </td>
-                                            <td class="cart-product-name  text-right">
+                                            <td class="cart-product-name text-right">
                                                 <span class="amount">{{ $order->shipping_cost_format }}</span>
                                             </td>
                                         </tr>
@@ -216,7 +216,7 @@
                                             <td class="cart-product-name">
                                                 <strong>Coupon</strong>
                                             </td>
-                                            <td class="cart-product-name  text-right">
+                                            <td class="cart-product-name text-right">
                                                 <span class="amount">-{{ $order->coupon }}%</span>
                                             </td>
                                         </tr> -->

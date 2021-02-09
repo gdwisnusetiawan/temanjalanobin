@@ -116,10 +116,14 @@
                         <div class="col-lg-12">
                             <h6>Shop from</h6>
                             @if($product->shopee_link)
-                            <a class="btn btn-light" href="{{ $product->shopee_link }}" target="_BLANK"> <img src="{{ asset('img/logo/shopee-logo-3.png') }}" alt="shopee logo" style="max-height: 24px;"></a>
+                            <a class="btn btn-light" href="{{ $product->shopee_link }}" target="_BLANK" data-toggle="tooltip" data-placement="top" title="Shopee"> 
+                                <img src="{{ asset('img/logo/shopee-logo.png') }}" alt="shopee logo" style="max-height: 24px;">
+                            </a>
                             @endif
                             @if($product->tokopedia_link)
-                            <a class="btn btn-light" href="{{ $product->tokopedia_link }}" target="_BLANK"> <img src="{{ asset('img/logo/tokopedia-mascot.png') }}" alt="tokopedia logo" style="max-height: 24px"></a>
+                            <a class="btn btn-light" href="{{ $product->tokopedia_link }}" target="_BLANK" data-toggle="tooltip" data-placement="top" title="Tokopedia">
+                                <img src="{{ asset('img/logo/tokopedia-mascot.png') }}" alt="tokopedia logo" style="max-height: 24px">
+                            </a>
                             @endif
                         </div>
                         @endif

@@ -16,8 +16,6 @@ class CartController extends Controller
     {
         $total = collect($cart['list'])->sum('total');
         $total_quantity = collect($cart['list'])->sum('quantity');
-        // $coupun = $cart['summary']['coupon'] ?? 0;
-        // $shipping = $cart['summary']['shipping'] ?? 0;
         $grand_total = $total - round($total * $coupon / 100, 2) + $shipping;
         return [
             'subtotal' => $total,
@@ -143,7 +141,7 @@ class CartController extends Controller
             ]);
         $result = json_decode($response->body())->rajaongkir->results;
         $shipping = $result[0]->costs[0]->cost[0]->value ?? 0;
-        // dd(($result));
+        // dd(($shipping));
         $cart = session()->get('cart');
 
         $cart['summary'] = $this->summary($cart, $shipping);

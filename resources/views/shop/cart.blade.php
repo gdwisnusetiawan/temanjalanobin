@@ -145,7 +145,6 @@
                         <div class="col-lg-6  form-group">
                             <label for=""></label>
                             <!-- <input type="text" class="form-control" placeholder="Post Code / Zip"> -->
-                            <!-- <button type="button" class="btn" onclick="shippingCost(this.form)">Calculate</button> -->
                             <button type="button" class="btn" id="button-shipping" onclick="shippingCost(this.form)">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
                                 <span class="btn-text">Calculate</span>
@@ -193,10 +192,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <form method="POST" action="{{ route('checkout.store') }}">
-                        @csrf
-                        <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
-                    </form> -->
                 </div>
             </div>
             <div class="row mb-3">
@@ -328,7 +323,7 @@ function shippingCost(form) {
         dataType: 'json',
         data: formData,
         success: function(data) {
-            // console.log(data);
+            console.log(data);
             $('#shipping').html(formatCurrency(data.cart.summary.shipping));
             $('#total').html(formatCurrency(data.cart.summary.total));
             var html = '';
