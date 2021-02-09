@@ -95,7 +95,7 @@
                 </table>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <form class="form-inline">
                         <div class="input-group">
                             <input type="text" placeholder="Coupon Code" id="CouponCode" class="form-control">
@@ -105,7 +105,7 @@
                         </div>
                         <p class="small">Enter any valid coupon or promo code here to redeem your discount.</p>
                     </form>
-                </div>
+                </div> -->
                 <div class="col-lg-8 text-right">
                     <!-- <button type="button" class="btn">Update Card</button> -->
                 </div>
@@ -114,17 +114,40 @@
                 <hr class="space">
                 <div class="col-lg-6">
                     <h4>Calculate Shipping</h4>
-                    <form class="row">
-                        <div class="col-lg-12 m-b-20">
-                            <select>
-                                <option value="ID">Indonesia</option>
+                    <form method="POST" action="{{ route('cart.shipping') }}" class="row">
+                        @csrf
+                        <div class="col-lg-6 m-b-20">
+                            <select name="origin">
+                                <option selected disabled>From</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6 m-b-20">
+                            <select name="destination">
+                                <option selected disabled>To</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-lg-6 form-group">
-                            <input type="text" placeholder="State / County" class="form-control">
+                            <!-- <label for="">Weight</label> -->
+                            <div class="input-group">
+                                <input type="number" name="weight" placeholder="Weight" class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">gram</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6  form-group">
-                            <input type="text" class="form-control" placeholder="Post Code / Zip">
+                            <label for=""></label>
+                            <!-- <input type="text" class="form-control" placeholder="Post Code / Zip"> -->
+                            <button type="button" class="btn" id="button-shipping" onclick="shippingCost(this.form)">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
+                                <span class="btn-text">Calculate</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -146,17 +169,17 @@
                                         <strong>Shipping</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="shipping">Free Shipping</span>
+                                        <span class="amount" id="shipping">-</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td class="cart-product-name">
                                         <strong>Coupon</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
                                         <span class="amount" id="coupon">-{{ session('cart')['summary']['coupon'] }}%</span>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td class="cart-product-name">
                                         <strong>Total</strong>
@@ -168,12 +191,32 @@
                             </tbody>
                         </table>
                     </div>
-                    <form method="POST" action="{{ route('checkout.store') }}">
-                        @csrf
-                        <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
-                    </form>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="list-group" id="shipping-list">
+                        <!-- <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between">
+                            <div class="">
+                                <h5 class="mb-1">code</h5>
+                                <p class="mb-1">name</p>
+                            </div>
+                            <div class="">
+                                <h5 class="mb-1">cost.service</h5>
+                                <p class="mb-1">cost.description</p>
+                            </div>
+                            <div class="">
+                                <h5 class="mb-1">cost[0].value</h5>
+                                <p class="mb-1">cost[0].etd</p>
+                            </div>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+            <form method="POST" action="{{ route('checkout.store') }}">
+                @csrf
+                <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
+            </form>
         </div>
     </div>
 </section>
@@ -194,7 +237,7 @@
 <!-- end: SHOP CART EMPTY -->
 
 <!-- DELIVERY INFO -->
-@include('shop.delivery')
+<!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
 @endsection
 
@@ -229,7 +272,7 @@ function updateCart(form, qty, id) {
         success: function(data) {
             // console.log(data);
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
-            $('#shipping').html(data.summary.shipping);
+            $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#coupon').html('-'+data.summary.coupon+'%');
             $('#total').html(formatCurrency(data.summary.total));
             Object.values(data.list).forEach(function (item, index) {
@@ -255,11 +298,86 @@ function deleteCart(form) {
         success: function(data) {
             // console.log(data);
             $('#product-'+data.id).remove();
-            $('#subtotal').html(formatCurrency('Rp', data.summary.subtotal));
-            $('#shipping').html(data.summary.shipping);
+            $('#subtotal').html(formatCurrency(data.summary.subtotal));
+            $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#total').html(formatCurrency('Rp', data.summary.total));
+            $('#total').html(formatCurrency(data.summary.total));
             notify(data.message, data.type);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function shippingCost(form) {
+    var formData = $(form).serializeArray();
+    $('#button-spinner').show();
+    $('#button-shipping .btn-text').html('Loading...');
+    $('#button-shipping').prop('disabled', true);
+    $.ajax({
+        type: $(form).attr('method'),
+        url: $(form).attr('action'),
+        dataType: 'json',
+        data: formData,
+        success: function(data) {
+            console.log(data);
+            $('#shipping').html(formatCurrency(data.cart.summary.shipping));
+            $('#total').html(formatCurrency(data.cart.summary.total));
+            var html = '';
+            data.result.forEach(function (result, i) {
+                result.costs.forEach(function (costs, j) {
+                    costs.cost.forEach(function (cost, k) {
+                        html += `<li class="list-group-item list-group-item-action" onclick="changeShipping(${cost.value})">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5 class="mb-1">${result.code.toUpperCase()}</h5>
+                                            <p class="mb-1">${result.name}</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-1">${costs.service}</h5>
+                                            <p class="mb-1">${costs.description}</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
+                                            <p class="mb-1">${cost.etd} days</p>
+                                        </div>
+                                    </div>
+                                </li>`;
+                    });
+                });
+            });
+            $('#shipping-list').html(html);
+            $('#button-spinner').hide();
+            $('#button-shipping .btn-text').html('Calculate');
+            $('#button-shipping').prop('disabled', false);
+            // notify(data.message, data.type);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function changeShipping(cost) {
+    // var formData = $(form).serializeArray();
+    // $('#button-spinner').show();
+    // $('#button-shipping .btn-text').html('Loading...');
+    // $('#button-shipping').prop('disabled', true);
+    $.ajax({
+        type: 'POST',
+        url: @json(route('cart.changeShipping')),
+        dataType: 'json',
+        data: { _token: @json(csrf_token()), _method: 'PUT', shipping: cost },
+        success: function(data) {
+            // console.log(data);
+            $('#shipping').html(formatCurrency(data.summary.shipping));
+            $('#total').html(formatCurrency(data.summary.total));
+            // $('#shipping-list').html(html);
+            // $('#button-spinner').hide();
+            // $('#button-shipping .btn-text').html('Calculate');
+            // $('#button-shipping').prop('disabled', false);
+            // notify(data.message, data.type);
         },
         error: function(error) {
             console.log(error);

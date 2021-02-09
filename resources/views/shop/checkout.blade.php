@@ -208,18 +208,18 @@
                                             <td class="cart-product-name">
                                                 <strong>Shipping</strong>
                                             </td>
-                                            <td class="cart-product-name  text-right">
-                                                <span class="amount">Free Shipping</span>
+                                            <td class="cart-product-name text-right">
+                                                <span class="amount">{{ $order->shipping_cost_format }}</span>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!-- <tr>
                                             <td class="cart-product-name">
                                                 <strong>Coupon</strong>
                                             </td>
-                                            <td class="cart-product-name  text-right">
+                                            <td class="cart-product-name text-right">
                                                 <span class="amount">-{{ $order->coupon }}%</span>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                         <tr>
                                             <td class="cart-product-name">
                                                 <strong>Total</strong>
@@ -276,6 +276,6 @@
 @endif
 
 <!-- DELIVERY INFO -->
-@include('shop.delivery')
+<!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
 @endsection

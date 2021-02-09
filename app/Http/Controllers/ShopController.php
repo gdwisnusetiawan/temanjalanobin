@@ -13,7 +13,7 @@ class ShopController extends Controller
     public function index($category)
     {
         $title = str_replace('-', ' ', $category);
-        $category = Category::where('title', $title)->first();
+        $category = Category::whereRaw("LOWER(title) = '$title'")->first();
         $products = $category->products;
 
         // dd((asset('/img/'.$products[0]->image1)));

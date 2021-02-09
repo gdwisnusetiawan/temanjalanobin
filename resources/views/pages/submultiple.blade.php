@@ -83,7 +83,7 @@
                                 <a href="#">Travel</a>
                             </div> -->
                             <div class="post-navigation">
-                                @if($prev_page)
+                                @if($prev_page && $prev_page->multipage)
                                 <a href="{{ route('page.show', [$prev_page->multipage->slug, $prev_page->slug]) }}" class="post-prev">
                                     <div class="post-prev-title"><span>Previous Post</span>{{ $prev_page->title }}</div>
                                 </a>
@@ -91,7 +91,7 @@
                                 <a href="{{ route('page.index', $page->multipage->slug) }}" class="post-all">
                                     <i class="icon-grid"> </i>
                                 </a>
-                                @if($next_page)
+                                @if($next_page && $next_page->multipage)
                                 <a href="{{ route('page.show', [$next_page->multipage->slug, $next_page->slug]) }}" class="post-next">
                                     <div class="post-next-title"><span>Next Post</span>{{ $next_page->title }}</div>
                                 </a>

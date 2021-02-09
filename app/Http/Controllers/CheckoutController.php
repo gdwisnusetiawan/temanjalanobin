@@ -33,6 +33,7 @@ class CheckoutController extends Controller
         $order->orderstatus = 1;
         $order->coupon = $summary['coupon'];
         $order->discount = $summary['subtotal'] * $summary['coupon'] / 100;
+        $order->shipping_cost = $summary['shipping'];
         $order->key = $key;
         $order->uid = auth()->user()->id;
         $order->save();

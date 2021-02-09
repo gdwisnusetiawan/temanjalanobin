@@ -91,6 +91,7 @@
                 <div class="d-flex justify-content-end mb-5">
                     <div>
                         Subtotal: <span class="align-selft-end">{{ $order->subtotal_format }}</span> <br>
+                        Shipping: <span class="align-selft-end">{{ $order->shipping_cost_format }}</span> <br>
                         Discount: <span class="align-selft-end">{{ $order->coupon }}%</span> <br>
                         <hr>
                         <strong>Grand Total:</strong> <span class="align-selft-end">{{ $order->total_format }}</span> <br>

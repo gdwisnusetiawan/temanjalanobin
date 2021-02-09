@@ -1,6 +1,6 @@
-<div id="topbar" class="d-none d-xl-block d-lg-block topbar-fullwidth">
+<div id="topbar" class="d-none d-xl-block d-lg-block topbar-fullwidth {{ $marquee->marqueebgcolor }}">
     <div class="container">
-        <marquee behavior="scroll" direction="left" scrollamount="4" class="dark">Welcome to Tutoya</marquee>
+    <marquee behavior="scroll" direction="{{ $marquee->marqueedirection }}" scrollamount="{{ $marquee->marqueespeed }}" class="text-{{ $marquee->marqueetextcolor }}">{{ $marquee->marqueetext }}</marquee>
         <!-- <div class="row">
             <div class="col-md-12">
             </div>

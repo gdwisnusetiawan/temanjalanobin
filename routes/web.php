@@ -68,6 +68,8 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('store', 'CartController@store')->name('store');
     Route::put('update/{id}', 'CartController@update')->name('update');
     Route::delete('destroy/{id}', 'CartController@destroy')->name('destroy');
+    Route::post('shipping', 'CartController@shipping')->name('shipping');
+    Route::put('change-shipping', 'CartController@changeShipping')->name('changeShipping');
 });
 
 Route::prefix('news')->name('news.')->group(function () {

@@ -7,18 +7,21 @@ use App\Suborder;
 use App\Order;
 use App\Helpers\Functions;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    protected function summary($cart)
+    protected function summary($cart, $shipping = 0, $coupon = 0)
     {
         $total = collect($cart['list'])->sum('total');
         $total_quantity = collect($cart['list'])->sum('quantity');
+        $grand_total = $total - round($total * $coupon / 100, 2) + $shipping;
         return [
             'subtotal' => $total,
-            'coupon' => 20,
-            'total' => $total - round($total * 20 / 100, 2),
+            'coupon' => $coupon,
+            'shipping' => $shipping,
+            'total' => $grand_total,
             'total_quantity' => $total_quantity
         ];
     }
@@ -31,7 +34,10 @@ class CartController extends Controller
     {
         // session()->forget('cart');
         // dd(session()->get('cart'));
-        return view('shop.cart');
+        $city_json = asset('data/city.json');
+        $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
+        // dd($cities);
+        return view('shop.cart', compact('cities'));
     }
 
     /**
@@ -116,6 +122,44 @@ class CartController extends Controller
 
         $cart['id'] = $id;
         $cart['message'] = 'Product removed successfully';
+        $cart['type'] = 'success';
+        return response()->json($cart);
+    }
+
+    public function shipping(Request $request)
+    {
+        // dd($request->all());
+        $response = Http::withHeaders([
+            'content-type' => 'application/x-www-form-urlencoded',
+            'key' => 'a668420368d4731d3ca94321058bcea2'
+            ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+                'origin' => $request->origin,
+                'destination' => $request->destination,
+                'weight' => $request->weight,
+                'courier' => 'pos',
+                'courier' => 'jne',
+            ]);
+        $result = json_decode($response->body())->rajaongkir->results;
+        $shipping = $result[0]->costs[0]->cost[0]->value ?? 0;
+        // dd(($shipping));
+        $cart = session()->get('cart');
+
+        $cart['summary'] = $this->summary($cart, $shipping);
+        session()->put('cart', $cart);
+
+        $cart['message'] = 'Cart updated successfully';
+        $cart['type'] = 'success';
+        return response()->json(['result' => $result, 'cart' => $cart]);
+    }
+
+    public function changeShipping(Request $request)
+    {
+        $cart = session()->get('cart');
+
+        $cart['summary'] = $this->summary($cart, $request->shipping);
+        session()->put('cart', $cart);
+
+        $cart['message'] = 'Cart updated successfully';
         $cart['type'] = 'success';
         return response()->json($cart);
     }

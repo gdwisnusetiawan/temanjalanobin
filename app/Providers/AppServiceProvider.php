@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Config;
 use App\Footer;
 use App\Subcategory;
+use App\Marquee;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -38,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         $menus = Functions::menu();
         $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+        $marquee = Marquee::first();
         $subcategories = Subcategory::with('categories')->get();
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
         // dd($user_referer);
@@ -47,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
             'menus' => $menus,
             'config' => $config,
             'footer' => $footer,
+            'marquee' => $marquee,
             'subcategories' => $subcategories
         ]);
     }
