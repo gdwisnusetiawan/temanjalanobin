@@ -209,17 +209,17 @@
                                                 <strong>Shipping</strong>
                                             </td>
                                             <td class="cart-product-name  text-right">
-                                                <span class="amount">Free Shipping</span>
+                                                <span class="amount">{{ $order->shipping_cost_format }}</span>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!-- <tr>
                                             <td class="cart-product-name">
                                                 <strong>Coupon</strong>
                                             </td>
                                             <td class="cart-product-name  text-right">
                                                 <span class="amount">-{{ $order->coupon }}%</span>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                         <tr>
                                             <td class="cart-product-name">
                                                 <strong>Total</strong>

@@ -215,10 +215,12 @@
                                     @endguest
                                 </ul>
                             </li>
+                            @auth
                             <li>
                                 <a href="{{ route('dashboard.welcome') }}"><img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm"></a>
                                 <!-- <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a> -->
                             </li>
+                            @endauth
                         </ul>
                     </nav>
                 </div>

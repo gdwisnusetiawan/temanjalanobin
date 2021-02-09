@@ -18,7 +18,7 @@ class CartController extends Controller
         $total_quantity = collect($cart['list'])->sum('quantity');
         // $coupun = $cart['summary']['coupon'] ?? 0;
         // $shipping = $cart['summary']['shipping'] ?? 0;
-        $grand_total = $total - round($total * $coupon / 100, 2) - $shipping;
+        $grand_total = $total - round($total * $coupon / 100, 2) + $shipping;
         return [
             'subtotal' => $total,
             'coupon' => $coupon,

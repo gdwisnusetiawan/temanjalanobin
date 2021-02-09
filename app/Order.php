@@ -33,12 +33,17 @@ class Order extends Model
 
     public function getGrandTotalAttribute()
     {
-        return $this->price - $this->discount;
+        return $this->price - $this->discount + $this->shipping_cost;
     }
 
     public function getBalanceAttribute()
     {
         return $this->grand_total - $this->payments->sum('transactionmount');
+    }
+
+    public function getShippingCostFormatAttribute()
+    {
+        return Functions::formatCurrency($this->shipping_cost);
     }
 
     public function getSubtotalFormatAttribute()

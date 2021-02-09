@@ -112,11 +112,17 @@
                                 <button type="submit" class="btn"><i class="icon-shopping-cart"></i> Add to cart</button>
                             </form>
                         </div>
+                        @if($product->shopee_link || $product->tokopedia_link)
                         <div class="col-lg-12">
                             <h6>Shop from</h6>
+                            @if($product->shopee_link)
                             <a class="btn btn-light" href="{{ $product->shopee_link }}" target="_BLANK"> <img src="{{ asset('img/logo/shopee-logo-3.png') }}" alt="shopee logo" style="max-height: 24px;"></a>
+                            @endif
+                            @if($product->tokopedia_link)
                             <a class="btn btn-light" href="{{ $product->tokopedia_link }}" target="_BLANK"> <img src="{{ asset('img/logo/tokopedia-mascot.png') }}" alt="tokopedia logo" style="max-height: 24px"></a>
+                            @endif
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

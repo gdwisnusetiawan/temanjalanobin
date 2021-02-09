@@ -171,7 +171,7 @@
                                         <strong>Shipping</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="shipping">Free Shipping</span>
+                                        <span class="amount" id="shipping">-</span>
                                     </td>
                                 </tr>
                                 <!-- <tr>

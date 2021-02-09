@@ -108,38 +108,6 @@
                             </div>
                         </div>
                         @endforeach
-                        <!-- <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
-                                    <a href=""><img alt="Shop product image!" src="{{ asset('polo-5/images/blog/1.jpg') }}" style="object-fit: cover"></a>
-                                    <a href="#"><img alt="Shop product image!" src="{{ asset('polo-5/images/blog/1.jpg') }}"></a>
-                                    <span class="product-new">NEW</span>
-                                    <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                    </span>
-                                    <div class="product-overlay">
-                                        <a href="{{ route('shop.single-ajax') }}" data-lightbox="ajax">Quick View</a>
-                                    </div>
-                                </div>
-                                <div class="product-description">
-                                    <div class="product-category">{{ $product->category_model->title }}</div>
-                                    <div class="product-title">
-                                        <h3><a href="#">{{ $product->title }}</a></h3>
-                                    </div>
-                                    <div class="product-price"><ins>{{ $product->price }}</ins>
-                                    </div>
-                                    <div class="product-rate">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                    </div>
-                                    <div class="product-reviews"><a href="#">6 customer reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                     <!-- Load next portfolio items -->
                     <div id="pagination" class="infinite-scroll">
