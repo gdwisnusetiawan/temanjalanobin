@@ -146,6 +146,7 @@
 </section>
 <!--END: Shop products CAROUSEL -->
 
+@if(false)
 <!-- SHOP WIDGET PRODUTCS -->
 <section class="pt-0">
 <div class="container">
@@ -283,6 +284,7 @@
     </div>
 </div>
 </section>
+@endif
 <!-- end: SHOP WIDGET PRODUTCS -->
 
 
