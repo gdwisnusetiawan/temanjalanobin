@@ -64,13 +64,8 @@
                                 </select>
                             </form>
                         </div>
-<<<<<<< HEAD
                     </div>
                 </div> -->
-=======
-                    </div> -->
-                </div>
->>>>>>> b2d37b37c93cbe7cf12b88f2c4d2ad47421755ab
                 <!--Product list-->
                 <div class="shop">
                     <div class="row">
