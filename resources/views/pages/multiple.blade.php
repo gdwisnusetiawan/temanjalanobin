@@ -30,7 +30,7 @@
                         <a href="#">
                             <img alt="" src="{{ asset('polo-5/images/blog/audio-bg.jpg') }}">
                         </a>
-                        <span class="post-meta-category"><a href="">Audio</a></span>
+                        <!-- <span class="post-meta-category"><a href="">Audio</a></span> -->
                         <audio class="video-js vjs-default-skin" controls preload="false" data-setup="{}">
                             <source type="audio/mp3" src="{{ $multisubpage->media['url'] }}"/>
                         </audio>
@@ -38,7 +38,7 @@
                     @elseif($multisubpage->media['type'] == 'video')
                     <div class="post-video">
                         <iframe width="560" height="376" src="{{ $multisubpage->media['url'] }}" frameborder="0" allowfullscreen></iframe>
-                        <span class="post-meta-category"><a href="">Video</a></span>
+                        <!-- <span class="post-meta-category"><a href="">Video</a></span> -->
                     </div>
                     @else
                         @if(count($multisubpage->media['url']) > 1)
@@ -50,14 +50,14 @@
                                 </a>
                                 @endforeach
                             </div>
-                            <span class="post-meta-category"><a href="">Slider</a></span>
+                            <!-- <span class="post-meta-category"><a href="">Slider</a></span> -->
                         </div>
                         @else
                         <div class="post-image">
                             <a href="#">
                                 <img alt="" src="{{ $multisubpage->media['url'][0] }}">
                             </a>
-                            <span class="post-meta-category"><a href="">Image</a></span>
+                            <!-- <span class="post-meta-category"><a href="">Image</a></span> -->
                         </div>
                         @endif
                     @endif
