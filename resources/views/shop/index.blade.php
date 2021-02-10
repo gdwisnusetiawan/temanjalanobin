@@ -12,7 +12,7 @@
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Shop</a></li>
-                <li class="active"><a href="#">{{ $category->title }}</a></li>
+                <li class="active"><a href="#">{{ ucwords($category->title) }}</a></li>
             </ul>
         </div>
     </div>
@@ -32,10 +32,10 @@
 
                 <!-- <div class="row m-b-20">
                     <div class="col-lg-6 p-t-10 m-b-20">
-                        <h3 class="m-b-20">{{ $category->title }}</h3>
-                        <p>Lorem ipsum dolor sit amet. Accusamus, sit, exercitationem, consequuntur, assumenda iusto eos commodi alias.</p>
+                        <h3 class="m-b-20">{{ ucwords($category->title) }}</h3>
+                        <!-- <p>Lorem ipsum dolor sit amet. Accusamus, sit, exercitationem, consequuntur, assumenda iusto eos commodi alias.</p> -->
                     </div>
-                    <div class="col-lg-3">
+                    <!-- <div class="col-lg-3">
                         <div class="order-select">
                             <h6>Sort by</h6>
                             <p>Showing 1&ndash;12 of 25 results</p>
@@ -64,8 +64,13 @@
                                 </select>
                             </form>
                         </div>
+<<<<<<< HEAD
                     </div>
                 </div> -->
+=======
+                    </div> -->
+                </div>
+>>>>>>> b2d37b37c93cbe7cf12b88f2c4d2ad47421755ab
                 <!--Product list-->
                 <div class="shop">
                     <div class="row">

@@ -55,7 +55,7 @@
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
-                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->isMegaMenu() ? '#' : $menu->url }}">{{ $menu->title }}</a>
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)

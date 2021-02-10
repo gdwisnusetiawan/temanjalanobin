@@ -52,12 +52,19 @@ class CartController extends Controller
         $price = $product->getUserPrice($request->quantity);
         $cart = session()->get('cart');
         
+        if(!isset($cart['list'][$product->id])) {
+            $quantity = $request->quantity;
+        }
+        else {
+            $quantity = $cart['list'][$product->id]['quantity'] + $request->quantity;
+        }
         $cart['list'][$product->id] = [
             'product' => $product,
             'price' => $price,
-            'quantity' => $request->quantity,
-            'total' => $price * $request->quantity
+            'quantity' => $quantity,
+            'total' => $price * $quantity
         ];
+
         foreach($product->variants as $variant) {
             $cart['list'][$product->id]['variants'][$variant->input_name] = $request->get($variant->input_name);
         }
@@ -119,7 +126,15 @@ class CartController extends Controller
             $cart['summary'] = $this->summary($cart);
             session()->put('cart', $cart);
         }
-
+        $total_quantity = 0;
+        foreach($cart['list'] as $product) {
+            $total_quantity += $product['quantity'];
+        }
+        if(count($cart['list']) <= 0) {
+            session()->forget('cart');
+        }
+        
+        $cart['total_quantity'] = $total_quantity;
         $cart['id'] = $id;
         $cart['message'] = 'Product removed successfully';
         $cart['type'] = 'success';

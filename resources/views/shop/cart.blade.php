@@ -22,7 +22,7 @@
 <!-- end: Page title -->
 @if(session('cart'))
 <!-- SHOP CART -->
-<section id="shop-cart">
+<section id="shop-cart" class="cart-exists">
     <div class="container">
         <!-- <h1 class="text-center mb-5">Shopping Cart</h1> -->
         <div class="shop-cart">
@@ -214,9 +214,10 @@
                     </div>
                 </div>
             </div>
-            <form method="POST" action="{{ route('checkout.store') }}">
+            <form method="POST" action="{{ route('checkout.store') }}" id="form-checkout" class="text-right">
                 @csrf
-                <button type="submit" class="btn icon-left float-right"><span>Proceed to Checkout</span></button>
+                <p class="text-muted">Choose your shipment before checkout.</p>
+                <button type="submit" class="btn icon-left" disabled><span>Proceed to Checkout</span></button>
             </form>
         </div>
     </div>
@@ -224,7 +225,7 @@
 <!-- end: SHOP CART -->
 @else
 <!-- SHOP CART EMPTY -->
-<section id="shop-cart">
+<section id="shop-cart" class="cart-empty">
     <div class="container">
         <!-- <h1 class="text-center mb-5">Shopping Cart</h1> -->
         <div class="p-t-10 m-b-20 text-center">
@@ -235,8 +236,18 @@
         </div>
     </div>
 </section>
-@endif
 <!-- end: SHOP CART EMPTY -->
+@endif
+<section id="shop-cart" class="cart-empty" style="display: none">
+    <div class="container">
+        <div class="p-t-10 m-b-20 text-center">
+            <div class="heading-text heading-line text-center">
+                <h4>Your cart is currently empty.</h4>
+            </div>
+            <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
+        </div>
+    </div>
+</section>
 
 <!-- DELIVERY INFO -->
 <!-- @include('shop.delivery') -->
@@ -282,6 +293,9 @@ function updateCart(form, qty, id) {
                 $('#product-'+item.product.id).find('.cart-product-price .amount').html(formatCurrency(item.price));
                 $('#product-'+item.product.id).find('.total').html(formatCurrency(item.total));
             });
+            let cartIcon = $('#cart-icon-quantity');
+            var cartQuantity = parseInt(cartIcon.html()) + qty;
+            cartIcon.html(cartQuantity);
             // notify(data.message, data.type);
         },
         error: function(error) {
@@ -304,6 +318,15 @@ function deleteCart(form) {
             $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#coupon').html('-'+data.summary.coupon+'%');
             $('#total').html(formatCurrency(data.summary.total));
+
+            let cartIcon = $('#cart-icon-quantity');
+            var cartQuantity = data.total_quantity;
+            cartIcon.html(cartQuantity);
+            if(cartQuantity <= 0) {
+                cartIcon.hide();
+                $('.cart-exists').hide();
+                $('.cart-empty').show();
+            }
             notify(data.message, data.type);
         },
         error: function(error) {
@@ -327,10 +350,11 @@ function shippingCost(form) {
             $('#shipping').html(formatCurrency(data.cart.summary.shipping));
             $('#total').html(formatCurrency(data.cart.summary.total));
             var html = '';
+            var count = 0;
             data.result.forEach(function (result, i) {
                 result.costs.forEach(function (costs, j) {
                     costs.cost.forEach(function (cost, k) {
-                        html += `<li class="list-group-item list-group-item-action" onclick="changeShipping(${cost.value})">
+                        html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" onclick="changeShipping(${result.code+count}, ${cost.value})">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <h5 class="mb-1">${result.code.toUpperCase()}</h5>
@@ -346,6 +370,7 @@ function shippingCost(form) {
                                         </div>
                                     </div>
                                 </li>`;
+                        count++;
                     });
                 });
             });
@@ -353,6 +378,8 @@ function shippingCost(form) {
             $('#button-spinner').hide();
             $('#button-shipping .btn-text').html('Calculate');
             $('#button-shipping').prop('disabled', false);
+            $('#form-checkout p').hide();
+            $('#form-checkout button').prop('disabled', false);
             // notify(data.message, data.type);
         },
         error: function(error) {
@@ -361,7 +388,7 @@ function shippingCost(form) {
     });
 }
 
-function changeShipping(cost) {
+function changeShipping(id, cost) {
     // var formData = $(form).serializeArray();
     // $('#button-spinner').show();
     // $('#button-shipping .btn-text').html('Loading...');
@@ -375,6 +402,10 @@ function changeShipping(cost) {
             // console.log(data);
             $('#shipping').html(formatCurrency(data.summary.shipping));
             $('#total').html(formatCurrency(data.summary.total));
+            $('.list-group-item.list-group-item-action').each(function () {
+                $(this).removeClass('active text-white');
+            });
+            $(id).addClass('active text-white');
             // $('#shipping-list').html(html);
             // $('#button-spinner').hide();
             // $('#button-shipping .btn-text').html('Calculate');
