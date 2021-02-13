@@ -15,7 +15,9 @@ class CheckoutController extends Controller
     public function index(Order $order)
     {
         $user = $order->user;
-        return view('shop.checkout', compact('order', 'user'));
+        $merchants = Merchant::all();
+        // dd($merchants->split(2));
+        return view('shop.checkout', compact('order', 'user', 'merchants'));
     }
 
     public function store()
@@ -58,12 +60,12 @@ class CheckoutController extends Controller
         $order->orderstatus = 2;
         $order->save();
 
-        $merchant = Merchant::first();
+        // $merchant = Merchant::first();
         $last_payment = Payment::orderBy('insertid', 'desc')->first();
 
         $payment = new Payment();
         $payment->user()->associate($order->user);
-        $payment->merchant()->associate($merchant);
+        $payment->merchant()->associate($request->payment_merchant);
         $payment->order()->associate($order);
         $payment->transactionmount = $order->price - $order->discount;
         $payment->transactiondate = Carbon::now();
@@ -84,6 +86,6 @@ class CheckoutController extends Controller
             $transaction->save();
         }
 
-        return redirect()->route('checkout.index', $order);
+        return redirect()->route('dashboard.payment', $payment);
     }
 }
