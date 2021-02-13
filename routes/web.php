@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('transaction')->group(function () {
             Route::get('order', 'DashboardController@order')->name('order');
             Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
+            Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
         });
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('{user}', 'UserController@index')->name('index');
@@ -51,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('{order}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
-        Route::get('update/{order}', 'CheckoutController@update')->name('update');
+        Route::put('update/{order}', 'CheckoutController@update')->name('update');
     });
 });
 

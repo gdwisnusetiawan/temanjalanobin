@@ -11,6 +11,11 @@ class Payment extends Model
     public $timestamps = false;
     protected $connection = 'paymentgateway';
 
+    public function getRouteKeyName()
+    {
+        return 'transactionno';
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -34,6 +39,11 @@ class Payment extends Model
     public function getDateFormatAttribute()
     {
         return Functions::datetimeFormat($this->transactiondate);
+    }
+
+    public function getExpireFormatAttribute()
+    {
+        return Functions::datetimeFormat($this->transactionexpire);
     }
 
     public function getTotalFormatAttribute()
