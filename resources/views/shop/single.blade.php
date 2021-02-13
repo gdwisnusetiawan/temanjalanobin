@@ -341,7 +341,6 @@ $(document).ready(function(){
 function updateQuantity(form, qty) {
     // Get the field name
     var elemQuantity = $('#quantity');
-    // let cartIcon = $('#cart-icon-quantity');
     // Increment Decrement
     var quantity = parseInt(elemQuantity.val()) + qty;
     if(quantity < 1) {
@@ -349,10 +348,6 @@ function updateQuantity(form, qty) {
         cartIcon.hide();
     }
     elemQuantity.val(quantity);
-    // var cartQuantity = parseInt(cartIcon.html()) + quantity;
-    // cartIcon.html(cartQuantity);
-    // console.log(cartIcon, cartQuantity);
-    // return quantity;
     calculatePrice(form, quantity);
 }
 
