@@ -38,6 +38,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('order', 'DashboardController@order')->name('order');
             Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
             Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
+            Route::put('confirm-payment/{payment}', 'DashboardController@confirmPayment')->name('confirmPayment');
+            Route::put('upload-payment-proof/{payment}', 'DashboardController@uploadPaymentProof')->name('uploadPaymentProof');
+            Route::delete('delete-payment-proof/{payment}', 'DashboardController@deletePaymentProof')->name('deletePaymentProof');
         });
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('{user}', 'UserController@index')->name('index');
