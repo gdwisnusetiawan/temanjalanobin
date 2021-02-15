@@ -37,6 +37,8 @@ class PageController extends Controller
         {
             if($page->page_type == 'single') {
                 // $view = 'pages.single';
+                // $page->views = $page->views + 1;
+                // $page->save();
                 return view('pages.single', compact('page'));
             }
             elseif($page->page_type == 'multiple') {
@@ -63,6 +65,8 @@ class PageController extends Controller
         // dd($recents);
         if(isset($page))
         {
+            $page->views = $page->views + 1;
+            $page->save();
             return view('pages.submultiple', compact('page', 'prev_page', 'next_page', 'recents', 'populars', 'share_links'));
         }
         else

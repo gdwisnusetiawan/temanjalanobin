@@ -90,11 +90,23 @@
                 </div>
                 <div class="d-flex justify-content-end mb-5">
                     <div>
-                        Subtotal: <span class="align-selft-end">{{ $order->subtotal_format }}</span> <br>
-                        Shipping: <span class="align-selft-end">{{ $order->shipping_cost_format }}</span> <br>
-                        Discount: <span class="align-selft-end">{{ $order->coupon }}%</span> <br>
+                        <div class="d-flex justify-content-between">
+                            <span class="mr-1">Subtotal:</span>
+                            <span class="">{{ $order->subtotal_format }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="mr-1">Shipping:</span>
+                            <span class="">{{ $order->shipping_cost_format }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="mr-1">Discount:</span>
+                            <span class="">{{ $order->coupon }}%</span>
+                        </div>
                         <hr>
-                        <strong>Grand Total:</strong> <span class="align-selft-end">{{ $order->total_format }}</span> <br>
+                        <div class="d-flex justify-content-between">
+                            <strong class="mr-1">Grand Total:</strong>
+                            <span class="">{{ $order->total_format }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -108,20 +120,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($order->payments as $payment)
+                            @forelse($order->payments as $payment)
                             <tr>
                                 <td>{{ $payment->date_format }}</td>
                                 <td>{{ $payment->merchant->name }}</td>
                                 <td>{{ $payment->transactionpaymentref }}</td>
                                 <td>{{ $payment->total_format }}</td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center">No related transaction found</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
                 <div class="d-flex justify-content-end mb-5">
-                    <div>
-                        <strong>Balance:</strong> <span class="align-selft-end">{{ $order->balance_format }}</span> <br>
+                    <div class="d-flex justify-content-between">
+                        <strong class="mr-1">Balance:</strong>
+                        <span class="">{{ $order->balance_format }}</span> <br>
                     </div>
                 </div>
                 <!-- <p class="card-text">With supporting text below as a natural lead-in to
