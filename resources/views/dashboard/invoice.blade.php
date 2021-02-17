@@ -218,7 +218,7 @@
                     <div class="col-md-12 d-flex">
                         <h2 class="mr-3"><i class="fa fa-exclamation-triangle text-danger"></i></h2>
                         <h5>Are you sure want to cancel this order?</h5>
-                        <form method="POST" action="{{ route('dashboard.cancelOrder', $payment) }}" id="form-cancel-order" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
+                        <form method="POST" action="{{ route('dashboard.cancelPayment', $payment) }}" id="form-cancel-order" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
                             @csrf
                             @method('PUT')
                         </form>
