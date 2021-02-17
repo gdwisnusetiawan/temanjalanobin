@@ -26,7 +26,7 @@ class CartController extends Controller
             'total_quantity' => $total_quantity,
             'total_discount' => $total_discount,
             'total_weight' => $total_weight,
-            'shipping' => $cart['summary']['shipping']
+            // 'shipping' => array_key_exists('summary', $cart) ? $cart['summary']['shipping'] : null
         ];
     }
     /**
@@ -38,8 +38,9 @@ class CartController extends Controller
     {
         // session()->forget('cart');
         // dd(session()->get('cart'));
-        $city_json = asset('data/city.json');
-        $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
+        // $city_json = asset('data/city.json');
+        // $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
+        $cities = [];
 
         return view('shop.cart', compact('cities'));
     }

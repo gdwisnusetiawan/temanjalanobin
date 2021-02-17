@@ -477,6 +477,7 @@ function provinces() {
         $('#spinner-origin-province').hide();
         $('#spinner-destination-province').hide();
 
+        @if(session('cart'))
         var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
         if(shipping != null) {
             $('select[name="origin_province"]').val(shipping.origin_details.province_id).change();
@@ -484,6 +485,7 @@ function provinces() {
             cities('select[name="origin_province"]', 'origin');
             cities('select[name="destination_province"]', 'destination');
         }
+        @endif
     });
 }
 
@@ -496,11 +498,13 @@ function cities(provinceElement, name) {
         });
         $('#spinner-'+name).hide();
 
+        @if(session('cart'))
         var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
         if(shipping != null) {
             $('select[name="origin"]').val(shipping.origin_details.city_id);
             $('select[name="destination"]').val(shipping.destination_details.city_id);
         }
+        @endif
     });
 }
 
