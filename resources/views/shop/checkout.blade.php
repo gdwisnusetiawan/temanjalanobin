@@ -18,7 +18,7 @@
     </div>
 </section>
 <!-- end: Page title -->
-@if($order->orderstatus == 1)
+@if($payment->status == 1)
 <!-- SHOP CHECKOUT -->
 <section id="shop-checkout">
     <div class="container">
@@ -91,19 +91,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($order->suborders as $suborder)
+                                    @foreach($payment->transactions as $transaction)
                                     <tr>
                                         <td class="cart-product-thumbnail">
-                                            <div class="cart-product-thumbnail-name">{{ $suborder->product->title }}</div>
+                                            <div class="cart-product-thumbnail-name">{{ $transaction->itemname }}</div>
                                         </td>
                                         <!-- <td class="cart-product-name">
-                                            <p>{{ $suborder->product->title }}</p>
+                                            <p>{{ $transaction->product->title }}</p>
                                         </td> -->
                                         <td class="cart-product-description">
-                                            <p>{!! $suborder->product->description !!}</p>
+                                            <p>{!! $transaction->product->description !!}</p>
                                         </td>
                                         <td class="cart-product-subtotal">
-                                            <span class="amount">{{ $suborder->price_format }}</span>
+                                            <span class="amount">{{ $transaction->price_format }}</span>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -123,7 +123,7 @@
                                                     <strong>Order Subtotal</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount">{{ $order->subtotal_format }}</span>
+                                                    <span class="amount">{{ $payment->subtotal_format }}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -131,7 +131,7 @@
                                                     <strong>Shipping</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount">{{ $order->shipping_cost_format }}</span>
+                                                    <span class="amount">{{ $payment->shipping_cost_format }}</span>
                                                 </td>
                                             </tr>
                                             <!-- <tr>
@@ -139,15 +139,23 @@
                                                     <strong>Coupon</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount">-{{ $order->coupon }}%</span>
+                                                    <span class="amount">-{{ $payment->coupon }}%</span>
                                                 </td>
                                             </tr> -->
+                                            <tr>
+                                                <td class="cart-product-name">
+                                                    <strong>Discount</strong>
+                                                </td>
+                                                <td class="cart-product-name text-right">
+                                                    <span class="amount">-{{ $payment->discount > 0 ? $payment->discount_format : '' }}</span>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td class="cart-product-name">
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount color lead"><strong>{{ $order->total_format }}</strong></span>
+                                                    <span class="amount color lead"><strong>{{ $payment->total_format }}</strong></span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -166,7 +174,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-12">
-                                <a href="{{ route('checkout.update', $order) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a>
+                                <a href="{{ route('checkout.update', $payment) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a>
                             </div> -->
                         </div>
                     </div>
@@ -252,119 +260,27 @@
                 </div>
                 @endforeach
                 <div class="col-lg-12">
-                    <form method="POST" action="{{ route('checkout.update', $order) }}" id="form-checkout">
+                    <form method="POST" action="{{ route('checkout.update', $payment) }}" id="form-checkout">
                         @csrf
                         @method('PUT')
-                        <!-- <a href="{{ route('checkout.update', $order) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a> -->
+                        <!-- <a href="{{ route('checkout.update', $payment) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a> -->
                         <button type="submit" class="btn icon-left mt-3" id="button-checkout" disabled><span>Choose Payment Method</span></button>
                     </form>
                 </div>
-                <!-- <div class="col-lg-6">
-                    <h4 class="upper">Your Order</h4>
-                    <div class="table table-sm table-striped table-responsive table table-bordered table-responsive">
-                        <table class="table m-b-0">
-                            <thead>
-                                <tr>
-                                    <th class="cart-product-thumbnail">Product</th>
-                                    <th class="cart-product-name">Description</th>
-                                    <th class="cart-product-subtotal">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($order->suborders as $suborder)
-                                <tr>
-                                    <td class="cart-product-thumbnail">
-                                        <div class="cart-product-thumbnail-name">{{ $suborder->product->title }}</div>
-                                    </td>
-                                    <td class="cart-product-description">
-                                        <p>{!! $suborder->product->description !!}</p>
-                                    </td>
-                                    <td class="cart-product-subtotal">
-                                        <span class="amount">{{ $suborder->price_format }}</span>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div> -->
-                <!-- <div class="col-lg-6">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <h4>Order Total</h4>
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td class="cart-product-name">
-                                                <strong>Order Subtotal</strong>
-                                            </td>
-                                            <td class="cart-product-name text-right">
-                                                <span class="amount">{{ $order->subtotal_format }}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="cart-product-name">
-                                                <strong>Shipping</strong>
-                                            </td>
-                                            <td class="cart-product-name text-right">
-                                                <span class="amount">{{ $order->shipping_cost_format }}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="cart-product-name">
-                                                <strong>Coupon</strong>
-                                            </td>
-                                            <td class="cart-product-name text-right">
-                                                <span class="amount">-{{ $order->coupon }}%</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="cart-product-name">
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td class="cart-product-name text-right">
-                                                <span class="amount color lead"><strong>{{ $order->total_format }}</strong></span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <h4 class="upper">Payment Method</h4>
-                            <div class="list-group">
-                                <input type="radio" name="RadioInputName" value="Value1" id="Radio1" />
-                                <label class="list-group-item" for="Radio1">Direct Bank Transfer</label>
-                                <input type="radio" name="RadioInputName" value="Value2" id="Radio2" />
-                                <label class="list-group-item" for="Radio2">Cheque Payment</label>
-                                <input type="radio" name="RadioInputName" value="Value3" id="Radio3" />
-                                <label class="list-group-item" for="Radio3"><img width="90" alt="paypal" src="{{ asset('polo-5/images/shop/paypal-logo.png') }}"></label>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <a href="{{ route('checkout.update', $order) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
 </section>
 <!-- end: SHOP CHECKOUT -->
-@elseif($order->orderstatus == 2)
+@elseif($payment->status == 2)
 <!-- SHOP CHECKOUT COMPLETED -->
 <section id="shop-checkout-completed">
     <div class="container">
         <div class="p-t-10 m-b-20 text-center">
             <div class="text-center">
-                <div class="icon-box effect large center process">
-                <div class="icon"> <a href="#"><i class="fa fa-check-circle"></i></a> </div>
-                <!-- <h3>Powerful template</h3> -->
-                <!-- <p>Lorem ipsum dolor sit amet, consecte adipiscing elit.</p> -->
-                </div>
+                <h1 class="icon text-success"> <i class="fa fa-check-circle"></i> </h1>
                 <h3>Congratulations! Your order is completed!</h3>
-                <p>Your order is number #{{ $order->invoiceno }}. You can
+                <p>Your order is number #{{ $payment->transactionno }}. You can
                     <a href="{{ route('dashboard.order') }}" class="text-underline">
                         <mark>view your order</mark>
                     </a> on your account page, when you are logged in.</p>
@@ -372,7 +288,7 @@
             @if(!auth()->check())
             <a href="{{ route('login') }}" class="btn icon-left m-r-10"><span>Go to login page</span></a>
             @endif
-            <a class="btn icon-left" href="{{ url('/') }}"><span>View your orders</span></a>
+            <a class="btn icon-left" href="{{ route('dashboard.order') }}"><span>View your orders</span></a>
             <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
         </div>
     </div>

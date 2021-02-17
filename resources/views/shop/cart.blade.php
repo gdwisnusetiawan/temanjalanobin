@@ -115,7 +115,7 @@
                 <hr class="space">
                 <div class="col-lg-6">
                     <h4>Calculate Shipping</h4>
-                    <form method="POST" action="{{ route('cart.shipping') }}" class="row">
+                    <form method="POST" action="{{ route('cart.shipping') }}" class="row" id="form-shipping">
                         @csrf
                         <div class="col-lg-6 m-b-20">
                             <div class="input-group">
@@ -128,7 +128,7 @@
                             </div>
                             <div class="input-group">
                                 <select name="origin">
-                                    <option selected disabled>From</option>
+                                    <option value="" selected disabled>From</option>
                                 </select>
                                 <div class="spinner-loader-inside" id="spinner-origin" style="display: none">
                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -146,7 +146,7 @@
                             </div>
                             <div class="input-group">
                                 <select name="destination">
-                                    <option selected disabled>To</option>
+                                    <option value="" selected disabled>To</option>
                                 </select>
                                 <div class="spinner-loader-inside" id="spinner-destination" style="display: none">
                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -156,7 +156,7 @@
                         <div class="col-lg-6 form-group">
                             <!-- <label for="">Weight</label> -->
                             <div class="input-group">
-                                <input type="number" name="weight" placeholder="Weight" class="form-control">
+                                <input type="number" name="weight" placeholder="Weight" class="form-control" value="{{ session('cart')['summary']['total_weight'] }}" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">gram</span>
                                 </div>
@@ -190,7 +190,7 @@
                                         <strong>Shipping</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="shipping">-</span>
+                                        <span class="amount" id="shipping">{{ array_key_exists('shipping', session('cart')['summary']) ? $functions->formatCurrency(session('cart')['summary']['shipping']['cost']) : '-' }}</span>
                                     </td>
                                 </tr>
                                 <!-- <tr>
@@ -244,8 +244,8 @@
             </div>
             <form method="POST" action="{{ route('checkout.store') }}" id="form-checkout" class="text-right">
                 @csrf
-                <p class="text-muted">Choose your shipment before checkout.</p>
-                <button type="submit" class="btn icon-left" disabled><span>Proceed to Checkout</span></button>
+                <p class="text-muted" style="{{ array_key_exists('shipping', session('cart')['summary']) ? 'display: none' : '' }}">Choose your shipment before checkout.</p>
+                <button type="submit" class="btn icon-left" {{ !array_key_exists('shipping', session('cart')['summary']) ? 'disabled' : '' }}><span>Proceed to Checkout</span></button>
             </form>
         </div>
     </div>
@@ -315,7 +315,7 @@ function updateCart(form, qty, id) {
         success: function(data) {
             // console.log(data);
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
-            $('#shipping').html(formatCurrency(data.summary.shipping));
+            // $('#shipping').html(formatCurrency(data.summary.shipping.cost));
             // $('#coupon').html('-'+data.summary.coupon+'%');
             $('#discount').html('-'+formatCurrency(data.summary.total_discount));
             $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
@@ -327,6 +327,12 @@ function updateCart(form, qty, id) {
             let cartIcon = $('#cart-icon-quantity');
             var cartQuantity = parseInt(cartIcon.html()) + qty;
             cartIcon.html(cartQuantity);
+
+            // update shipping
+            $('input[name="weight"]').val(data.summary.total_weight);
+            if($('select[name="origin"] option:selected').val() != '' && $('select[name="destination"] option:selected').val() != '') {
+                shippingCost('#form-shipping');
+            }
             // notify(data.message, data.type);
         },
         error: function(error) {
@@ -346,7 +352,7 @@ function deleteCart(form) {
             // console.log(data);
             $('#product-'+data.id).remove();
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
-            $('#shipping').html(formatCurrency(data.summary.shipping));
+            $('#shipping').html(formatCurrency(data.summary.shipping.cost));
             // $('#coupon').html('-'+data.summary.coupon+'%');
             $('#discount').html('-'+formatCurrency(data.summary.total_discount));
             $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
@@ -379,14 +385,15 @@ function shippingCost(form) {
         data: formData,
         success: function(data) {
             console.log(data);
-            $('#shipping').html(formatCurrency(data.cart.summary.shipping));
+            $('#shipping').html(formatCurrency(data.cart.summary.shipping.cost));
             $('#total').html(formatCurrency(data.cart.summary.total));
             var html = '';
             var count = 0;
             data.result.forEach(function (result, i) {
                 result.costs.forEach(function (costs, j) {
                     costs.cost.forEach(function (cost, k) {
-                        html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" onclick="changeShipping(${result.code+count}, ${cost.value})">
+                        html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
+                            onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <h5 class="mb-1">${result.code.toUpperCase()}</h5>
@@ -420,7 +427,7 @@ function shippingCost(form) {
     });
 }
 
-function changeShipping(id, cost) {
+function changeShipping(id, code, name, service, description, cost, etd) {
     // var formData = $(form).serializeArray();
     // $('#button-spinner').show();
     // $('#button-shipping .btn-text').html('Loading...');
@@ -429,15 +436,24 @@ function changeShipping(id, cost) {
         type: 'POST',
         url: @json(route('cart.changeShipping')),
         dataType: 'json',
-        data: { _token: @json(csrf_token()), _method: 'PUT', shipping: cost },
+        data: { 
+            _token: @json(csrf_token()), 
+            _method: 'PUT', 
+            code: code,
+            name: name,
+            service: service,
+            description: description,
+            cost: cost,
+            etd: etd
+        },
         success: function(data) {
             // console.log(data);
-            $('#shipping').html(formatCurrency(data.summary.shipping));
+            $('#shipping').html(formatCurrency(data.summary.shipping.cost));
             $('#total').html(formatCurrency(data.summary.total));
             $('.list-group-item.list-group-item-action').each(function () {
                 $(this).removeClass('active text-white');
             });
-            $(id).addClass('active text-white');
+            $('#'+id).addClass('active text-white');
             // $('#shipping-list').html(html);
             // $('#button-spinner').hide();
             // $('#button-shipping .btn-text').html('Calculate');
@@ -460,6 +476,14 @@ function provinces() {
         });
         $('#spinner-origin-province').hide();
         $('#spinner-destination-province').hide();
+
+        var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
+        if(shipping != null) {
+            $('select[name="origin_province"]').val(shipping.origin_details.province_id).change();
+            $('select[name="destination_province"]').val(shipping.destination_details.province_id).change();
+            cities('select[name="origin_province"]', 'origin');
+            cities('select[name="destination_province"]', 'destination');
+        }
     });
 }
 
@@ -471,6 +495,12 @@ function cities(provinceElement, name) {
             $("select[name='"+name+"'").append(`<option value="${field.city_id}">${field.city_name}</option>`);
         });
         $('#spinner-'+name).hide();
+
+        var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
+        if(shipping != null) {
+            $('select[name="origin"]').val(shipping.origin_details.city_id);
+            $('select[name="destination"]').val(shipping.destination_details.city_id);
+        }
     });
 }
 

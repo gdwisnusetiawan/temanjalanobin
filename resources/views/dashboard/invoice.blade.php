@@ -1,5 +1,33 @@
 @extends('layouts.master')
 
+@push('styles')
+<style>
+    #print-page {
+        position: relative;
+    }
+
+    .watermark {
+        background-image: url("{{ asset($config->logo) }}");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 50%;
+        opacity: 0.05;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: none;
+    }
+
+    @media print {
+        .watermark {
+            display: block;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
 <!-- Page title -->
 <!-- <section id="page-title" class="page-title-center text-light" style="background-image:url({{ asset('polo-5/images/parallax/2.jpg') }});">
@@ -19,30 +47,34 @@
         <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('dashboard.order') }}" class="btn btn-secondary"><i class="icon-chevron-left"></i> Back</a>
             <span>
-                @if($order->balance > 0)
-                    <a href="{{ route('checkout.index', $order) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
-                @endif
                 <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Order</button>
-                <button class="btn btn-outline" onclick="printPage('Invoice #{{ $order->invoiceno }}')"><i class="icon-printer"></i> Print</button>
+                @if($payment->balance > 0 || $payment->status != 3)
+                    <a href="{{ route('checkout.index', $payment) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
+                @endif
+                <button class="btn btn-outline" onclick="printPage('Invoice #{{ $payment->invoiceno }}')"><i class="icon-printer"></i> Print</button>
             </span>
         </div>
-        @if($order->orderstatus != null)
+        @if($payment->status != null)
+        <!-- <div class="watermark">
+            <img src="{{ asset($config->logo) }}" alt="watermark logo">
+        </div> -->
         <div class="card" id="print-page">
+            <div class="watermark"></div>
             <div class="card-header">
                 <div class="d-flex justify-content-between mb-3">
                     <img src="{{ asset($config->logo) }}" alt="" height="120px"> <br>
-                    <h3 class="align-self-center">Invoice #{{ $order->invoiceno }}</h3>
+                    <h3 class="align-self-center">Invoice #{{ $payment->transactionno }}</h3>
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
                         <!-- Office 149, 450 South Brand Brooklyn <br>
                         San Diego County, CA 91905, USA <br>
                         +1 (123) 456 7891, +44 (876) 543 2198 -->
-                        Status: <span class="badge badge-{{ $payment->status_desc['color'] }}">{{ strtoupper($payment->status_desc['text']) }}</span>
+                        Status: <span class="badge badge-pill badge-{{ $payment->status_desc['color'] }}">{{ strtoupper($payment->status_desc['text']) }}</span>
                     </div>
                     <div>
-                        Date Issued: {{ $order->orderdate_format }} <br>
-                        Due Date: {{ $order->duedate_format }}
+                        Date Issued: {{ $payment->invoice_date_format }} <br>
+                        Due Date: {{ $payment->invoice_duedate_format }}
                     </div>
                 </div>
             </div>
@@ -52,17 +84,17 @@
                         <h5 class="card-title">Invoice To:</h5>
                         <strong>{{ $user->fullname }}</strong> <br>
                         <!-- Shelby Company Limited <br> -->
-                        {{ $user->city }}, {{ $user->province }} {{ $user->postcode }} <br>
+                        {{ $user->address_line }} <br>
                         {{ $user->email }} <br>
                         {{ $user->nohp }} <br>
                     </div>
                     <div>
                         <h5 class="card-title">Payment Details:</h5>
                         <!-- Total Due: <strong>Rp1.000.000</strong> -->
-                        <strong>{{ $distributor->name }}</strong> <br>
-                        {{ $distributor->address }} <br>
-                        {{ $distributor->email }} <br>
-                        {{ $distributor->telp }} <br>
+                        <strong>{{ $config->title }}</strong> <br>
+                        {{ $config->address }} <br>
+                        {{ $config->email }} <br>
+                        {{ $config->telp }} <br>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -77,13 +109,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($order->suborders as $suborder)
+                            @foreach($payment->transactions as $transaction)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $suborder->product->title }}</td>
-                                <td>{{ $suborder->price_format }}</td>
-                                <td>{{ $suborder->qty }}</td>
-                                <td>{{ $suborder->total_format }}</td>
+                                <td>{{ $transaction->itemname }}</td>
+                                <td>{{ $transaction->price_format }}</td>
+                                <td>{{ $transaction->quantity }}</td>
+                                <td>{{ $transaction->total_format }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -93,20 +125,20 @@
                     <div>
                         <div class="d-flex justify-content-between">
                             <span class="mr-1">Subtotal:</span>
-                            <span class="">{{ $order->subtotal_format }}</span>
+                            <span class="">{{ $payment->subtotal_format }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="mr-1">Shipping:</span>
-                            <span class="">{{ $order->shipping_cost_format }}</span>
+                            <span class="">{{ $payment->shipping_cost_format }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="mr-1">Discount:</span>
-                            <span class="">{{ $order->coupon }}%</span>
+                            <span class="">-{{ $payment->discount > 0 ? $payment->discount_format : '' }}</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between">
                             <strong class="mr-1">Grand Total:</strong>
-                            <span class="">{{ $order->total_format }}</span>
+                            <span class="">{{ $payment->total_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -118,15 +150,17 @@
                                 <th scope="col">Gateway</th>
                                 <th scope="col">Transaction ID</th>
                                 <th scope="col">Total</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($order->payments as $payment)
+                            @forelse($payment->paymentProofs as $proof)
                             <tr>
-                                <td>{{ $payment->date_format }}</td>
+                                <td>{{ $proof->date_format }}</td>
                                 <td>{{ $payment->merchant->name }}</td>
                                 <td>{{ $payment->transactionpaymentref }}</td>
-                                <td>{{ $payment->total_format }}</td>
+                                <td>{{ $proof->total_format }}</td>
+                                <td><span class="badge badge-pill badge-{{ $proof->status_desc['color'] }}">{{ $proof->status_desc['text'] }}</span></td>
                             </tr>
                             @empty
                             <tr>
@@ -139,7 +173,7 @@
                 <div class="d-flex justify-content-end mb-5">
                     <div class="d-flex justify-content-between">
                         <strong class="mr-1">Balance:</strong>
-                        <span class="">{{ $order->balance_format }}</span> <br>
+                        <span class="">{{ $payment->balance_format }}</span> <br>
                     </div>
                 </div>
                 <!-- <p class="card-text">With supporting text below as a natural lead-in to
@@ -147,7 +181,7 @@
                 <a href="#" class="btn btn-primary">Go somewhere</a> -->
             </div>
             <div class="card-footer text-muted">
-                <strong>Note:</strong> It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance projects. Thank You!
+                <strong>Note:</strong> It was a pleasure working with you. We hope you will keep us in mind. Thank You!
             </div>
         </div>
         @else
@@ -163,7 +197,7 @@
                         <mark>view your order</mark>
                     </a> on your account page, when you are logged in.</p>
             </div>
-            <a href="{{ route('checkout.index', $order) }}" class="btn icon-left m-r-10"><span>Proceed to Payment</span></a>
+            <a href="{{ route('checkout.index', $payment) }}" class="btn icon-left m-r-10"><span>Proceed to Payment</span></a>
             <a class="btn icon-left" href="{{ route('dashboard.order') }}"><span>Go To Order History</span></a>
         </div>
         @endif
@@ -184,7 +218,7 @@
                     <div class="col-md-12 d-flex">
                         <h2 class="mr-3"><i class="fa fa-exclamation-triangle text-danger"></i></h2>
                         <h5>Are you sure want to cancel this order?</h5>
-                        <form method="POST" action="{{ route('dashboard.cancelOrder', $order) }}" id="form-cancel-order" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
+                        <form method="POST" action="{{ route('dashboard.cancelOrder', $payment) }}" id="form-cancel-order" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
                             @csrf
                             @method('PUT')
                         </form>

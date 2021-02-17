@@ -25,4 +25,14 @@ class Transaction extends Model
     {
         return $this->belongsTo('App\Product', 'productid', 'id');
     }
+
+    public function getPriceFormatAttribute()
+    {
+        return Functions::formatCurrency($this->price);
+    }
+
+    public function getTotalFormatAttribute()
+    {
+        return Functions::formatCurrency($this->price * $this->quantity);
+    }
 }

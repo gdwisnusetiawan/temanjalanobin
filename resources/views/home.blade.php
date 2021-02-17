@@ -127,7 +127,12 @@
                 <div class="product-title">
                     <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                 </div>
-                <div class="product-title"><ins>{{ $product->getPriceFormat() }}</ins></div>
+                <div class="product-title">
+                    @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                        <del>{{ $product->real_price }}</del>
+                    @endif
+                    <ins>{{ $product->getPriceFormat() }}</ins>
+                </div>
                 <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
                 <!-- <div class="product-rate">
                     <i class="fa fa-star"></i>
@@ -168,7 +173,9 @@
                             <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
                         <div class="product-price">
-                            <!-- <del>$30.00</del> -->
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                                <del>{{ $product->real_price }}</del>
+                            @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
                         <!-- <div class="product-rate">
@@ -200,7 +207,9 @@
                             <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
                         <div class="product-price">
-                            <!-- <del>$30.00</del> -->
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                                <del>{{ $product->real_price }}</del>
+                            @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
                         <!-- <div class="product-rate">
@@ -232,7 +241,9 @@
                             <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
                         <div class="product-price">
-                            <!-- <del>$30.00</del> -->
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                                <del>{{ $product->real_price }}</del>
+                            @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
                         <!-- <div class="product-rate">
@@ -265,7 +276,9 @@
                             <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
                         </div>
                         <div class="product-price">
-                            <!-- <del>$30.00</del> -->
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                                <del>{{ $product->real_price }}</del>
+                            @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
                         <!-- <div class="product-rate">

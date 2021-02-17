@@ -76,6 +76,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
+    public function getAddressLineAttribute()
+    {
+        return $this->address .', '. ucwords($this->city) .', '. ucwords($this->province) .', '. $this->postcode;
+    }
+
     public function pricing($product_id)
     {
         return $this->hasMany('App\Pricing', 'actorid', 'actorid')->where('productid', $product_id)->get();
@@ -84,5 +89,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function orders()
     {
         return $this->hasMany('App\Order', 'uid', 'id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany('App\Payment');
     }
 }

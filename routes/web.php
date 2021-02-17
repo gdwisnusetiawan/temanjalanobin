@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('welcome', 'DashboardController@welcome')->name('welcome');
         Route::prefix('transaction')->group(function () {
             Route::get('order', 'DashboardController@order')->name('order');
-            Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
+            Route::get('invoice/{payment}', 'DashboardController@invoice')->name('invoice');
             Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
             Route::put('confirm-payment/{payment}', 'DashboardController@confirmPayment')->name('confirmPayment');
             Route::put('cancel-payment/{payment}', 'DashboardController@cancelPayment')->name('cancelPayment');
@@ -53,9 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
     Route::prefix('checkout')->name('checkout.')->group(function () {
-        Route::get('{order}', 'CheckoutController@index')->name('index');
+        Route::get('{payment}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
-        Route::put('update/{order}', 'CheckoutController@update')->name('update');
+        Route::put('update/{payment}', 'CheckoutController@update')->name('update');
     });
 });
 

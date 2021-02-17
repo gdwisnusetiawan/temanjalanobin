@@ -43,7 +43,7 @@
                                     <!-- <input type="hidden" value="{{ $payment->transactionmount }}" id="total-payment"> -->
                                     <span>
                                         <a class="btn btn-xs btn-outline">View Details</a>
-                                        <a data-clipboard-text="{{ $payment->transactionmount }}" class="btn btn-xs btn-outline">Copy</a>
+                                        <a data-clipboard-text="{{ $payment->grand_total }}" class="btn btn-xs btn-outline">Copy</a>
                                     </span>
                                 </div>
                             </li>
@@ -157,7 +157,7 @@
                         </form>
                         <div class="d-flex justify-content-end mt-3">
                             <!-- <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Payment</button> -->
-                            <a href="{{ route('dashboard.invoice', $payment->order) }}" class="btn btn-light">Cancel Payment</a>
+                            <a href="{{ route('dashboard.invoice', $payment) }}" class="btn btn-light">Cancel Payment</a>
                             <button type="submit" class="btn" id="button-submit" form="form-payment-proof">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
                                 <span class="btn-text">Confirm Payment</span>

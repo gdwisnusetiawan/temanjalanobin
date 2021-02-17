@@ -26,10 +26,15 @@ class Payment extends Model
         return $this->belongsTo('App\Merchant');
     }
 
-    public function order()
+    public function paymentProofs()
     {
-        return $this->belongsTo('App\Order', 'transactionno', 'invoiceno');
+        return $this->hasMany('App\PaymentProof');
     }
+
+    // public function order()
+    // {
+    //     return $this->belongsTo('App\Order', 'transactionno', 'invoiceno');
+    // }
 
     public function transactions()
     {
@@ -46,24 +51,64 @@ class Payment extends Model
         return Functions::datetimeFormat($this->transactionexpire);
     }
 
-    public function getTotalFormatAttribute()
+    public function getInvoiceDateFormatAttribute()
+    {
+        return Functions::datetimeFormat($this->invoicedate);
+    }
+
+    public function getInvoiceDuedateFormatAttribute()
+    {
+        return Functions::datetimeFormat($this->invoiceduedate);
+    }
+
+    public function getGrandTotalAttribute()
+    {
+        return $this->transactionmount - $this->discount + $this->shipping_cost;
+    }
+
+    public function getBalanceAttribute()
+    {
+        return $this->grand_total - $this->paymentProofs->where('status', 2)->sum('transfer_amount');
+    }
+
+    public function getShippingCostFormatAttribute()
+    {
+        return Functions::formatCurrency($this->shipping_cost);
+    }
+
+    public function getDiscountFormatAttribute()
+    {
+        return Functions::formatCurrency($this->discount);
+    }
+
+    public function getSubtotalFormatAttribute()
     {
         return Functions::formatCurrency($this->transactionmount);
+    }
+
+    public function getTotalFormatAttribute()
+    {
+        return Functions::formatCurrency($this->grand_total);
+    }
+
+    public function getBalanceFormatAttribute()
+    {
+        return Functions::formatCurrency($this->balance);
     }
 
     public function getStatusDescAttribute()
     {
         if($this->status == 1) {
-            $desc = ['text' => 'pending', 'color' => 'info'];
+            $desc = ['text' => 'pending', 'color' => 'warning'];
         }
         elseif($this->status == 2) {
-            $desc = ['text' => 'wait', 'color' => 'warning'];
+            $desc = ['text' => 'waiting', 'color' => 'info'];
         }
         elseif($this->status == 3) {
             $desc = ['text' => 'paid', 'color' => 'success'];
         }
         elseif($this->status == 4) {
-            $desc = ['text' => 'cancel', 'color' => 'danger'];
+            $desc = ['text' => 'canceled', 'color' => 'danger'];
         }
         elseif($this->status == 5) {
             $desc = ['text' => 'expired', 'color' => 'danger'];
