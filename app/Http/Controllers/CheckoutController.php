@@ -31,7 +31,7 @@ class CheckoutController extends Controller
 
         $summary = $cart['summary'];
 
-        $last_payment = Payment::orderBy('insertid', 'desc')->first();
+        $last_payment = Payment::orderBy('insertid', 'desc')->first() ?? 0;
 
         $payment = new Payment();
         $payment->user()->associate(auth()->user());
