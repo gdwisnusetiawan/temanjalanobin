@@ -37,10 +37,9 @@ class CheckoutController extends Controller
         $payment->user()->associate(auth()->user());
         // $payment->merchant()->associate($request->payment_merchant);
         $payment->transactionno = $invoiceno;
-        $payment->transactionmount = 0;
+        $payment->transactionmount = $summary['subtotal'];
         $payment->transactiondate = Carbon::now();
         $payment->transactionexpire = Carbon::now()->addDays(7);
-        $payment->subtotal = $summary['subtotal'];
         $payment->shipping_cost = $summary['shipping']['cost'];
         $payment->discount = $summary['total_discount'];
         // status: pending
