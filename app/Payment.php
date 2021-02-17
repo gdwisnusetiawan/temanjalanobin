@@ -50,4 +50,27 @@ class Payment extends Model
     {
         return Functions::formatCurrency($this->transactionmount);
     }
+
+    public function getStatusDescAttribute()
+    {
+        if($this->status == 1) {
+            $desc = ['text' => 'pending', 'color' => 'info'];
+        }
+        elseif($this->status == 2) {
+            $desc = ['text' => 'wait', 'color' => 'warning'];
+        }
+        elseif($this->status == 3) {
+            $desc = ['text' => 'paid', 'color' => 'success'];
+        }
+        elseif($this->status == 4) {
+            $desc = ['text' => 'cancel', 'color' => 'danger'];
+        }
+        elseif($this->status == 5) {
+            $desc = ['text' => 'expired', 'color' => 'danger'];
+        }
+        else {
+            $desc = ['text' => 'pending', 'color' => 'info'];
+        }
+        return $desc;
+    }
 }

@@ -118,20 +118,40 @@
                     <form method="POST" action="{{ route('cart.shipping') }}" class="row">
                         @csrf
                         <div class="col-lg-6 m-b-20">
-                            <select name="origin">
-                                <option selected disabled>From</option>
-                                @foreach($cities as $city)
-                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group">
+                                <select name="origin_province" class="mb-2" onchange="cities(this, 'origin')">
+                                    <option selected disabled>Province</option>
+                                </select>
+                                <div class="spinner-loader-inside" id="spinner-origin-province" style="display: none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <select name="origin">
+                                    <option selected disabled>From</option>
+                                </select>
+                                <div class="spinner-loader-inside" id="spinner-origin" style="display: none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6 m-b-20">
-                            <select name="destination">
-                                <option selected disabled>To</option>
-                                @foreach($cities as $city)
-                                    <option value="{{ $city['city_id'] }}">{{ $city['city_name'] }}</option>
-                                @endforeach
-                            </select>
+                            <div class="input-group">
+                                <select name="destination_province" class="mb-2" onchange="cities(this, 'destination')">
+                                    <option selected disabled>Province</option>
+                                </select>
+                                <div class="spinner-loader-inside" id="spinner-destination-province" style="display: none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <select name="destination">
+                                    <option selected disabled>To</option>
+                                </select>
+                                <div class="spinner-loader-inside" id="spinner-destination" style="display: none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6 form-group">
                             <!-- <label for="">Weight</label> -->
@@ -181,6 +201,14 @@
                                         <span class="amount" id="coupon">-{{ session('cart')['summary']['coupon'] }}%</span>
                                     </td>
                                 </tr> -->
+                                <tr>
+                                    <td class="cart-product-name">
+                                        <strong>Discount</strong>
+                                    </td>
+                                    <td class="cart-product-name text-right">
+                                        <span class="amount" id="discount">-{{ $functions->formatCurrency(session('cart')['summary']['total_discount']) }}</span>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="cart-product-name">
                                         <strong>Total</strong>
@@ -261,6 +289,8 @@ $(document).ready(function(){
     @if($totalstock <= 0)
         $('#add-cart').prop('disabled', true);
     @endif
+
+    provinces();
 });
 
 function updateQuantity(id, qty) {
@@ -286,8 +316,9 @@ function updateCart(form, qty, id) {
             // console.log(data);
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
             $('#shipping').html(formatCurrency(data.summary.shipping));
-            $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#total').html(formatCurrency(data.summary.total));
+            // $('#coupon').html('-'+data.summary.coupon+'%');
+            $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
             Object.values(data.list).forEach(function (item, index) {
                 $('#product-'+item.product.id).find('.qty').val(item.quantity);
                 $('#product-'+item.product.id).find('.cart-product-price .amount').html(formatCurrency(item.price));
@@ -316,8 +347,9 @@ function deleteCart(form) {
             $('#product-'+data.id).remove();
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
             $('#shipping').html(formatCurrency(data.summary.shipping));
-            $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#total').html(formatCurrency(data.summary.total));
+            // $('#coupon').html('-'+data.summary.coupon+'%');
+            $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
 
             let cartIcon = $('#cart-icon-quantity');
             var cartQuantity = data.total_quantity;
@@ -415,6 +447,30 @@ function changeShipping(id, cost) {
         error: function(error) {
             console.log(error);
         }
+    });
+}
+
+function provinces() {
+    $('#spinner-origin-province').show();
+    $('#spinner-destination-province').show();
+    $.getJSON(@json(route('rajaongkir.province')), function(result){
+        $.each(result, function(i, field){
+            $("select[name='origin_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
+            $("select[name='destination_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
+        });
+        $('#spinner-origin-province').hide();
+        $('#spinner-destination-province').hide();
+    });
+}
+
+function cities(provinceElement, name) {
+    province = $(provinceElement).find(':selected').val();
+    $('#spinner-'+name).show();
+    $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
+        $.each(result, function(i, field){
+            $("select[name='"+name+"'").append(`<option value="${field.city_id}">${field.city_name}</option>`);
+        });
+        $('#spinner-'+name).hide();
     });
 }
 

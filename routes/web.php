@@ -39,8 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
             Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
             Route::put('confirm-payment/{payment}', 'DashboardController@confirmPayment')->name('confirmPayment');
-            Route::put('upload-payment-proof/{payment}', 'DashboardController@uploadPaymentProof')->name('uploadPaymentProof');
-            Route::delete('delete-payment-proof/{payment}', 'DashboardController@deletePaymentProof')->name('deletePaymentProof');
+            Route::put('cancel-payment/{payment}', 'DashboardController@cancelPayment')->name('cancelPayment');
+            Route::put('cancel-order/{order}', 'DashboardController@cancelOrder')->name('cancelOrder');
         });
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('{user}', 'UserController@index')->name('index');
@@ -79,6 +79,12 @@ Route::prefix('cart')->name('cart.')->group(function () {
 Route::prefix('news')->name('news.')->group(function () {
     Route::get('', 'NewsController@index')->name('index');
     Route::get('single', 'NewsController@single')->name('single');
+});
+
+Route::prefix('rajaongkir')->name('rajaongkir.')->group(function () {
+    Route::get('province/{id?}', 'RajaOngkirController@province')->name('province');
+    Route::get('city/{province}/{id?}', 'RajaOngkirController@city')->name('city');
+    Route::post('cost', 'RajaOngkirController@city')->name('cost');
 });
 
 Route::get('{slug}', 'PageController@index')->name('page.index');

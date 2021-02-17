@@ -25,7 +25,7 @@
                             <h3><a href="#">{{ $product->title }}</a></h3>
                         </div>
                         <div class="product-price" id="product-price">
-                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty())
+                            @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
                                 <del>{{ $product->real_price }}</del>
                             @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>

@@ -16,13 +16,15 @@ class CartController extends Controller
     {
         $total = collect($cart['list'])->sum('total');
         $total_quantity = collect($cart['list'])->sum('quantity');
-        $grand_total = $total - round($total * $coupon / 100, 2) + $shipping;
+        $total_discount = collect($cart['list'])->sum('discount');
+        $grand_total = $total - $total_discount + $shipping;
         return [
             'subtotal' => $total,
             'coupon' => $coupon,
             'shipping' => $shipping,
             'total' => $grand_total,
-            'total_quantity' => $total_quantity
+            'total_quantity' => $total_quantity,
+            'total_discount' => $total_discount
         ];
     }
     /**
@@ -33,10 +35,14 @@ class CartController extends Controller
     public function index(Request $request)
     {
         // session()->forget('cart');
-        // dd(session()->get('cart'));
         $city_json = asset('data/city.json');
         $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
-        // dd($cities);
+        // $response = Http::withHeaders([
+        //     'content-type' => 'application/x-www-form-urlencoded',
+        //     'key' => 'a668420368d4731d3ca94321058bcea2'
+        //     ])->asForm()->get('https://api.rajaongkir.com/starter/province');
+        // dd(json_decode($response->body()));
+
         return view('shop.cart', compact('cities'));
     }
 
@@ -50,6 +56,9 @@ class CartController extends Controller
     {
         $product = Product::find($request->product_id);
         $price = $product->getUserPrice($request->quantity);
+        if($product->discount > 0) {
+            $price = $price + $product->discount;
+        }
         $cart = session()->get('cart');
         
         if(!isset($cart['list'][$product->id])) {
@@ -62,13 +71,21 @@ class CartController extends Controller
             'product' => $product,
             'price' => $price,
             'quantity' => $quantity,
-            'total' => $price * $quantity
+            'total' => $price * $quantity,
+            'discount' => $product->discount * $quantity
         ];
 
         foreach($product->variants as $variant) {
             $cart['list'][$product->id]['variants'][$variant->input_name] = $request->get($variant->input_name);
         }
 
+        // $discount = 0;
+        // if($product->discount_value != null) {
+        //     $discount = $product->discount_value;
+        // }
+        // elseif($product->discount_percent != null) {
+        //     $discount = $product->discount_percent;
+        // }
         $cart['summary'] = $this->summary($cart);
         session()->put('cart', $cart);
         return redirect()->back()->with('notify', ['message' => 'Product added to cart successfully', 'type' => 'success']);
@@ -97,10 +114,15 @@ class CartController extends Controller
  
         $cart = session()->get('cart');
         if(isset($cart['list'][$id])) {
-            $price = Product::find($id)->getUserPrice($request->quantity);
+            $product = Product::find($id);
+            $price = $product->getUserPrice($request->quantity);
+            if($product->discount > 0) {
+                $price = $price + $product->discount;
+            }
             $cart['list'][$id]['price'] = $price;
             $cart['list'][$id]['quantity'] = $request->quantity;
             $cart['list'][$id]['total'] = $price * $request->quantity;
+            $cart['list'][$id]['discount'] = $product->discount * $request->quantity;
         }
 
         $cart['summary'] = $this->summary($cart);
@@ -143,7 +165,6 @@ class CartController extends Controller
 
     public function shipping(Request $request)
     {
-        // dd($request->all());
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
             'key' => 'a668420368d4731d3ca94321058bcea2'
@@ -156,7 +177,6 @@ class CartController extends Controller
             ]);
         $result = json_decode($response->body())->rajaongkir->results;
         $shipping = $result[0]->costs[0]->cost[0]->value ?? 0;
-        // dd(($shipping));
         $cart = session()->get('cart');
 
         $cart['summary'] = $this->summary($cart, $shipping);

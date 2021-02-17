@@ -85,6 +85,18 @@ class Product extends Model
         {
             $price = $this->price;
         }
-        return $price;
+        return $price - $this->discount;
+    }
+
+    public function getDiscountAttribute()
+    {
+        $discount = 0;
+        if($this->discount_value != null) {
+            $discount = $this->discount_value;
+        }
+        elseif($this->discount_percent != null) {
+            $discount = round($this->price * $this->discount_percent / 100, 2);
+        }
+        return $discount;
     }
 }

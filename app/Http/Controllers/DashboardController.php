@@ -30,7 +30,8 @@ class DashboardController extends Controller
     {
         $user = $order->user;
         $distributor = $order->suborders->first()->product->distributor;
-        return view('dashboard.invoice', compact('order', 'user', 'distributor'));
+        $payment = $order->payments->sortByDesc('transactiondate')->first();
+        return view('dashboard.invoice', compact('order', 'user', 'distributor', 'payment'));
     }
 
     public function payment(Payment $payment)
@@ -43,7 +44,6 @@ class DashboardController extends Controller
 
     public function confirmPayment(Request $request, Payment $payment)
     {
-        // dd($request->all());
         $payment_proof = new PaymentProof();
         $payment_proof->payment()->associate($payment);
         $payment_proof->payment_date = Carbon::parse($request->payment_date)->format('Y-m-d H:i:s');
@@ -60,6 +60,10 @@ class DashboardController extends Controller
             $file_location = $file->move('img/payment/', $file_name);
             $payment_proof->proof = $file_location;
             $payment_proof->save();
+
+            // status: wait for confirmation
+            $payment->status = 2; 
+            $payment->save();
         }
         else
         {
@@ -68,35 +72,21 @@ class DashboardController extends Controller
         return response()->json(['notify' => 'Confirmation has been sent']);
     }
 
-    public function uploadPaymentProof(Request $request, Payment $payment)
+    public function cancelPayment(Payment $payment)
     {
-        // upload file if exists
-        if($request->has('file'))
-        {
-            // delete old file
-            // unlink(asset($user->ktpfile));
-            // save new file
-            $file = $request->file('file');
-            $file_name = $file->getClientOriginalName();
-            // $file_location = $file->move('img/payment/', $file_name);
-            // $user->ktpfile = $file_location;
-            // dd($file);
-        }
-        else {
-            $file = $request->file('file');
-            $file_name = $file->getClientOriginalName();
-            // $file_name = 'empty';
-        }
-        return response()->json($request->payment_date);
+        // status: cancel
+        $payment->status = 4;
+        $payment->save();
+        request()->session()->flash('notify', ['message' => 'You canceled the payment', 'type' => 'success']);
+        return redirect()->route('dashboard.payment', $payment);
     }
 
-    public function deletePaymentProof(Request $request, Payment $payment)
+    public function cancelOrder(Order $order)
     {
-        if($request->has('payment_file') && $request->file('payment_file') != null)
-        {
-            $file = $request->file('payment_file');
-            $file_name = $file->getClientOriginalName();
-            unlink(asset('img/payment/'.$file_name));
-        }
+        // status: cancel
+        $order->orderstatus = 4;
+        $order->save();
+        request()->session()->flash('notify', ['message' => 'You canceled the order', 'type' => 'success']);
+        return redirect()->route('dashboard.invoice', $order);
     }
 }
