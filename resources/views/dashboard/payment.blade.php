@@ -5,24 +5,7 @@
 @endpush
 
 @section('content')
-<!-- Page title -->
-<!-- <section id="page-title">
-    <div class="container">
-        <div class="page-title">
-            <h1>Checkout</h1>
-            <span>Checkout details</span>
-        </div>
-        <div class="breadcrumb">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="{{ route('dashboard.order') }}">Transaction</a></li>
-                <li class="active"><a href="#">Checkout</a></li>
-            </ul>
-        </div>
-    </div>
-</section> -->
-<!-- end: Page title -->
-<section>
+<section id="payment-section" style="{{ $payment->status != 1 ? 'display: none' : 'display: block' }}">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
@@ -56,18 +39,16 @@
                                 <p class="mb-1">Total Payment</p>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="mb-1">{{ $payment->total_format }}</h5>
-                                    <h5 class="mb-1 d-none" id="total-payment">{{ $payment->transactionmount }}</h5>
+                                    <!-- <h5 class="mb-1 d-none" id="total-payment">{{ $payment->transactionmount }}</h5> -->
+                                    <!-- <input type="hidden" value="{{ $payment->transactionmount }}" id="total-payment"> -->
                                     <span>
-                                        <!-- <a class="btn btn-xs btn-outline">View Details</a> -->
-                                        <a data-clipboard-target="#total-payment" class="btn btn-xs btn-outline">Copy</a>
+                                        <a class="btn btn-xs btn-outline">View Details</a>
+                                        <a data-clipboard-text="{{ $payment->transactionmount }}" class="btn btn-xs btn-outline">Copy</a>
                                     </span>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <!-- <div class="card-footer text-muted">
-                        2 days ago
-                    </div> -->
                 </div>
                 <!-- Accordion -->
                 <h4>Payment Guide</h4>
@@ -125,9 +106,6 @@
                             <li>Transfer Amount</li>
                         </ul>
                     </div>
-                    <!-- <div class="countdown small" data-countdown="{{ $payment->transactionexpire }}"></div> -->
-                    <!-- <p class="m-0">Due Date</p> -->
-                    <!-- <h5>{{ $payment->expire_format }}</h5> -->
                 </div>
                 <div class="card">
                     <div class="card-body">
@@ -137,7 +115,6 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
-                                    <!-- <input class="form-control" type="date" name="dateofbirth" required> -->
                                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input" name="payment_date" data-target="#datetimepicker1" data-toggle="datetimepicker" placeholder="Select date & time" autocomplete="off" required/>
                                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -179,19 +156,89 @@
                             <!--end: File upload 1-->
                         </form>
                         <div class="d-flex justify-content-end mt-3">
-                            <!-- <button type="submit" class="btn btn-danger" id="button-submit">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
-                                <span class="btn-text">Cancel Payment</span>
-                            </button> -->
+                            <!-- <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Payment</button> -->
+                            <a href="{{ route('dashboard.invoice', $payment->order) }}" class="btn btn-light">Cancel Payment</a>
                             <button type="submit" class="btn" id="button-submit" form="form-payment-proof">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
                                 <span class="btn-text">Confirm Payment</span>
                             </button>
                         </div>
-                        <!-- <button type="submit" class="btn mb-3 float-right">Confirm Payment</button> -->
+                        
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!--Modal -->
+<div class="modal fade" id="modal-cancel" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h4 class="modal-title" id="modal-label">Cancel Payment</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 d-flex">
+                        <h2 class="mr-3"><i class="fa fa-exclamation-triangle text-danger"></i></h2>
+                        <h5>Are you sure want to cancel this payment?</h5>
+                        <form method="POST" action="{{ route('dashboard.cancelPayment', $payment) }}" id="form-cancel-payment" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
+                            @csrf
+                            @method('PUT')
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-b btn-light" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-b btn-danger" id="button-cancel" form="form-cancel-payment">
+                    <span class="spinner-border spinner-border-sm button-spinner" role="status" aria-hidden="true" style="display: none;"></span>
+                    <span class="btn-text">Cancel Payment</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
+
+<section id="success-section" style="{{ $payment->status != 2 && $payment->status != 3 ? 'display: none' : 'display: block' }}">
+    <div class="container">
+        <div class="p-t-10 m-b-20 text-center">
+            <div class="text-center">
+                <h1 class="icon text-success"> <i class="fa fa-check-circle"></i> </h1>
+                <h3>Congratulations! Your confirmation has been sent!</h3>
+                <p>Your order is number #{{ $payment->transactionno }}. You can
+                    <a href="{{ route('dashboard.order') }}" class="text-underline">
+                        <mark>view your order</mark>
+                    </a> on your account page, when you are logged in.</p>
+            </div>
+            @if(!auth()->check())
+            <a href="{{ route('login') }}" class="btn icon-left m-r-10"><span>Go to login page</span></a>
+            @endif
+            <a class="btn icon-left" href="{{ route('dashboard.order') }}"><span>View your orders</span></a>
+            <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
+        </div>
+    </div>
+</section>
+
+<section id="cancel-section" style="{{ $payment->status != 4 ? 'display: none' : 'display: block' }}">
+    <div class="container">
+        <div class="p-t-10 m-b-20 text-center">
+            <div class="text-center">
+                <h1 class="icon text-info"> <i class="fa fa-info-circle"></i> </h1>
+                <h3>Your payment has been canceled!</h3>
+                <p>Your order is number #{{ $payment->transactionno }}. You can
+                    <a href="{{ route('dashboard.order') }}" class="text-underline">
+                        <mark>view your order</mark>
+                    </a> on your account page, when you are logged in.</p>
+            </div>
+            @if(!auth()->check())
+            <a href="{{ route('login') }}" class="btn icon-left m-r-10"><span>Go to login page</span></a>
+            @endif
+            <a class="btn icon-left" href="{{ route('dashboard.order') }}"><span>View your orders</span></a>
+            <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
         </div>
     </div>
 </section>
@@ -231,7 +278,7 @@
             //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             //     },
             //     type: "POST",
-            //     url: "{{ route('dashboard.deletePaymentProof', $payment) }}",
+            //     url: "#",
             //     data: { _method: 'DELETE', payment_file: name },
             //     success: function (data) {
             //         console.log('File has been successfully removed!!');
@@ -261,6 +308,10 @@
             notify(response.notify, "Success");
             $('#form-payment-proof')[0].reset();
             $('#form-payment-proof').find('.is-valid').removeClass('is-valid');
+            $('#success-section').show();
+            $('#payment-section').hide();
+            scrollTop();
+
             var name = file.upload.filename;
             var fileRef;
             return (fileRef = file.previewElement) != null ? 
@@ -274,7 +325,6 @@
 
     $('#form-payment-proof').submit(function (e) {
         e.preventDefault();
-        console.log(paymentDropzone.getQueuedFiles().length)
         if(paymentDropzone.getQueuedFiles().length > 0) {
             paymentDropzone.processQueue();
             $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');

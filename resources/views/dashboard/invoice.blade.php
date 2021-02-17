@@ -22,6 +22,7 @@
                 @if($order->balance > 0)
                     <a href="{{ route('checkout.index', $order) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
                 @endif
+                <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Order</button>
                 <button class="btn btn-outline" onclick="printPage('Invoice #{{ $order->invoiceno }}')"><i class="icon-printer"></i> Print</button>
             </span>
         </div>
@@ -37,7 +38,7 @@
                         <!-- Office 149, 450 South Brand Brooklyn <br>
                         San Diego County, CA 91905, USA <br>
                         +1 (123) 456 7891, +44 (876) 543 2198 -->
-                        Status: <span class="badge badge-warning">Belum Lunas</span>
+                        Status: <span class="badge badge-{{ $payment->status_desc['color'] }}">{{ strtoupper($payment->status_desc['text']) }}</span>
                     </div>
                     <div>
                         Date Issued: {{ $order->orderdate_format }} <br>
@@ -169,4 +170,36 @@
     </div>
 </section>
 <!-- end: Page Content -->
+
+<!--Modal -->
+<div class="modal fade" id="modal-cancel" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h4 class="modal-title" id="modal-label">Cancel Order</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 d-flex">
+                        <h2 class="mr-3"><i class="fa fa-exclamation-triangle text-danger"></i></h2>
+                        <h5>Are you sure want to cancel this order?</h5>
+                        <form method="POST" action="{{ route('dashboard.cancelOrder', $order) }}" id="form-cancel-order" class="d-none" onsubmit="onSubmitButton('#button-cancel')">
+                            @csrf
+                            @method('PUT')
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-b btn-light" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-b btn-danger" id="button-cancel" form="form-cancel-order">
+                    <span class="spinner-border spinner-border-sm button-spinner" role="status" aria-hidden="true" style="display: none;"></span>
+                    <span class="btn-text">Cancel Order</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
 @endsection

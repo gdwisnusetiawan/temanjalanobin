@@ -70,6 +70,7 @@ class CheckoutController extends Controller
         $payment->transactionmount = $order->price - $order->discount;
         $payment->transactiondate = Carbon::now();
         $payment->transactionexpire = Carbon::now()->addDays(7);
+        // status: pending
         $payment->status = 1;
         $payment->insertid = $last_payment->insertid + 1;
         $payment->currency = 'rupiah';

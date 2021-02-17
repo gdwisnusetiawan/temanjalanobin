@@ -99,11 +99,17 @@
             return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
         }
 
-        function onSubmit(e) {
+        function onSubmit() {
             $('#button-spinner').show();
             $('#button-submit .btn-text').html('Loading...');
             $('#button-submit').prop('disabled', true);
-            $('#button-cancel').prop('disabled', true);
+            // $('#button-cancel').prop('disabled', true);
+        }
+
+        function onSubmitButton(button) {
+            $(button+' .button-spinner').show();
+            $(button+' .btn-text').html('Loading...');
+            $(button).prop('disabled', true);
         }
 
         function printPage(title) {
