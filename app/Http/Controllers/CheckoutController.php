@@ -31,7 +31,7 @@ class CheckoutController extends Controller
 
         $summary = $cart['summary'];
 
-        $last_payment = Payment::orderBy('insertid', 'desc')->first() ?? 0;
+        $last_payment = Payment::orderBy('insertid', 'desc')->first();
 
         $payment = new Payment();
         $payment->user()->associate(auth()->user());
@@ -45,7 +45,7 @@ class CheckoutController extends Controller
         $payment->discount = $summary['total_discount'];
         // status: pending
         $payment->status = 1;
-        $payment->insertid = $last_payment->insertid + 1;
+        $payment->insertid = $last_payment->insertid ? $last_payment->insertid + 1 : 1;
         $payment->currency = 'IDR';
         $payment->save();
 
