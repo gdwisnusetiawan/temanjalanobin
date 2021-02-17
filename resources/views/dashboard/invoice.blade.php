@@ -47,7 +47,9 @@
         <div class="d-flex justify-content-between mb-3">
                 <a href="{{ route('dashboard.order') }}" class="btn btn-secondary"><i class="icon-chevron-left"></i> Back</a>
             <span>
-                <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Order</button>
+                @if($payment->status != 4)
+                    <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Order</button>
+                @endif
                 @if($payment->balance > 0 || $payment->status != 3)
                     <a href="{{ route('checkout.index', $payment) }}" class="btn btn-primary"><i class="icon-send"></i> Pay</a>
                 @endif
