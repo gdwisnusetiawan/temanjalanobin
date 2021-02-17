@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Config;
 use App\Footer;
-use App\category;
+use App\Category;
 use App\Marquee;
 use App\Popup;
 use App\Helpers\Functions;
