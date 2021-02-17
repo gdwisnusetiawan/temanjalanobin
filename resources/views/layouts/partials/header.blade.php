@@ -65,10 +65,8 @@
                                     @elseif($menu->isMegaMenu())
                                     <ul class="dropdown-menu">
                                         @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
-                                            @foreach($subcategories as $subcategory)
-                                                @foreach($subcategory->categories as $category)
-                                                    <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
-                                                @endforeach
+                                            @foreach($categories as $category)
+                                                <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach
                                         @endif
                                     </ul>
