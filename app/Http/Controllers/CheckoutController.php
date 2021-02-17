@@ -45,7 +45,7 @@ class CheckoutController extends Controller
         $payment->discount = $summary['total_discount'];
         // status: pending
         $payment->status = 1;
-        $payment->insertid = $last_payment->insertid ? $last_payment->insertid + 1 : 1;
+        $payment->insertid = $last_payment ? $last_payment->insertid + 1 : 1;
         $payment->currency = 'IDR';
         $payment->save();
 
