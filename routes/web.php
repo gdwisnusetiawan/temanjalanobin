@@ -87,5 +87,63 @@ Route::prefix('rajaongkir')->name('rajaongkir.')->group(function () {
     Route::post('cost', 'RajaOngkirController@city')->name('cost');
 });
 
+Route::get('foto/{menu}/{id}/{custom?}', function($menu, $id, $custom=""){
+    $filename = $id;
+    $table = $menu;
+    if($menu == "pages" || $menu == "multipages" || $menu == "multisubpages" || $menu == "product" || $menu == "customer" || $menu == "emailtemplate" || $menu == "slider" || $menu == "general" || $menu == "popup"){
+      $pretable = "";
+      if($menu == "pages" || $menu == "multipages" || $menu == "multisubpages" || $menu == "slider" || $menu == "general" || $menu == "popup"){
+        $pretable = "web.";
+        if($menu == "slider"){
+          $custom = "bgimage";
+        }
+        if($menu == "general"){
+          $table = "config";
+          if($custom == "image1"){
+            $custom = "favicon";
+          }
+          if($custom == "image2"){
+            $custom = "logo";
+          }
+        }
+        if($menu == "popup"){
+          $custom = "image";
+        }
+      }
+      if($menu == "product" || $menu == "customer" || $menu == "emailtemplate"){
+        $pretable = "master.";
+        if($menu == "customer"){
+          $menu = "user";
+          $table = "user";
+          if($custom == "image1") {
+            $custom = "avatarfile";
+          }
+          if($custom == "image2") {
+            $custom = "ktpfile";
+          }
+        }
+        if($menu == "emailtemplate"){
+          $custom = "picture";
+        }
+      }
+      $pdo = DB::getPdo();
+      $sql = 'SELECT '.$custom.' FROM '.$pretable.$table.' WHERE id = :id';
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue("id", $id);
+      $stmt->execute();
+      if($stmt->rowCount() > 0) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $filename = $row[$custom];
+      }
+    }
+    if($filename != ""){
+      $path = config('consts.PATH_IMG').$menu.'/'.Utils::id2Folder($id).'/'.$filename;
+      if(file_exists($path)){
+          return response()->file($path);
+      }
+    }
+    return response()->file(config('consts.PATH_IMG').'no-image.png');
+})->where(['jenis' => '(users|pages|multipages|multisubpages|product|customer|emailtemplate|slider|general|popup)', 'id' => '([0-9]+)'], 'custom' > '(|image1|image2|image3|image4)');
+
 Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');

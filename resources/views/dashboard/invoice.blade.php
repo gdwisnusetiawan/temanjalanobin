@@ -93,7 +93,7 @@
                     <div>
                         <h5 class="card-title">Payment Details:</h5>
                         <!-- Total Due: <strong>Rp1.000.000</strong> -->
-                        <strong>{{ $config->title }}</strong> <br>
+                        <strong>{{ $config->name }}</strong> <br>
                         {{ $config->address }} <br>
                         {{ $config->email }} <br>
                         {{ $config->telp }} <br>
