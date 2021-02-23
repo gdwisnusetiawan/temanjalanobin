@@ -40,12 +40,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
             Route::put('confirm-payment/{payment}', 'DashboardController@confirmPayment')->name('confirmPayment');
             Route::put('cancel-payment/{payment}', 'DashboardController@cancelPayment')->name('cancelPayment');
+            Route::put('change-address/{payment}', 'DashboardController@changeAddress')->name('changeAddress');
             Route::put('cancel-order/{order}', 'DashboardController@cancelOrder')->name('cancelOrder');
         });
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('{user}', 'UserController@index')->name('index');
             Route::put('update/{user}', 'UserController@update')->name('update');
             Route::put('change-password/{user}', 'UserController@changePassword')->name('changePassword');
+            Route::put('change-avatar/{user}', 'UserController@changeAvatar')->name('changeAvatar');
             Route::put('billing/{user}', 'UserController@billing')->name('billing');
             Route::get('registration/{user}', 'UserController@registration')->name('registration');
             Route::put('register-business/{user}', 'UserController@registerBusiness')->name('registerBusiness');

@@ -11,7 +11,7 @@
         @break
     @case(2)
         <!-- Modal Shop -->
-        <div id="modalShop" class="modal modal-auto-open no-padding" data-delay="{{ $popup->duration }}" style="max-width: 700px;">
+        <div id="modalShop" class="modal modal-auto-open no-padding" data-delay="0" style="max-width: 700px;">
             <div class="row">
                 <div class="col-md-6 d-none d-sm-block no-padding" style="background: transparent url({{ $popup->image_url }}) no-repeat scroll center top / cover; height:470px;"></div>
                 <div class="col-md-6">
@@ -20,7 +20,7 @@
                         <h2 class="text-xl text-theme lh80 m-b-30">70%</h2> -->
                         <h2>{{ $popup->title }}</h2>
                         <p class="m-b-20">{!! $popup->description !!}</p>
-                        <a class="btn btn-shadow btn-rounded btn-block m-t-10">{{ $popup->button }}</a><small class="t300">
+                        <a href="{{ $popup->links }}" class="btn btn-shadow btn-rounded btn-block m-t-10">{{ $popup->button }}</a><small class="t300">
                             <p class="text-center"><em>* Limited time Offer</em></p>
                         </small>
                     </div>

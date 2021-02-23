@@ -16,7 +16,7 @@ class ShopController extends Controller
         $category = Category::whereRaw("LOWER(title) = '$title'")->first();
         $products = $category->products;
 
-        // dd((asset('/img/'.$products[0]->image1)));
+        // dd($products[0]->media);
 
         return view('shop.index', compact('category', 'products'));
     }

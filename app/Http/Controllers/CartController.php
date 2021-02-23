@@ -172,17 +172,20 @@ class CartController extends Controller
         if($request->origin == null && $request->destination == null) {
             return false;
         }
-        $response = Http::withHeaders([
-            'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
-            ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
-                'origin' => $request->origin,
-                'destination' => $request->destination,
-                'weight' => $request->weight,
-                'courier' => 'pos',
-                'courier' => 'jne',
-            ]);
-        $result = json_decode($response->body())->rajaongkir->results;
+        $couriers = ['pos','jne','tiki'];
+        foreach($couriers as $courier) {
+            $response = Http::withHeaders([
+                'content-type' => 'application/x-www-form-urlencoded',
+                'key' => 'a668420368d4731d3ca94321058bcea2'
+                ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+                    'origin' => $request->origin,
+                    'destination' => $request->destination,
+                    'weight' => $request->weight,
+                    'courier' => $courier,
+                ]);
+            $results[] = json_decode($response->body())->rajaongkir->results;
+        }
+        $result = $results[0];
         $origin_details = json_decode($response->body())->rajaongkir->origin_details;
         $destination_details = json_decode($response->body())->rajaongkir->destination_details;
         $courier_code = $result[0]->code ?? '';
@@ -208,7 +211,7 @@ class CartController extends Controller
 
         $cart['message'] = 'Cart updated successfully';
         $cart['type'] = 'success';
-        return response()->json(['result' => $result, 'cart' => $cart]);
+        return response()->json(['results' => $results, 'cart' => $cart]);
     }
 
     public function changeShipping(Request $request)

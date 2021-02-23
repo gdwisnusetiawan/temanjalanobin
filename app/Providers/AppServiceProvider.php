@@ -40,12 +40,13 @@ class AppServiceProvider extends ServiceProvider
         $loader = 2;
         $menus = Functions::menu();
         $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
-        $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+        // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+        $footer = Footer::orderBy('id', 'desc')->first();
         $marquee = Marquee::first();
         $categories = Category::all();
-        // dd($menus[0][1]->submenus);
+        // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
-        // dd($user_referer);
+        // dd($categories);
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,

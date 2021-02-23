@@ -156,7 +156,7 @@
                         <div class="col-lg-6 form-group">
                             <!-- <label for="">Weight</label> -->
                             <div class="input-group">
-                                <input type="number" name="weight" placeholder="Weight" class="form-control" value="{{ session('cart')['summary']['total_weight'] }}" readonly>
+                                <input type="number" name="weight" placeholder="Weight" class="form-control" value="{{ session('cart')['summary']['total_weight'] > 0 ? session('cart')['summary']['total_weight'] : 1 }}" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">gram</span>
                                 </div>
@@ -384,34 +384,36 @@ function shippingCost(form) {
         dataType: 'json',
         data: formData,
         success: function(data) {
-            console.log(data);
+            // console.log(data);
             $('#shipping').html(formatCurrency(data.cart.summary.shipping.cost));
             $('#total').html(formatCurrency(data.cart.summary.total));
             var html = '';
             var count = 0;
-            data.result.forEach(function (result, i) {
-                result.costs.forEach(function (costs, j) {
-                    costs.cost.forEach(function (cost, k) {
-                        html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
-                            onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h5 class="mb-1">${result.code.toUpperCase()}</h5>
-                                            <p class="mb-1">${result.name}</p>
+            data.results.forEach(function (results, i) {
+                results.forEach(function (result, i) {
+                    result.costs.forEach(function (costs, j) {
+                        costs.cost.forEach(function (cost, k) {
+                            html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
+                                onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h5 class="mb-1">${result.code.toUpperCase()}</h5>
+                                                <p class="mb-1">${result.name}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5 class="mb-1">${costs.service}</h5>
+                                                <p class="mb-1">${costs.description}</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
+                                                <p class="mb-1">${cost.etd} days</p>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <h5 class="mb-1">${costs.service}</h5>
-                                            <p class="mb-1">${costs.description}</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
-                                            <p class="mb-1">${cost.etd} days</p>
-                                        </div>
-                                    </div>
-                                </li>`;
-                        count++;
+                                    </li>`;
+                            count++;
+                        });
                     });
-                });
+                })
             });
             $('#shipping-list').html(html);
             $('#button-spinner').hide();

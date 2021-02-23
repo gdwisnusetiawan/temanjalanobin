@@ -46,6 +46,10 @@ class CheckoutController extends Controller
         $payment->status = 1;
         $payment->insertid = $last_payment ? $last_payment->insertid + 1 : 1;
         $payment->currency = 'IDR';
+        $payment->address = auth()->user()->address;
+        $payment->province = auth()->user()->province;
+        $payment->city = auth()->user()->city;
+        $payment->postcode = auth()->user()->postcode;
         $payment->save();
 
         foreach($cart['list'] as $cart)
@@ -56,7 +60,7 @@ class CheckoutController extends Controller
             $transaction->transactionno = $payment->transactionno;
             $transaction->product()->associate($product->id);
             $transaction->itemname = $product->title;
-            $transaction->quantity = $product->qty;
+            $transaction->quantity = $cart['quantity'];
             $transaction->price = $product->price;
             $transaction->save();
         }

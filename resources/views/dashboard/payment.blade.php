@@ -42,7 +42,7 @@
                                     <!-- <h5 class="mb-1 d-none" id="total-payment">{{ $payment->transactionmount }}</h5> -->
                                     <!-- <input type="hidden" value="{{ $payment->transactionmount }}" id="total-payment"> -->
                                     <span>
-                                        <a class="btn btn-xs btn-outline">View Details</a>
+                                        <button class="btn btn-xs btn-outline" data-target="#modal-details" data-toggle="modal">View Details</button>
                                         <a data-clipboard-text="{{ $payment->grand_total }}" class="btn btn-xs btn-outline">Copy</a>
                                     </span>
                                 </div>
@@ -242,6 +242,78 @@
         </div>
     </div>
 </section>
+
+<!--Modal -->
+<div class="modal fade" id="modal-details" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-label">Payment Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="mr-3"><i class="icon-shopping-cart"></i> List of items</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($payment->transactions as $transaction)
+                                    <tr>
+                                        <th scope="row">{{ $loop->index + 1 }}</th>
+                                        <td>{{ $transaction->itemname }}</td>
+                                        <td>{{ $transaction->price_format }}</td>
+                                        <td>{{ $transaction->quantity }}</td>
+                                        <td>{{ $transaction->total_format }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mx-2">
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Subtotal:</span>
+                                    <span class="">{{ $payment->subtotal_format }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Shipping:</span>
+                                    <span class="">{{ $payment->shipping_cost_format }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Discount:</span>
+                                    <span class="">-{{ $payment->discount > 0 ? $payment->discount_format : '' }}</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong class="mr-1">Grand Total:</strong>
+                                    <span class="">{{ $payment->total_format }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-b btn-light" data-dismiss="modal">Close</button>
+                <!-- <button type="submit" class="btn btn-b btn-danger" id="button-cancel" form="form-cancel-order">
+                    <span class="spinner-border spinner-border-sm button-spinner" role="status" aria-hidden="true" style="display: none;"></span>
+                    <span class="btn-text">Cancel Order</span>
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
 
 <!-- DELIVERY INFO -->
 <!-- @include('shop.delivery') -->

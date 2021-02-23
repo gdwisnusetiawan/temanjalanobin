@@ -1,7 +1,7 @@
 <footer id="footer">
     <div class="footer-content">
         <div class="container">
-        <div class="row">
+            <div class="row">
                 <!-- <div class="col-lg-5">
                     <div class="widget">
 
@@ -11,14 +11,19 @@
                         <a href="https://themeforest.net/item/polo-responsive-multipurpose-html5-template/13708923" class="btn btn-inverted" target="_blank">Purchase Now</a>
                     </div>
                 </div> -->
-                <div class="{{ $footer->newsletter || array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
+                <div class="{{ array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
                     <div class="row">
                         @php $count = count($footer->contents['default']) @endphp
                         @foreach($footer->contents['default'] as $content)
                             <div class="col-lg-{{ floor(12/$count) }}">
                                 <div class="widget">
                                     <div class="widget-title">{{ $content['title'] }}</div>
-                                    {!! $content['description'] !!}
+                                    <p>{!! $content['description'] !!}</p>
+                                    <ul class="list">
+                                        @foreach($content['links'] as $link)
+                                        <li><a href="{{ $link['location'] }}">{{ $link['title'] }}</a></li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
                         @endforeach
@@ -69,12 +74,12 @@
                         </div> -->
                     </div>
                 </div>
-                @if($footer->newsletter || array_key_exists('newsletter', $footer->contents))
+                @if(array_key_exists('newsletter', $footer->contents))
                     @foreach($footer->contents['newsletter'] as $content)
                     <div class="col-lg-4">
                         <div class="widget clearfix widget-newsletter">
                             <h4 class="widget-title"><i class="fa fa-envelope"></i> {{ $content['title'] }}</h4>
-                            {!! $content['description'] !!}
+                            <p>{!! $content['description'] !!}</p>
                             <form class="widget-subscribe-form p-r-40" action="include/subscribe-form.php" role="form" method="post" novalidate="novalidate">
 
                             <div class="input-group">

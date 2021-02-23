@@ -22,4 +22,14 @@ class Popup extends Model
                 : asset('polo-5/images/shop-bg.jpg');
         }
     }
+
+    public function getLinksAttribute()
+    {
+        if(Str::startsWith($this->link, 'http')) {
+            return $this->link;
+        }
+        else {
+            return route('page.index', $this->link);
+        }
+    }
 }

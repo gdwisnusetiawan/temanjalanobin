@@ -215,17 +215,27 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="province">Province</label>
-                                                <select name="province" class="form-control" required>
-                                                    <option selected disabled>Select province</option>
-                                                    <option value="jawa timur" {{ $user->province == 'jawa timur' ? 'selected' : '' }}>Jawa Timur</option>
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="province" class="form-control" required onchange="cities(this)">
+                                                        <option selected disabled>Select province</option>
+                                                        <!-- <option value="jawa timur" {{ $user->province == 'jawa timur' ? 'selected' : '' }}>Jawa Timur</option> -->
+                                                    </select>
+                                                    <div class="spinner-loader-inside" id="spinner-province" style="display: none">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="city">City</label>
-                                                <select name="city" class="form-control" required>
-                                                    <option selected disabled>Select city</option>
-                                                    <option value="surabaya" {{ $user->city == 'surabaya' ? 'selected' : '' }}>Surabaya</option>
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="city" class="form-control" required>
+                                                        <option selected disabled>Select city</option>
+                                                        <!-- <option value="surabaya" {{ $user->city == 'surabaya' ? 'selected' : '' }}>Surabaya</option> -->
+                                                    </select>
+                                                    <div class="spinner-loader-inside" id="spinner-city" style="display: none">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -238,7 +248,7 @@
                                                 <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required>
                                             </div>
                                         </div>
-                                        <div class="row my-4">
+                                        <!-- <div class="row my-4">
                                             <div class="col-6 col-md-8">
                                                 <span class="h5">Add new card</span>
                                                 <p class="text-muted">Safe money transfer using your bank account. We support
@@ -271,9 +281,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="mt-4">
-                                            <button type="submit" class="btn">Update Billing</button>
+                                            <button type="submit" class="btn">Update Mailing</button>
                                         </div>
                                     </form>
                                 </div>
@@ -297,35 +307,102 @@
             format: 'DD MMMM YYYY',
             defaultDate: '{{ $user->dateofbirth }}'
         });
+
+        provinces();
     });
     Dropzone.autoDiscover = false;
-    // //Form 1
-    // var form2 = $('#fileUpload1');
-    // form2.dropzone({
-    //     url: "http://polo/files/post",
-    //     addRemoveLinks: true,
-    //     maxFiles: 1,
-    //     maxFilesize: 10,
-    //     acceptedFiles: "image/*",
-    // });
-    // //Form 2
-    // var form2 = $('#fileUpload2');
-    // form2.dropzone({
-    //     url: "http://polo/files/post",
-    //     maxFilesize: 5,
-    //     acceptedFiles: "image/*",
-    //     previewsContainer: "#formFiles2",
-    //     previewTemplate: $("#formTemplate2").html(),
-    // });
+
     //Form 3
     var form3 = $('#fileUpload3');
     form3.dropzone({
-        url: "http://polo/files/post",
+        method: "POST",
+        url: "{{ route('dashboard.user.changeAvatar', $user) }}",
         maxFilesize: 5,
         acceptedFiles: "image/*",
-        previewsContainer: "#formFiles3",
-        previewTemplate: $("#formTemplate3").html(),
-        clickable: ".dropzone-attach-files"
+        // previewsContainer: "#formFiles3",
+        // previewTemplate: $("#formTemplate3").html(),
+        clickable: ".dropzone-attach-files",
+        renameFile: function(file) {
+            var dt = new Date();
+            var time = dt.getTime();
+            return time +'-user{{ $user->id }}';
+        },
+        removedfile: function(file) 
+        {
+            var name = file.upload.filename;
+            // $.ajax({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            //     },
+            //     type: "POST",
+            //     url: "#",
+            //     data: { _method: 'DELETE', payment_file: name },
+            //     success: function (data) {
+            //         console.log('File has been successfully removed!!');
+            //     },
+            //     error: function(e) {
+            //         console.log(e);
+            //     }
+            // });
+            $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+            var fileRef;
+            return (fileRef = file.previewElement) != null ? 
+            fileRef.parentNode.removeChild(file.previewElement) : void 0;
+        },
+        sending: function(file, xhr, formData) {
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('_method', 'PUT');
+        },
+        success: function(file, response) {
+            notify(response.notify, "Success");
+
+            var name = file.upload.filename;
+            var fileRef;
+            return (fileRef = file.previewElement) != null ? 
+            fileRef.parentNode.removeChild(file.previewElement) : void 0;
+        },
+        thumbnail: function(file, dataUrl) {
+            $('.avatar').attr('src', dataUrl);
+        },
+        error: function(response) {
+            console.log('Error: ', response)
+            return false;
+        }
     });
+
+    function provinces() {
+        $('#spinner-province').show();
+        $.getJSON(@json(route('rajaongkir.province')), function(result){
+            $.each(result, function(i, field){
+                $('select[name="province"').append(`<option value="${field.province_id}">${field.province}</option>`);
+            });
+            $('#spinner-province').hide();
+            
+            var province = @json($user->province);
+            console.log(province);
+            if(province != null) {
+                $('select[name="province"]').val(province).change();
+                // cities('select[name="province"]');
+            }
+        });
+    }
+
+    function cities(provinceElement) {
+        province = $(provinceElement).find(':selected').val();
+        $('#spinner-city').show();
+        $('select[name="city"').html(`<option selected disabled>Select city</option>`);
+        console.log(province);
+        $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
+            $.each(result, function(i, field){
+                $('select[name="city"').append(`<option value="${field.city_id}">${field.city_name}</option>`);
+            });
+            $('#spinner-city').hide();
+
+            var city = @json($user->city);
+            if(city != null) {
+                $('select[name="city"]').val(city).change();
+            }
+        });
+    }
 </script>
 @endpush

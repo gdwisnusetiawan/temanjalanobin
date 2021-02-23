@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -78,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAddressLineAttribute()
     {
-        return $this->address .', '. ucwords($this->city) .', '. ucwords($this->province) .', '. $this->postcode;
+        return $this->address .', '. ucwords($this->city_name) .', '. ucwords($this->province_name) .', '. $this->postcode;
     }
 
     public function pricing($product_id)
@@ -94,5 +95,33 @@ class User extends Authenticatable implements MustVerifyEmail
     public function payments()
     {
         return $this->hasMany('App\Payment');
+    }
+
+    public function getProvinceNameAttribute()
+    {
+        $response = Http::withHeaders([
+            'content-type' => 'application/x-www-form-urlencoded',
+            'key' => 'a668420368d4731d3ca94321058bcea2'
+            ])->get('https://api.rajaongkir.com/starter/province?id='.$this->province);
+        $result = json_decode($response->body())->rajaongkir->results;
+        $province = '';
+        if(!is_array($result)) {
+            $province = $result->province;
+        }
+        return $province;
+    }
+
+    public function getCityNameAttribute()
+    {
+        $response = Http::withHeaders([
+            'content-type' => 'application/x-www-form-urlencoded',
+            'key' => 'a668420368d4731d3ca94321058bcea2'
+            ])->get('https://api.rajaongkir.com/starter/city?id='.$this->city);
+        $result = json_decode($response->body())->rajaongkir->results;
+        $city = '';
+        if(!is_array($result)) {
+            $city = $result->city_name;
+        }
+        return $city;
     }
 }

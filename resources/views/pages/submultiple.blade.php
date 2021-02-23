@@ -137,7 +137,7 @@
                                         <div class="post-thumbnail-content">
                                             <a href="#">{{ $popular->title }}</a>
                                             <span class="post-date"><i class="icon-clock"></i> {{ $popular->datetime_diff }}</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Tag</span>
+                                            <span class="post-category"><i class="fa fa-eye"></i> {{ $popular->views }} views</span>
                                         </div>
                                     </div>
                                     @endforeach
@@ -151,7 +151,7 @@
                                         <div class="post-thumbnail-content">
                                             <a href="#">{{ $recent->title }}</a>
                                             <span class="post-date"><i class="icon-clock"></i> {{ $recent->datetime_diff }}</span>
-                                            <span class="post-category"><i class="fa fa-tag"></i> Tag</span>
+                                            <!-- <span class="post-category"><i class="fa fa-tag"></i> Tag</span> -->
                                         </div>
                                     </div>
                                     @endforeach

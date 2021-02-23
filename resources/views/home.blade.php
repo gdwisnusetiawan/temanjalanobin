@@ -11,13 +11,13 @@
         <div class="container">
             <div class="slide-captions text-light {{ $slider->textpos }}">
                 <!-- Captions -->
-                <span class="strong">TUTOYA</span>
+                <span class="strong">{{ config('app.name') }}</span>
                 <h2 class="text-dark">{{ $slider->slidertxt }}</h2>
                 @if($slider->button1 != null)
-                <a class="btn" href="{{ $slider->sliderlink1 }}" target="{{ $slider->target1 }}">{{ $slider->button1 }}</a>
+                <a class="btn" href="{{ $slider->link($slider->sliderlink1) }}" target="{{ $slider->target1 }}">{{ $slider->button1 }}</a>
                 @endif
                 @if($slider->button2 != null)
-                <a class="btn btn-light" href="{{ $slider->sliderlink2 }}" target="{{ $slider->target2 }}">{{ $slider->button2 }}</a>
+                <a class="btn btn-light" href="{{ $slider->link($slider->sliderlink2) }}" target="{{ $slider->target2 }}">{{ $slider->button2 }}</a>
                 @endif
                 <!-- end: Captions -->
             </div>

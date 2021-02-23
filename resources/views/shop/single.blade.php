@@ -13,7 +13,6 @@
                             @foreach($product->media['url'] as $media)
                             <a href="{{ $media }}" data-lightbox="image" title="Shop product image!"><img alt="Shop product image!" src="{{ $media }}"></a>
                             @endforeach
-                            <a href="{{ asset('polo-5/images/shop/products/product-large.jpg') }}" data-lightbox="image" title="Shop product image!"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}"></a>
                         </div>
                         <!-- Carousel slider -->
                     </div>

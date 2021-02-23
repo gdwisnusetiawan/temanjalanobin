@@ -7,11 +7,11 @@
     <meta name="author" content="WEBIDUS">
 	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else tutoya e-commerce, webidus digital marketing and technology @endif">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{ asset($config->favicon) }}">
+    <link rel="icon" type="image/png" href="{{ asset($config->favicon_url) }}">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Document title -->
-    <title>{{ $config->title ?? config('app.name', 'Tutoya') }} | @hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif</title>
+    <title>@hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif | {{ $config->title ?? config('app.name', 'Tutoya') }}</title>
     <!-- Bootstrap datetimepicker css -->
     <link href="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
     <!-- Stylesheets & Fonts -->

@@ -31,6 +31,7 @@ class Menu extends Model
         }
         else {
             $slug = Str::slug($this->title, '-');
+            // $slug = str_replace(' ', '-', $this->title);
         }
         return $slug;
     }
