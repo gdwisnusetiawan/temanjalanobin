@@ -12,6 +12,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Document title -->
     <title>{{ $config->title ?? config('app.name', 'Tutoya') }} | @hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif</title>
+    <!-- Bootstrap datetimepicker css -->
+    <link href="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
     <!-- Stylesheets & Fonts -->
     <link href="{{ asset('polo-5/css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('polo-5/css/style.css') }}" rel="stylesheet">
@@ -97,11 +99,17 @@
             return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
         }
 
-        function onSubmit(e) {
+        function onSubmit() {
             $('#button-spinner').show();
             $('#button-submit .btn-text').html('Loading...');
             $('#button-submit').prop('disabled', true);
-            $('#button-cancel').prop('disabled', true);
+            // $('#button-cancel').prop('disabled', true);
+        }
+
+        function onSubmitButton(button) {
+            $(button+' .button-spinner').show();
+            $(button+' .btn-text').html('Loading...');
+            $(button).prop('disabled', true);
         }
 
         function printPage(title) {

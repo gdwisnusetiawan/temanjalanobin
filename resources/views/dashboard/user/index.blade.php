@@ -3,7 +3,7 @@
 @push('styles')
     <link href="{{ asset('polo-5/plugins/dropzone/dropzone.css') }}" rel="stylesheet">
     <!-- Bootstrap datetimepicker css -->
-    <link href="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet"> -->
     <!-- <style>
         .datepicker.dropdown-menu {
             z-index: 9999 !important;

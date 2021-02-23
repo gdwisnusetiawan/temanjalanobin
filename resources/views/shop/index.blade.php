@@ -84,7 +84,7 @@
                                         <h3><a href="{{ route('shop.single', [$category, $product]) }}">{{ $product->title }}</a></h3>
                                     </div>
                                     <div class="product-title">
-                                        @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty())
+                                        @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
                                             <del><small>{{ $product->real_price }}</small></del>
                                         @endif
                                         {{ $product->getpriceFormat(1) }}

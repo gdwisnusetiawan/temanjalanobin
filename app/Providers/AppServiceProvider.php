@@ -6,6 +6,7 @@ use App\Config;
 use App\Footer;
 use App\Subcategory;
 use App\Marquee;
+use App\Popup;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
 
         $modal_type = rand(0,7);
         $modal_type = 0;
+        $popup = Popup::where('is_active', true)->first();
         $loader = 2;
         $menus = Functions::menu();
         $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
@@ -45,12 +47,13 @@ class AppServiceProvider extends ServiceProvider
         // dd($user_referer);
         view()->share([
             'modal_type' => $modal_type,
+            'popup' => $popup,
             'loader' => $loader,
             'menus' => $menus,
             'config' => $config,
             'footer' => $footer,
             'marquee' => $marquee,
-            'subcategories' => $subcategories
+            'subcategories' => $subcategories,
         ]);
     }
 }
