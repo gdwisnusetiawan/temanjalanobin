@@ -14,7 +14,7 @@ class Config extends Model
     {
         $file = explode('.', $this->logo);
         // return $file[0].'-dark.'.$file[1];
-        return $file[0].'-dark.png';
+        return $this->logo_url;
     }
 
     public function getLogoUrlAttribute()

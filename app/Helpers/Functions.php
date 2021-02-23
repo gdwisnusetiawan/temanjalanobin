@@ -85,12 +85,15 @@ class Functions
 
     public static function media($model)
     {
-        $cdn = 'acp.pasarama.com/foto';
+        $cdn = env('APP_STORAGE_URL').'foto/';
         $classname = strtolower(class_basename($model));
         if($classname == 'config') {
-            $classname = 'general/';
+            $classname = 'general';
         }
-        $url = $cdn.$classname.$model->id.'/';
+        elseif(in_array($classname, ['page', 'multipage', 'multisubpage'])) {
+            $classname = $classname.'s';
+        }
+        $url = $cdn.$classname.'/'.$model->id.'/';
 
         $table_columns = Functions::tableColumns($model);
         $image_count = collect($table_columns)->filter(function ($value, $key) {
@@ -98,7 +101,9 @@ class Functions
         })->count();
         $images = [];
         for ($i=1; $i <= $image_count; $i++) {
-            $images[] = $url.'image'.$i;
+            if($model->{'image'.$i} != null) {
+                $images[] = $url.'image'.$i;
+            }
         }
         if($model->video != null) {
             $media['type'] = 'video';
@@ -115,10 +120,12 @@ class Functions
         else {
             $media['type'] = 'image';
             if(in_array(class_basename($model), ['Page', 'Multipage', 'Multisubpage'])) {
-                $media['url'][] = asset('polo-5/images/blog/1.jpg');
+                // $media['url'][] = asset('polo-5/images/blog/1.jpg');
+                $media['url'][] = asset('img/no-image.png');
             }
             elseif(in_array(class_basename($model), ['Product'])) {
-                $media['url'][] = asset('polo-5/images/shop/products/1.jpg');
+                // $media['url'][] = asset('polo-5/images/shop/products/1.jpg');
+                $media['url'][] = asset('img/no-image.png');
             }
             $media[] = $media;
         }

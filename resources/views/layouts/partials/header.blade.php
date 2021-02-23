@@ -6,7 +6,7 @@
                 <a href="{{ url('/') }}">
                     <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
                     <!-- <span class="logo-dark">Tutoya</span> -->
-                    <img src="{{ $config->logo_url }}" alt="logo" class="logo-default">
+                    <img src="{{ $config->logo_url }}" alt="logo" class="logo-default py-3">
                     <img src="{{ asset($config->logo_dark) }}" alt="logo-dark" class="logo-dark">
                 </a>
             </div>

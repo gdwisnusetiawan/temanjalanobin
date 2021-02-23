@@ -29,7 +29,7 @@ class Popup extends Model
             return $this->link;
         }
         else {
-            return route($this->link);
+            return route('page.index', $this->link);
         }
     }
 }

@@ -7,7 +7,7 @@
     }
 
     .watermark {
-        background-image: url("{{ asset($config->logo) }}");
+        background-image: url("{{ asset($config->logo_url) }}");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 50%;
@@ -64,7 +64,7 @@
             <div class="watermark"></div>
             <div class="card-header">
                 <div class="d-flex justify-content-between mb-3">
-                    <img src="{{ asset($config->logo) }}" alt="" height="120px"> <br>
+                    <img src="{{ asset($config->logo_url) }}" alt="" height="120px"> <br>
                     <h3 class="align-self-center">Invoice #{{ $payment->transactionno }}</h3>
                 </div>
                 <div class="d-flex justify-content-between">

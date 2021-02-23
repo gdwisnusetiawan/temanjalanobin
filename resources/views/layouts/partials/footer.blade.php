@@ -1,7 +1,7 @@
 <footer id="footer">
     <div class="footer-content">
         <div class="container">
-            <div class="row">
+        <div class="row">
                 <!-- <div class="col-lg-5">
                     <div class="widget">
 
@@ -11,26 +11,34 @@
                         <a href="https://themeforest.net/item/polo-responsive-multipurpose-html5-template/13708923" class="btn btn-inverted" target="_blank">Purchase Now</a>
                     </div>
                 </div> -->
-                <div class="{{ array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
+                <div class="{{ $footer->newsletter || array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
                     <div class="row">
-                        <div class="col-lg-3">
+                        @php $count = count($footer->contents['default']) @endphp
+                        @foreach($footer->contents['default'] as $content)
+                            <div class="col-lg-{{ floor(12/$count) }}">
+                                <div class="widget">
+                                    <div class="widget-title">{{ $content['title'] }}</div>
+                                    {!! $content['description'] !!}
+                                </div>
+                            </div>
+                        @endforeach
+                        <!-- <div class="col-lg-3">
                             <div class="widget">
-                                <div class="widget-title">{{ $footer->title1 }}</div>
-                                <!-- <ul class="list">
+                                <div class="widget-title">Company</div>
+                                <ul class="list">
                                     <li><a href="#">About Us</a></li>
                                     <li><a href="#">Tutoya Update</a></li>
                                     <li><a href="#">Tutoya Gift</a></li>
                                     <li><a href="#">Newest Promo</a></li>
                                     <li><a href="#">Distributor List</a></li>
-                                </ul> -->
-                                {!! $footer->description1 !!}
+                                </ul>
                             </div>
                         </div>
 
                         <div class="col-lg-3">
                             <div class="widget">
-                                <div class="widget-title">{{ $footer->title2 }}</div>
-                                <!-- <ul class="list">
+                                <div class="widget-title">Support</div>
+                                <ul class="list">
                                     <li><a href="#">Payment</a></li>
                                     <li><a href="#">Payment Confirmation</a></li>
                                     <li><a href="#">Order Status</a></li>
@@ -38,25 +46,10 @@
                                     <li><a href="#">How To</a></li>
                                     <li><a href="#">Contact Us</a></li>
                                     <li><a href="#">FAQ</a></li>
-                                </ul> -->
-                                {!! $footer->description2 !!}
+                                </ul>
                             </div>
                         </div>
-
-                        <div class="col-lg-3">
-                            <div class="widget">
-                                <div class="widget-title">{{ $footer->title3 }}</div>
-                                {!! $footer->description3 !!}
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="widget">
-                                <div class="widget-title">{{ $footer->title4 }}</div>
-                                {!! $footer->description4 !!}
-                            </div>
-                        </div>
-                        <!-- <div class="col-lg-6 col-md-4">
+                        <div class="col-lg-6 col-md-4">
                             <div class="widget">
                                 <div class="widget-title">Customer Care</div>
                                 Buka Setiap Hari<br />Jam: 8.00 - 17.30<br />Telp: +62 123456<br />Email: cs@domain.com
@@ -76,6 +69,24 @@
                         </div> -->
                     </div>
                 </div>
+                @if($footer->newsletter || array_key_exists('newsletter', $footer->contents))
+                    @foreach($footer->contents['newsletter'] as $content)
+                    <div class="col-lg-4">
+                        <div class="widget clearfix widget-newsletter">
+                            <h4 class="widget-title"><i class="fa fa-envelope"></i> {{ $content['title'] }}</h4>
+                            {!! $content['description'] !!}
+                            <form class="widget-subscribe-form p-r-40" action="include/subscribe-form.php" role="form" method="post" novalidate="novalidate">
+
+                            <div class="input-group">
+                                <input aria-required="true" name="widget-subscribe-form-email" class="form-control required email" placeholder="Enter your Email" type="email">
+                                <span class="input-group-btn">
+                                <button type="submit" id="widget-subscribe-submit-button" class="btn"><i class="fa fa-paper-plane"></i></button>
+                                </span> </div>
+                            </form>
+                        </div>
+                    </div>
+                    @endforeach
+                @endif
             </div>
             <!-- <div class="row">
                 <div class="col-xl-4 col-lg-6 col-md-12">
