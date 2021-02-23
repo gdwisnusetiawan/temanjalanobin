@@ -1,6 +1,8 @@
-<div id="topbar" class="d-none d-xl-block d-lg-block topbar-fullwidth {{ $marquee->marqueebgcolor }}">
+<div id="topbar" class="d-none d-xl-block d-lg-block topbar-fullwidth @isset($marquee) {{ $marquee->marqueebgcolor }} @endisset">
     <div class="container">
+    @isset($marquee)
     <marquee behavior="scroll" direction="{{ $marquee->marqueedirection }}" scrollamount="{{ $marquee->marqueespeed }}" class="text-{{ $marquee->marqueetextcolor }}">{{ $marquee->marqueetext }}</marquee>
+    @endisset
         <!-- <div class="row">
             <div class="col-md-12">
             </div>

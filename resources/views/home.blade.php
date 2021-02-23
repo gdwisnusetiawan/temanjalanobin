@@ -2,6 +2,8 @@
 
 @section('content')
 @include('layouts.partials.modal')
+
+@isset($slider)
 <!-- Inspiro Slider -->
 <div id="slider" class="inspiro-slider slider-fullscreen dots-creative" data-height-xs="360">
     <!-- Slide -->
@@ -27,6 +29,7 @@
     <!-- end: Slide -->
 </div>
 <!--end: Inspiro Slider -->
+@endisset
 
 <!-- BOXES -->
 <!-- <section>
