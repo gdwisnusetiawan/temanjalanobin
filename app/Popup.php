@@ -25,11 +25,16 @@ class Popup extends Model
 
     public function getLinksAttribute()
     {
-        if(Str::startsWith($this->link, 'http')) {
-            return $this->link;
+        if($this->link) {
+            if(Str::startsWith($this->link, 'http')) {
+                return $this->link;
+            }
+            else {
+                return route('page.index', $this->link);
+            }
         }
         else {
-            return route('page.index', $this->link);
+            return '#';
         }
     }
 }
