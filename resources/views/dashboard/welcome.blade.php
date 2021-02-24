@@ -18,7 +18,7 @@
     <div class="container">
         <!--Heading text-->
         <div class="heading-text">
-            <h5 class="text-uppercase">{{ config('app.name', 'Tutoya') }}</h5>
+            <!-- <h5 class="text-uppercase">{{ config('app.name', 'Tutoya') }}</h5> -->
             <h2><span>Welcome {{ auth()->user()->name }}</span></h2>
             <p>Enjoy shopping and have a nice day.</p>
             <a href="{{ url('/') }}" class="btn btn-outline btn-rounded">Return to Shop</a>

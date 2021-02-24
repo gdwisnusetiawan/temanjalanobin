@@ -11,7 +11,7 @@
         <div class="container">
             <div class="slide-captions text-light {{ $slider->textpos }}">
                 <!-- Captions -->
-                <span class="strong">{{ config('app.name') }}</span>
+                <!-- <span class="strong">{{ config('app.name') }}</span> -->
                 <h2 class="text-dark">{{ $slider->slidertxt }}</h2>
                 @if($slider->button1 != null)
                 <a class="btn" href="{{ $slider->link($slider->sliderlink1) }}" target="{{ $slider->target1 }}">{{ $slider->button1 }}</a>
