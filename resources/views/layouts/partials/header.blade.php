@@ -52,7 +52,7 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
-                        @isset($menu)
+                        @isset($menus)
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
