@@ -1,7 +1,7 @@
 <footer id="footer">
     <div class="footer-content">
         <div class="container">
-        <div class="row">
+            <div class="row">
                 <!-- <div class="col-lg-5">
                     <div class="widget">
 
@@ -11,6 +11,7 @@
                         <a href="https://themeforest.net/item/polo-responsive-multipurpose-html5-template/13708923" class="btn btn-inverted" target="_blank">Purchase Now</a>
                     </div>
                 </div> -->
+                @isset($footer)
                 <div class="{{ $footer->newsletter || array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
                     <div class="row">
                         @php $count = count($footer->contents['default']) @endphp
@@ -87,6 +88,7 @@
                     </div>
                     @endforeach
                 @endif
+                @endisset
             </div>
             <!-- <div class="row">
                 <div class="col-xl-4 col-lg-6 col-md-12">
@@ -112,6 +114,7 @@
                 <div class="col-lg-6">
                     <!-- Social icons -->
                     <div class="social-icons social-icons">
+                        @isset($footer)
                         <ul>
                             <li class="social-facebook"><a href="{{ $footer->facebook }}" target="_BLANK"><i class="fab fa-facebook-f"></i></a></li>
                             <li class="social-instagram"><a href="{{ $footer->instagram }}" target="_BLANK"><i class="fab fa-instagram"></i></a></li>
@@ -123,13 +126,14 @@
                             <!-- <li class="social-pinterest"><a href="#" target="_BLANK"><i class="fab fa-pinterest"></i></a></li> -->
                             <!-- <li class="social-gplus"><a href="#" target="_BLANK"><i class="fab fa-google-plus-g"></i></a></li> -->
                         </ul>
+                        @endisset
                     </div>
                     <!-- end: Social icons -->
                 </div>
 
                 <div class="col-lg-6 text-right">
                     <div class="copyright-text">
-                        {{ $footer->copyright }}
+                        @isset($footer) {{ $footer->copyright }} @endisset
                         <!-- &copy; 2019 Today's Modern e-Commerce. All Rights Reserved. -->
                         <!-- <a href="//www.inspiro-media.com" target="_blank" rel="noopener"> TUTOYA</a> -->
                     </div>

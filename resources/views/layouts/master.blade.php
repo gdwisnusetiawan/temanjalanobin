@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="author" content="WEBIDUS">
-	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else tutoya e-commerce, webidus digital marketing and technology @endif">
+	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else new e-commerce, webidus digital marketing and technology @endif">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{ asset($config->favicon_url) }}">
+    <link rel="icon" type="image/png" href="@isset($config) {{ asset($config->favicon_url) }} @endisset">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Document title -->
@@ -58,7 +58,7 @@
 
     </div>
     <!-- Whatsapp float -->
-    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? $footer->whatsapp }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
+    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? (isset($footer) ? $footer->whatsapp : '') }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
     <!-- Scroll top -->

@@ -6,8 +6,8 @@
                 <a href="{{ url('/') }}">
                     <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
                     <!-- <span class="logo-dark">Tutoya</span> -->
-                    <img src="{{ $config->logo_url }}" alt="logo" class="logo-default py-3">
-                    <img src="{{ asset($config->logo_dark) }}" alt="logo-dark" class="logo-dark">
+                    <img src="{{ isset($config) ? $config->logo_url : '' }}" alt="logo" class="logo-default py-3">
+                    <img src="{{ isset($config) ? asset($config->logo_dark) : '' }}" alt="logo-dark" class="logo-dark">
                 </a>
             </div>
             <!--End: Logo-->
@@ -52,6 +52,7 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
+                        @isset($menu)
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
@@ -191,6 +192,7 @@
                             </li>
                             @endauth
                         </ul>
+                        @endisset
                     </nav>
                 </div>
             </div>
