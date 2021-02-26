@@ -65,12 +65,17 @@ class PageController extends Controller
     public function show($parent, $slug)
     {
         $page = Multisubpage::where('slug', $slug)->where('is_active', true)->first();
-        $recents = Multipage::with('submultipages')->where('slug', $parent)->first()->submultipages->where('is_active', true)->sortBy('datetime')->take(3);
-        $populars = Multipage::with('submultipages')->where('slug', $parent)->first()->submultipages->where('is_active', true)->sortByDesc('views')->take(3);
+        $multipage = Multipage::with('submultipages')->where('slug', $parent)->first();
         $share_links = Functions::shareLink(url()->full());
         $prev_page = null;
         $next_page = null;
+        $recents = [];
+        $populars = [];
         // dd($recents);
+        if(isset($multipage)) {
+            $recents = $multipage->submultipages->where('is_active', true)->sortBy('datetime')->take(3);
+            $populars = $multipage->submultipages->where('is_active', true)->sortByDesc('views')->take(3);
+        }
         if(isset($page))
         {
             $prev_page = Multisubpage::where('id', '<', $page->id)->orderBy('id', 'desc')->first();
