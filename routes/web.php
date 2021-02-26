@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('{payment}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
         Route::put('update/{payment}', 'CheckoutController@update')->name('update');
+        Route::post('shipping/{payment}', 'CheckoutController@shipping')->name('shipping');
+        Route::put('change-shipping/{payment}', 'CheckoutController@changeShipping')->name('changeShipping');
     });
 });
 

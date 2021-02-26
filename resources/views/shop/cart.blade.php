@@ -112,67 +112,8 @@
                 </div>
             </div>
             <div class="row">
-                <hr class="space">
-                <div class="col-lg-6">
-                    <h4>Calculate Shipping</h4>
-                    <form method="POST" action="{{ route('cart.shipping') }}" class="row" id="form-shipping">
-                        @csrf
-                        <div class="col-lg-6 m-b-20">
-                            <div class="input-group">
-                                <select name="origin_province" class="mb-2" onchange="cities(this, 'origin')">
-                                    <option selected disabled>Province</option>
-                                </select>
-                                <div class="spinner-loader-inside" id="spinner-origin-province" style="display: none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <select name="origin">
-                                    <option value="" selected disabled>From</option>
-                                </select>
-                                <div class="spinner-loader-inside" id="spinner-origin" style="display: none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 m-b-20">
-                            <div class="input-group">
-                                <select name="destination_province" class="mb-2" onchange="cities(this, 'destination')">
-                                    <option selected disabled>Province</option>
-                                </select>
-                                <div class="spinner-loader-inside" id="spinner-destination-province" style="display: none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <select name="destination">
-                                    <option value="" selected disabled>To</option>
-                                </select>
-                                <div class="spinner-loader-inside" id="spinner-destination" style="display: none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 form-group">
-                            <!-- <label for="">Weight</label> -->
-                            <div class="input-group">
-                                <input type="number" name="weight" placeholder="Weight" class="form-control" value="{{ session('cart')['summary']['total_weight'] > 0 ? session('cart')['summary']['total_weight'] : 1 }}" readonly>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">gram</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6  form-group">
-                            <label for=""></label>
-                            <!-- <input type="text" class="form-control" placeholder="Post Code / Zip"> -->
-                            <button type="button" class="btn" id="button-shipping" onclick="shippingCost(this.form)">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
-                                <span class="btn-text">Calculate</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-6 p-r-10 ">
+                <!-- <hr class="space"> -->
+                <div class="col-lg-6 p-r-10 offset-lg-6">
                     <div class="table-responsive">
                         <h4>Cart Subtotal</h4>
                         <table class="table">
@@ -185,14 +126,14 @@
                                         <span class="amount" id="subtotal">{{ $functions->formatCurrency(session('cart')['summary']['subtotal']) }}</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td class="cart-product-name">
                                         <strong>Shipping</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
                                         <span class="amount" id="shipping">{{ array_key_exists('shipping', session('cart')['summary']) ? $functions->formatCurrency(session('cart')['summary']['shipping']['cost']) : '-' }}</span>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <!-- <tr>
                                     <td class="cart-product-name">
                                         <strong>Coupon</strong>
@@ -222,30 +163,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="list-group" id="shipping-list">
-                        <!-- <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between">
-                            <div class="">
-                                <h5 class="mb-1">code</h5>
-                                <p class="mb-1">name</p>
-                            </div>
-                            <div class="">
-                                <h5 class="mb-1">cost.service</h5>
-                                <p class="mb-1">cost.description</p>
-                            </div>
-                            <div class="">
-                                <h5 class="mb-1">cost[0].value</h5>
-                                <p class="mb-1">cost[0].etd</p>
-                            </div>
-                        </a> -->
-                    </div>
-                </div>
-            </div>
+            
             <form method="POST" action="{{ route('checkout.store') }}" id="form-checkout" class="text-right">
                 @csrf
-                <p class="text-muted" style="{{ array_key_exists('shipping', session('cart')['summary']) ? 'display: none' : '' }}">Choose your shipment before checkout.</p>
-                <button type="submit" class="btn icon-left" {{ !array_key_exists('shipping', session('cart')['summary']) ? 'disabled' : '' }}><span>Proceed to Checkout</span></button>
+                <button type="submit" class="btn icon-left"><span>Proceed to Checkout</span></button>
+                <!-- <button type="submit" class="btn icon-left" {{ !array_key_exists('shipping', session('cart')['summary']) ? 'disabled' : '' }}><span>Proceed to Checkout</span></button> -->
             </form>
         </div>
     </div>
@@ -370,143 +292,6 @@ function deleteCart(form) {
         error: function(error) {
             console.log(error);
         }
-    });
-}
-
-function shippingCost(form) {
-    var formData = $(form).serializeArray();
-    $('#button-spinner').show();
-    $('#button-shipping .btn-text').html('Loading...');
-    $('#button-shipping').prop('disabled', true);
-    $.ajax({
-        type: $(form).attr('method'),
-        url: $(form).attr('action'),
-        dataType: 'json',
-        data: formData,
-        success: function(data) {
-            // console.log(data);
-            $('#shipping').html(formatCurrency(data.cart.summary.shipping.cost));
-            $('#total').html(formatCurrency(data.cart.summary.total));
-            var html = '';
-            var count = 0;
-            data.results.forEach(function (results, i) {
-                results.forEach(function (result, i) {
-                    result.costs.forEach(function (costs, j) {
-                        costs.cost.forEach(function (cost, k) {
-                            html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
-                                onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h5 class="mb-1">${result.code.toUpperCase()}</h5>
-                                                <p class="mb-1">${result.name}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h5 class="mb-1">${costs.service}</h5>
-                                                <p class="mb-1">${costs.description}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
-                                                <p class="mb-1">${cost.etd} days</p>
-                                            </div>
-                                        </div>
-                                    </li>`;
-                            count++;
-                        });
-                    });
-                })
-            });
-            $('#shipping-list').html(html);
-            $('#button-spinner').hide();
-            $('#button-shipping .btn-text').html('Calculate');
-            $('#button-shipping').prop('disabled', false);
-            $('#form-checkout p').hide();
-            $('#form-checkout button').prop('disabled', false);
-            // notify(data.message, data.type);
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
-}
-
-function changeShipping(id, code, name, service, description, cost, etd) {
-    // var formData = $(form).serializeArray();
-    // $('#button-spinner').show();
-    // $('#button-shipping .btn-text').html('Loading...');
-    // $('#button-shipping').prop('disabled', true);
-    $.ajax({
-        type: 'POST',
-        url: @json(route('cart.changeShipping')),
-        dataType: 'json',
-        data: { 
-            _token: @json(csrf_token()), 
-            _method: 'PUT', 
-            code: code,
-            name: name,
-            service: service,
-            description: description,
-            cost: cost,
-            etd: etd
-        },
-        success: function(data) {
-            // console.log(data);
-            $('#shipping').html(formatCurrency(data.summary.shipping.cost));
-            $('#total').html(formatCurrency(data.summary.total));
-            $('.list-group-item.list-group-item-action').each(function () {
-                $(this).removeClass('active text-white');
-            });
-            $('#'+id).addClass('active text-white');
-            // $('#shipping-list').html(html);
-            // $('#button-spinner').hide();
-            // $('#button-shipping .btn-text').html('Calculate');
-            // $('#button-shipping').prop('disabled', false);
-            // notify(data.message, data.type);
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
-}
-
-function provinces() {
-    $('#spinner-origin-province').show();
-    $('#spinner-destination-province').show();
-    $.getJSON(@json(route('rajaongkir.province')), function(result){
-        $.each(result, function(i, field){
-            $("select[name='origin_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
-            $("select[name='destination_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
-        });
-        $('#spinner-origin-province').hide();
-        $('#spinner-destination-province').hide();
-
-        @if(session('cart'))
-        var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
-        if(shipping != null) {
-            $('select[name="origin_province"]').val(shipping.origin_details.province_id).change();
-            $('select[name="destination_province"]').val(shipping.destination_details.province_id).change();
-            cities('select[name="origin_province"]', 'origin');
-            cities('select[name="destination_province"]', 'destination');
-        }
-        @endif
-    });
-}
-
-function cities(provinceElement, name) {
-    province = $(provinceElement).find(':selected').val();
-    $('#spinner-'+name).show();
-    $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
-        $.each(result, function(i, field){
-            $("select[name='"+name+"'").append(`<option value="${field.city_id}">${field.city_name}</option>`);
-        });
-        $('#spinner-'+name).hide();
-
-        @if(session('cart'))
-        var shipping = @json(array_key_exists('shipping', session('cart')['summary']) ? session('cart')['summary']['shipping'] : null);
-        if(shipping != null) {
-            $('select[name="origin"]').val(shipping.origin_details.city_id);
-            $('select[name="destination"]').val(shipping.destination_details.city_id);
-        }
-        @endif
     });
 }
 
