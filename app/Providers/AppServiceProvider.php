@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $categories = Category::all();
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
-        // dd($categories);
+        // dd($config);
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,

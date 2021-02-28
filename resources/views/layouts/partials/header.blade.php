@@ -1,4 +1,4 @@
-<header id="header" class="light">
+<header id="header" class="light header-logo-center">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
@@ -6,8 +6,8 @@
                 <a href="{{ url('/') }}">
                     <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
                     <!-- <span class="logo-dark">Tutoya</span> -->
-                    <img src="{{ isset($config) ? $config->logo_url : '' }}" alt="logo" class="logo-default py-3">
-                    <img src="{{ isset($config) ? asset($config->logo_dark) : '' }}" alt="logo-dark" class="logo-dark">
+                    <img src="{{ isset($config) ? $config->logo_url : '#' }}" alt="logo" class="logo-default py-3">
+                    <img src="{{ isset($config) ? asset($config->logo_dark) : '#' }}" alt="logo-dark" class="logo-dark">
                 </a>
             </div>
             <!--End: Logo-->
@@ -142,9 +142,9 @@
                                     </li>
                                 </ul>
                             </li> -->
-                        <!-- </ul> -->
+                        </ul>
                         <!-- right menu -->
-                        <!-- <ul> -->
+                        <ul>
                             @foreach($menus[1] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
