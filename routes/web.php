@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('{payment}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
         Route::put('update/{payment}', 'CheckoutController@update')->name('update');
+        Route::post('shipping/{payment}', 'CheckoutController@shipping')->name('shipping');
+        Route::put('change-shipping/{payment}', 'CheckoutController@changeShipping')->name('changeShipping');
     });
 });
 
@@ -84,9 +86,19 @@ Route::prefix('news')->name('news.')->group(function () {
 });
 
 Route::prefix('rajaongkir')->name('rajaongkir.')->group(function () {
-    Route::get('province/{id?}', 'RajaOngkirController@province')->name('province');
-    Route::get('city/{province}/{id?}', 'RajaOngkirController@city')->name('city');
-    Route::post('cost', 'RajaOngkirController@city')->name('cost');
+    // Route::get('province/{id?}', 'RajaOngkirController@province')->name('province');
+    // Route::get('city/{province}/{id?}', 'RajaOngkirController@city')->name('city');
+    // Route::post('cost', 'RajaOngkirController@city')->name('cost');
+});
+
+Route::prefix('shipment')->name('shipment.')->group(function () {
+    Route::get('jnt/cost', 'ShipmentController@jntCost')->name('jnt.cost');
+    Route::get('jnt/order', 'ShipmentController@jntOrder')->name('jnt.order');
+    Route::get('jnt/track', 'ShipmentController@jntTrack')->name('jnt.track');
+    Route::get('ncs/cost', 'ShipmentController@ncsCost')->name('ncs.cost');
+    Route::get('rajaongkir/province/{id?}', 'ShipmentController@rajaongkirProvince')->name('rajaongkir.province');
+    Route::get('rajaongkir/city/{province}/{id?}', 'ShipmentController@rajaongkirCity')->name('rajaongkir.city');
+    Route::post('rajaongkir/cost', 'ShipmentController@rajaongkirCost')->name('rajaongkir.cost');
 });
 
 Route::get('{slug}', 'PageController@index')->name('page.index');

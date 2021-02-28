@@ -108,7 +108,7 @@
 <section>
 <div class="container">
     <div class="heading-text heading-line text-center">
-        <h4>Featured Products </h4>
+        <h4>New Arrival </h4>
     </div>
     <div class="carousel shop-products" data-margin="20" data-dots="false">
         @foreach($products as $product)

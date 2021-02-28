@@ -372,14 +372,14 @@
 
     function provinces() {
         $('#spinner-province').show();
-        $.getJSON(@json(route('rajaongkir.province')), function(result){
+        $.getJSON(@json(route('shipment.rajaongkir.province')), function(result){
             $.each(result, function(i, field){
                 $('select[name="province"').append(`<option value="${field.province_id}">${field.province}</option>`);
             });
             $('#spinner-province').hide();
             
             var province = @json($user->province);
-            console.log(province);
+            // console.log(province);
             if(province != null) {
                 $('select[name="province"]').val(province).change();
                 // cities('select[name="province"]');
@@ -391,8 +391,8 @@
         province = $(provinceElement).find(':selected').val();
         $('#spinner-city').show();
         $('select[name="city"').html(`<option selected disabled>Select city</option>`);
-        console.log(province);
-        $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
+        // console.log(province);
+        $.getJSON(@json(url('shipment/rajaongkir/city'))+'/'+province, function(result){
             $.each(result, function(i, field){
                 $('select[name="city"').append(`<option value="${field.city_id}">${field.city_name}</option>`);
             });

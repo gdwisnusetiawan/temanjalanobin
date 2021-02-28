@@ -8,6 +8,7 @@ use App\Payment;
 use App\Transaction;
 use App\Merchant;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -19,8 +20,10 @@ class CheckoutController extends Controller
         if($payment->paymentProofs->count() > 0) {
             return redirect()->route('dashboard.payment', $payment);
         }
+        // $shippings = $this->shipping(444, $payment->city, $payment->weight);
+        $shippings = [];
         // dd($payment);
-        return view('shop.checkout', compact('payment', 'user', 'merchants'));
+        return view('shop.checkout', compact('payment', 'user', 'merchants', 'shippings'));
     }
 
     public function store()
@@ -40,8 +43,9 @@ class CheckoutController extends Controller
         $payment->transactionmount = $summary['subtotal'];
         $payment->transactiondate = Carbon::now();
         $payment->transactionexpire = Carbon::now()->addDays(7);
-        $payment->shipping_cost = $summary['shipping']['cost'];
+        // $payment->shipping_cost = $summary['shipping']['cost'];
         $payment->discount = $summary['total_discount'];
+        $payment->weight = $summary['total_weight'];
         // status: pending
         $payment->status = 1;
         $payment->insertid = $last_payment ? $last_payment->insertid + 1 : 1;
@@ -64,6 +68,7 @@ class CheckoutController extends Controller
             $transaction->price = $product->price;
             $transaction->save();
         }
+        
         session()->forget('cart');
         return redirect()->route('checkout.index', $payment);
     }
@@ -95,5 +100,99 @@ class CheckoutController extends Controller
         // }
 
         return redirect()->route('dashboard.payment', $payment);
+    }
+
+    public function shipping(Request $request, Payment $payment)
+    {
+        // return response()->json($request->all());
+        if($request->origin == null && $request->destination == null) {
+            return false;
+        }
+        $couriers = ['pos','jne','tiki'];
+        foreach($couriers as $courier) {
+            $response = Http::withHeaders([
+                'content-type' => 'application/x-www-form-urlencoded',
+                'key' => env('RAJAONGKIR_API_KEY')
+                ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+                    'origin' => $request->origin,
+                    'destination' => $request->destination,
+                    'weight' => $request->weight > 0 ? $request->weight : 1,
+                    'courier' => $courier,
+                ]);
+            $results[] = json_decode($response->body())->rajaongkir->results;
+        }
+        $result = $results[0];
+        $origin_details = json_decode($response->body())->rajaongkir->origin_details;
+        $destination_details = json_decode($response->body())->rajaongkir->destination_details;
+        $courier_code = $result[0]->code ?? '';
+        $courier_name = $result[0]->name ?? '';
+        $service = $result[0]->costs[0]->service ?? '';
+        $description = $result[0]->costs[0]->description ?? '';
+        $cost = $result[0]->costs[0]->cost[0]->value ?? 0;
+        $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
+
+        $payment->shipping_cost = $cost;
+        $payment->save();
+
+        $shipping = [
+            'origin_details' => $origin_details,
+            'destination_details' => $destination_details,
+            'courier_code' => $courier_code,
+            'courier_name' => $courier_name,
+            'service' => $service,
+            'description' => $description,
+            'cost' => $cost,
+            'etd' => $etd,
+            'total' => $payment->grand_total
+        ];
+        
+        // dd($results);
+        // $cart = session()->get('cart');
+        // $cart['summary'] = $this->summary($cart, $cost);
+        // $cart['summary']['shipping'] = [
+        //     'origin_details' => $origin_details,
+        //     'destination_details' => $destination_details,
+        //     'courier_code' => $courier_code,
+        //     'courier_name' => $courier_name,
+        //     'service' => $service,
+        //     'description' => $description,
+        //     'cost' => $cost,
+        //     'etd' => $etd,
+        // ];
+        // session()->put('cart', $cart);
+
+        // $cart['message'] = 'Cart updated successfully';
+        // $cart['type'] = 'success';
+        return response()->json(['results' => $results, 'shipping' => $shipping]);
+        // return response()->json(['results' => $results, 'cart' => $cart]);
+        // return $results;
+    }
+
+    public function changeShipping(Request $request, Payment $payment)
+    {
+        // $cart = session()->get('cart');
+        // return response()->json([$cart, $request->all()]);
+        // $origin_details = $cart['summary']['shipping']['origin_details'];
+        // $destination_details = $cart['summary']['shipping']['destination_details'];
+        // $cart['summary'] = $this->summary($cart, $request->cost);
+        $payment->shipping_cost = $request->cost;
+        $payment->save();
+
+        $shipping = [
+            // 'origin_details' => $origin_details,
+            // 'destination_details' => $destination_details,
+            'courier_code' => $request->code,
+            'courier_name' => $request->name,
+            'service' => $request->service,
+            'description' => $request->description,
+            'cost' => $request->cost,
+            'etd' => $request->etd,
+            'total' => $payment->grand_total
+        ];
+        // session()->put('cart', $cart);
+
+        $notify['message'] = 'Cart updated successfully';
+        $notify['type'] = 'success';
+        return response()->json(['shipping' => $shipping, 'notify' => $notify]);
     }
 }
