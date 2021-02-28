@@ -375,7 +375,7 @@
 
     function provinces() {
         $('#spinner-province').show();
-        $.getJSON(@json(route('rajaongkir.province')), function(result){
+        $.getJSON(@json(route('shipment.rajaongkir.province')), function(result){
             $.each(result, function(i, field){
                 $('select[name="province"').append(`<option value="${field.province_id}">${field.province}</option>`);
             });
@@ -395,7 +395,7 @@
         $('#spinner-city').show();
         $('select[name="city"').html(`<option selected disabled>Select city</option>`);
         // console.log(province);
-        $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
+        $.getJSON(@json(url('shipment/rajaongkir/city'))+'/'+province, function(result){
             $.each(result, function(i, field){
                 $('select[name="city"').append(`<option value="${field.city_id}">${field.city_name}</option>`);
             });
@@ -514,7 +514,7 @@
     // function provinces() {
     //     $('#spinner-origin-province').show();
     //     $('#spinner-destination-province').show();
-    //     $.getJSON(@json(route('rajaongkir.province')), function(result){
+    //     $.getJSON(@json(route('shipment.rajaongkir.province')), function(result){
     //         $.each(result, function(i, field){
     //             $("select[name='origin_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
     //             $("select[name='destination_province'").append(`<option value="${field.province_id}">${field.province}</option>`);
@@ -537,7 +537,7 @@
     // function cities(provinceElement, name) {
     //     province = $(provinceElement).find(':selected').val();
     //     $('#spinner-'+name).show();
-    //     $.getJSON(@json(url('rajaongkir/city'))+'/'+province, function(result){
+    //     $.getJSON(@json(url('shipment/rajaongkir/city'))+'/'+province, function(result){
     //         $.each(result, function(i, field){
     //             $("select[name='"+name+"'").append(`<option value="${field.city_id}">${field.city_name}</option>`);
     //         });
