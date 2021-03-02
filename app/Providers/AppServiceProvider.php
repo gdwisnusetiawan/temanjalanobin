@@ -34,12 +34,15 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
 
+        $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
+        if($config == null || $config->is_active == false) {
+            abort(503);
+        }
         $modal_type = rand(0,7);
         $modal_type = 0;
         $popup = Popup::where('is_active', true)->first();
         $loader = 2;
         $menus = Functions::menu();
-        $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::orderBy('id', 'desc')->first();
         $marquee = Marquee::first();

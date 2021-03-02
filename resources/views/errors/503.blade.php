@@ -18,19 +18,20 @@
 <body>
 	<!-- Body Inner -->
 	<div class="body-inner">
-		<section class="fullscreen text-center">
+	<section class="fullscreen text-center">
 			<div class="container container-fullscreen">
 				<div class="text-middle text-center">
+					<img src="{{ asset('polo-5/images/logo.png') }}" alt="logo" class="logo-default py-3"> <br>	
 					<i class="fa fa-exclamation-triangle fa-5x" style="color: #ffd530;"></i>
 					<h1 class="text-uppercase text-lg">Maintenance mode</h1>
 					<p class="lead">We are currently working on our website, we'll be back soon!</p>
 				</div>
 			</div>
-			<div class="p-progress-bar-container title-up small">
+			<!-- <div class="p-progress-bar-container title-up small">
 				<div class="p-progress-bar" data-percent="95" data-delay="100" data-type="%" style="background-color:#ffd530">
 					<div class="progress-title">DEVELOPMENT PROGRESS</div>
 				</div>
-			</div>
+			</div> -->
 		</section>
 	</div> <!-- end: Body Inner -->
 	<!-- Scroll top -->
