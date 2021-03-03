@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" type="image/png" href="{{ asset('polo-5/images/favicon.png') }}">
 	<!-- Document title -->
-	<title>Tutoya | Today's Modern e-Commerce</title>
+	<title>@hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif | {{ $config->title ?? config('app.name', 'Tutoya') }}</title>
 	<!-- Stylesheets & Fonts -->
 	<link href="{{ asset('polo-5/css/plugins.css') }}" rel="stylesheet">
 	<link href="{{ asset('polo-5/css/style.css') }}" rel="stylesheet">
@@ -21,7 +21,7 @@
 	<section class="fullscreen text-center">
 			<div class="container container-fullscreen">
 				<div class="text-middle text-center">
-					<img src="{{ asset('polo-5/images/logo.png') }}" alt="logo" class="logo-default py-3"> <br>	
+					<!-- <img src="{{ asset('polo-5/images/logo.png') }}" alt="logo" class="logo-default py-3"> <br>	 -->
 					<i class="fa fa-exclamation-triangle fa-5x" style="color: #ffd530;"></i>
 					<h1 class="text-uppercase text-lg">Maintenance mode</h1>
 					<p class="lead">We are currently working on our website, we'll be back soon!</p>
