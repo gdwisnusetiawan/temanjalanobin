@@ -145,6 +145,7 @@
                         <!-- </ul> -->
                         <!-- right menu -->
                         <!-- <ul> -->
+                        @isset($menus[1])
                             @foreach($menus[1] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
@@ -164,6 +165,7 @@
                                     @endif
                                 </li>
                             @endforeach
+                        @endisset
                             <li class="{{ request()->is('dashboard*') ? 'current' : '' }}"><a href="#">My Account</a>
                                 <ul class="dropdown-menu">
                                     @guest
