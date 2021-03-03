@@ -7,7 +7,7 @@
     <meta name="author" content="INSPIRO"/>
 	<meta name="description" content="Themeforest Template Polo, html template">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{ asset('polo-5/images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 	<!-- Document title -->
 	<title>@hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif | {{ $config->title ?? config('app.name', 'Tutoya') }}</title>
 	<!-- Stylesheets & Fonts -->
@@ -21,7 +21,7 @@
 	<section class="fullscreen text-center">
 			<div class="container container-fullscreen">
 				<div class="text-middle text-center">
-					<!-- <img src="{{ asset('polo-5/images/logo.png') }}" alt="logo" class="logo-default py-3"> <br>	 -->
+					<img src="{{ asset('logo.png') }}" alt="logo" class="logo-default pb-5" style="max-height: 120px;"> <br>	
 					<i class="fa fa-exclamation-triangle fa-5x" style="color: #ffd530;"></i>
 					<h1 class="text-uppercase text-lg">Maintenance mode</h1>
 					<p class="lead">We are currently working on our website, we'll be back soon!</p>
