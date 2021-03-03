@@ -134,7 +134,7 @@
                 <div class="col-lg-6 text-right">
                     <div class="copyright-text">
                         @isset($footer) {{ $footer->copyright }} @endisset
-                        COPYRIGHT ©️ 2021 Pasarama , All rights Reserved
+                        COPYRIGHT ©️ 2021 {{ $config->name ?? config('app.name') }} , All rights Reserved
                         <!-- &copy; 2019 Today's Modern e-Commerce. All Rights Reserved. -->
                         <!-- <a href="//www.inspiro-media.com" target="_blank" rel="noopener"> TUTOYA</a> -->
                     </div>
