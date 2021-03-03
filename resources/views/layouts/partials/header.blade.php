@@ -52,9 +52,9 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
-                        @isset($menus)
                         <!-- left menu -->
                         <ul>
+                        @if($menus->count() > 0)
                             @foreach($menus[0] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
@@ -145,7 +145,7 @@
                         <!-- </ul> -->
                         <!-- right menu -->
                         <!-- <ul> -->
-                        @isset($menus[1])
+                            @isset($menus[1])
                             @foreach($menus[1] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
@@ -165,7 +165,8 @@
                                     @endif
                                 </li>
                             @endforeach
-                        @endisset
+                            @endisset
+                        @endif
                             <li class="{{ request()->is('dashboard*') ? 'current' : '' }}"><a href="#">My Account</a>
                                 <ul class="dropdown-menu">
                                     @guest
@@ -194,7 +195,6 @@
                             </li>
                             @endauth
                         </ul>
-                        @endisset
                     </nav>
                 </div>
             </div>

@@ -58,7 +58,7 @@
 
     </div>
     <!-- Whatsapp float -->
-    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? (isset($footer) ? $footer->whatsapp : '') }}?text=Mohon info lebih lanjut" class="btn-link wa-float" target="_BLANK">
+    <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? (isset($config) ? $config->wa : '') }}?text={{ $config->wa_text }}" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
     <!-- Scroll top -->
