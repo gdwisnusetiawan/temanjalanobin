@@ -11,15 +11,19 @@
                         <a href="https://themeforest.net/item/polo-responsive-multipurpose-html5-template/13708923" class="btn btn-inverted" target="_blank">Purchase Now</a>
                     </div>
                 </div> -->
-                @isset($footer)
-                <div class="{{ $footer->newsletter || array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
+                <div class="{{ array_key_exists('newsletter', $footer->contents) ? 'col-lg-8' : 'col-lg-12'}}">
                     <div class="row">
                         @php $count = count($footer->contents['default']) @endphp
                         @foreach($footer->contents['default'] as $content)
                             <div class="col-lg-{{ floor(12/$count) }}">
                                 <div class="widget">
                                     <div class="widget-title">{{ $content['title'] }}</div>
-                                    {!! $content['description'] !!}
+                                    <p>{!! $content['description'] !!}</p>
+                                    <ul class="list">
+                                        @foreach($content['links'] as $link)
+                                        <li><a href="{{ $link['location'] }}">{{ $link['title'] }}</a></li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
                         @endforeach
@@ -70,12 +74,12 @@
                         </div> -->
                     </div>
                 </div>
-                @if($footer->newsletter || array_key_exists('newsletter', $footer->contents))
+                @if(array_key_exists('newsletter', $footer->contents))
                     @foreach($footer->contents['newsletter'] as $content)
                     <div class="col-lg-4">
                         <div class="widget clearfix widget-newsletter">
                             <h4 class="widget-title"><i class="fa fa-envelope"></i> {{ $content['title'] }}</h4>
-                            {!! $content['description'] !!}
+                            <p>{!! $content['description'] !!}</p>
                             <form class="widget-subscribe-form p-r-40" action="include/subscribe-form.php" role="form" method="post" novalidate="novalidate">
 
                             <div class="input-group">
@@ -88,7 +92,6 @@
                     </div>
                     @endforeach
                 @endif
-                @endisset
             </div>
             <!-- <div class="row">
                 <div class="col-xl-4 col-lg-6 col-md-12">
@@ -114,7 +117,6 @@
                 <div class="col-lg-6">
                     <!-- Social icons -->
                     <div class="social-icons social-icons">
-                        @isset($footer)
                         <ul>
                             <li class="social-facebook"><a href="{{ $footer->facebook }}" target="_BLANK"><i class="fab fa-facebook-f"></i></a></li>
                             <li class="social-instagram"><a href="{{ $footer->instagram }}" target="_BLANK"><i class="fab fa-instagram"></i></a></li>
@@ -126,15 +128,13 @@
                             <!-- <li class="social-pinterest"><a href="#" target="_BLANK"><i class="fab fa-pinterest"></i></a></li> -->
                             <!-- <li class="social-gplus"><a href="#" target="_BLANK"><i class="fab fa-google-plus-g"></i></a></li> -->
                         </ul>
-                        @endisset
                     </div>
                     <!-- end: Social icons -->
                 </div>
 
                 <div class="col-lg-6 text-right">
                     <div class="copyright-text">
-                        @isset($footer) {{ $footer->copyright }} @endisset
-                        COPYRIGHT ©️ 2021 Pasarama , All rights Reserved
+                        {{ $footer->copyright }}
                         <!-- &copy; 2019 Today's Modern e-Commerce. All Rights Reserved. -->
                         <!-- <a href="//www.inspiro-media.com" target="_blank" rel="noopener"> TUTOYA</a> -->
                     </div>

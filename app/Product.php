@@ -25,7 +25,6 @@ class Product extends Model
     //     return $this->belongsTo('App\Category', 'category', 'id');
     // }
 
-
     public function variants()
     {
         return $this->hasMany('App\Variant', 'product_id', 'id');
@@ -34,6 +33,16 @@ class Product extends Model
     public function distributor()
     {
         return $this->belongsTo('App\Distributor');
+    }
+
+    public function subinventories()
+    {
+        return $this->hasMany('App\Subinventory', 'productid', 'id');
+    }
+
+    public function getSubinventoryAttribute()
+    {
+        return $this->subinventories->sortByDesc('date_time')->first();
     }
     
     public function getCategoryModelAttribute()

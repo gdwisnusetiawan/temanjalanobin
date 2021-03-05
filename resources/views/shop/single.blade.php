@@ -13,7 +13,6 @@
                             @foreach($product->media['url'] as $media)
                             <a href="{{ $media }}" data-lightbox="image" title="Shop product image!"><img alt="Shop product image!" src="{{ $media }}"></a>
                             @endforeach
-                            <a href="{{ asset('polo-5/images/shop/products/product-large.jpg') }}" data-lightbox="image" title="Shop product image!"><img alt="Shop product image!" src="{{ asset('polo-5/images/shop/products/2.jpg') }}"></a>
                         </div>
                         <!-- Carousel slider -->
                     </div>
@@ -38,6 +37,17 @@
                             <i class="fa fa-star-half-o"></i>
                         </div>
                         <div class="product-reviews"><a href="#">3 customer reviews</a></div> -->
+                        @isset($product->subinventory)
+                        <div class="product-rate">
+                            @if($product->subinventory->totalstock <= 0)
+                            <span class="badge badge-danger">Stok Habis</span>
+                            @elseif($product->subinventory->totalstock > $product->min)
+                            <span class="badge badge-success">Stok Tersedia</span>
+                            @else
+                            <span class="badge badge-warning">Stok Sisa {{ $product->subinventory->totalstock }}</span>
+                            @endif
+                        </div>
+                        @endisset
                         <div class="seperator m-b-10"></div>
                         <p>{!! htmlspecialchars_decode($product->description) !!}</p>
                         <div class="product-meta">

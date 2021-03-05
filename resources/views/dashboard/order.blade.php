@@ -69,20 +69,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $order)
+                        @forelse($payments as $payment)
                         <tr>
-                            <td><a href="{{ route('dashboard.invoice', $order) }}">{{ $order->invoiceno }}</a></td>
-                            <td>{{ $order->orderdate_format }}</td>
-                            <td>{{ $order->duedate_format }}</td>
-                            <td>{{ $order->total_format }}</td>
-                            <td><span class="badge badge-pill badge-primary">{{ $order->orderstatus }}</span></td>
+                            <td><a href="{{ route('dashboard.invoice', $payment) }}">{{ $payment->transactionno }}</a></td>
+                            <td>{{ $payment->invoice_date_format }}</td>
+                            <td>{{ $payment->invoice_duedate_format }}</td>
+                            <td>{{ $payment->total_format }}</td>
+                            <td><span class="badge badge-pill badge-{{ $payment->status_desc['color'] }}">{{ $payment->status_desc['text'] }}</span></td>
                             <td>
-                                <a class="ml-2" href="{{ route('checkout.index', $order) }}" data-toggle="tooltip" data-original-title="Pay"><i class="icon-shopping-bag"></i></a>
+                                <a class="ml-2" href="{{ route('checkout.index', $payment) }}" data-toggle="tooltip" data-original-title="Pay"><i class="icon-shopping-bag"></i></a>
                                 <!-- <a class="ml-2" href="#" data-toggle="tooltip" data-original-title="Delete"><i class="icon-trash-2"></i></a>
                                 <a class="ml-2" href="#" data-toggle="tooltip" data-original-title="Settings"><i class="icon-settings"></i></a> -->
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>

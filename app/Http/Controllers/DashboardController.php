@@ -22,16 +22,15 @@ class DashboardController extends Controller
 
     public function order()
     {
-        $orders = auth()->user()->orders;
-        return view('dashboard.order', compact('orders'));
+        $payments = auth()->user()->payments;
+        return view('dashboard.order', compact('payments'));
     }
 
-    public function invoice(Order $order)
+    public function invoice(Payment $payment)
     {
-        $user = $order->user;
-        $distributor = $order->suborders->first()->product->distributor;
-        $payment = $order->payments->sortByDesc('transactiondate')->first();
-        return view('dashboard.invoice', compact('order', 'user', 'distributor', 'payment'));
+        $user = $payment->user;
+        $payments = Payment::where('transactionno', $payment->transactionno)->where('status', 3)->get();
+        return view('dashboard.invoice', compact('payment', 'payments', 'user'));
     }
 
     public function payment(Payment $payment)
@@ -49,7 +48,9 @@ class DashboardController extends Controller
         $payment_proof->payment_date = Carbon::parse($request->payment_date)->format('Y-m-d H:i:s');
         $payment_proof->transfer_amount = $request->transfer_amount;
         $payment_proof->sender_account = $request->sender_account;
+        $payment_proof->status = 1;
         // upload file if exists
+        // return response()->json($request->has('file'));
         if($request->has('file'))
         {
             // delete old file
@@ -88,5 +89,16 @@ class DashboardController extends Controller
         $order->save();
         request()->session()->flash('notify', ['message' => 'You canceled the order', 'type' => 'success']);
         return redirect()->route('dashboard.invoice', $order);
+    }
+
+    public function changeAddress(Request $request, Payment $payment)
+    {
+        $payment->address = $request->address;
+        $payment->province = $request->province;
+        $payment->city = $request->city;
+        $payment->postcode = $request->postcode;
+        $payment->save();
+        request()->session()->flash('notify', ['message' => 'You changed the address', 'type' => 'success']);
+        return redirect()->route('checkout.index', $payment);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Config;
 use App\Footer;
-use App\Subcategory;
+use App\Category;
 use App\Marquee;
 use App\Popup;
 use App\Helpers\Functions;
@@ -34,17 +34,23 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
 
+        // $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
+        $config = Config::orderBy('id', 'desc')->first();
+        if($config == null || $config->is_active == false) {
+            abort(503);
+        }
         $modal_type = rand(0,7);
         $modal_type = 0;
         $popup = Popup::where('is_active', true)->first();
         $loader = 2;
         $menus = Functions::menu();
-        $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
-        $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+        // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+        $footer = Footer::orderBy('id', 'desc')->first();
         $marquee = Marquee::first();
-        $subcategories = Subcategory::with('categories')->get();
+        $categories = Category::all();
+        // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
-        // dd($user_referer);
+        // dd($config);
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,
@@ -53,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
             'config' => $config,
             'footer' => $footer,
             'marquee' => $marquee,
-            'subcategories' => $subcategories,
+            'categories' => $categories
         ]);
     }
 }

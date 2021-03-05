@@ -1,4 +1,4 @@
-<header id="header" class="dark submenu-light header-logo-center">
+<header id="header" class="light header-logo-center">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
@@ -6,22 +6,23 @@
                 <a href="{{ url('/') }}">
                     <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
                     <!-- <span class="logo-dark">Tutoya</span> -->
-                    <img src="{{ asset($config->logo) }}" alt="logo-tutoya-dark" class="logo-default">
-                    <img src="{{ asset($config->logo_dark) }}" alt="logo-tutoya-dark" class="logo-dark">
+                    <img src="{{ isset($config) ? $config->logo_url : '#' }}" alt="logo" class="logo-default py-3">
+                    <img src="{{ isset($config) ? asset($config->logo_dark) : '#' }}" alt="logo-dark" class="logo-dark">
                 </a>
             </div>
             <!--End: Logo-->
             <!-- Search -->
-            <div id="search"><a id="btn-search-close" class="btn-search-close" aria-label="Close search form"><i class="icon-x"></i></a>
+            <!-- <div id="search"><a id="btn-search-close" class="btn-search-close" aria-label="Close search form"><i class="icon-x"></i></a>
                 <form class="search-form" action="search-results-page.html" method="get">
                     <input class="form-control" name="q" type="text" placeholder="Type & Search..." />
                     <span class="text-muted">Start typing & press "Enter" or "ESC" to close</span>
                 </form>
-            </div> <!-- end: search -->
+            </div>  -->
+            <!-- end: search -->
             <!--Header Extras-->
             <div class="header-extras">
                 <ul>
-                    <li> <a id="btn-search" href="#"> <i class="icon-search"></i></a> </li>
+                    <!-- <li> <a id="btn-search" href="#"> <i class="icon-search"></i></a> </li> -->
                     <li>
                         <a id="btn-notifcation" href="{{ route('cart.index') }}"> 
                             <i class="icon-shopping-cart"></i>
@@ -33,14 +34,14 @@
                     <!-- <li><a class="btn">
                         <i class="icon-shopping-cart"></i> <span class="badge badge-light">4</span>
                     </a></li> -->
-                    <li>
+                    <!-- <li>
                         <div class="p-dropdown"> <a href="#"><i class="icon-globe"></i><span>EN</span></a>
                             <ul class="p-dropdown-content">
                                 <li><a href="#">English</a></li>
                                 <li><a href="#">Indonesia</a></li>
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!--end: Header Extras-->
@@ -51,10 +52,11 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
+                        @isset($menus)
                         <!-- left menu -->
                         <ul>
                             @foreach($menus[0] as $menu)
-                                <li class="{{ $menu->isMegaMenu() ? 'mega-menu-item' : '' }} {{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
@@ -63,40 +65,11 @@
                                     </ul>
                                     @elseif($menu->isMegaMenu())
                                     <ul class="dropdown-menu">
-                                        <li class="mega-menu-content">
-                                            <div class="row">
-                                                @if($menu->isContains('title', ['belanja', 'shop']))
-                                                    @foreach($subcategories as $subcategory)
-                                                    <div class="col-lg-2-5">
-                                                        <ul>
-                                                            <li class="mega-menu-title">{{ $subcategory->name }}</li>
-                                                            @foreach($subcategory->categories as $category)
-                                                            <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                    @endforeach
-                                                @else
-                                                    @foreach($menu->submenus->chunk(8) as $submenus)
-                                                    <div class="col-lg-2-5">
-                                                        <ul>
-                                                            <!-- <li class="mega-menu-title">Submenu</li> -->
-                                                            @foreach($submenus as $submenu)
-                                                            <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                    @endforeach
-                                                @endif
-                                                <!-- <div class="col-lg-2-5 p-l-0">
-                                                    <h4 class="text-theme">BIG SALE<small>Up to</small></h4>
-                                                    <h2 class="text-lg text-theme lh80 m-b-30">70%</h2>
-                                                    <p class="m-b-0">The most happiest time of the day!. Morbi sagittis, sem quis ipsum dolor sit amet lacinia faucibus.</p><a class="btn btn-shadow btn-rounded btn-block m-t-10">SHOP NOW!</a><small class="t300">
-                                                        <p class="text-center m-0"><em>* Limited time Offer</em></p>
-                                                    </small>
-                                                </div> -->
-                                            </div>
-                                        </li>
+                                        @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
+                                            @foreach($categories as $category)
+                                                <li><a href="{{ route('shop.index', $category) }}">{{ ucwords($category->title) }}</a></li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                     @endif
                                 </li>
@@ -173,42 +146,52 @@
                         <!-- right menu -->
                         <ul>
                             @foreach($menus[1] as $menu)
-                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ $menu->url }}">{{ $menu->title }}</a>
+                                <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
                                     <ul class="dropdown-menu">
                                         @foreach($menu->submenus as $submenu)
                                             <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
                                         @endforeach
                                     </ul>
+                                    @elseif($menu->isMegaMenu())
+                                    <ul class="dropdown-menu">
+                                        @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
+                                            @foreach($categories as $category)
+                                                <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
+                                            @endforeach
+                                        @endif
+                                    </ul>
                                     @endif
                                 </li>
                             @endforeach
-                            @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            @else
-                            <li class="dropdown">
-                                <a href="#">
-                                    <!-- {{ auth()->user()->name }} -->
-                                    <img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm">
-                                </a>
-                                <ul class="dropdown-menu active">
-                                    <li class="text-center">
+                            <li class="{{ request()->is('dashboard*') ? 'current' : '' }}"><a href="#">My Account</a>
+                                <ul class="dropdown-menu">
+                                    @guest
+                                    <li><a href="{{ route('login') }}">Login</a></li>
+                                    @else
+                                    <!-- <li class="text-center">
                                         <img src="{{ auth()->user()->avatar }}" class="avatar avatar-lg">
                                         <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a>
-                                    </li>
+                                    </li> -->
+                                    <li><a href="{{ route('dashboard.order') }}">Dashboard</a></li>
+                                    <li><a href="">History</a></li>
                                     <li><hr></li>
-                                    <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                                    <li><a href="{{ route('dashboard.order') }}">History</a></li>
-                                    <li><hr></li>
-                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Account Settings</a></li>
+                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Edit Profile</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+                                    @endguest
                                 </ul>
                             </li>
-                            @endguest
+                            @auth
+                            <li>
+                                <a href="{{ route('dashboard.welcome') }}"><img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm"></a>
+                                <!-- <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a> -->
+                            </li>
+                            @endauth
                         </ul>
+                        @endisset
                     </nav>
                 </div>
             </div>

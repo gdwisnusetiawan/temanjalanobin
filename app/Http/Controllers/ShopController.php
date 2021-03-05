@@ -15,8 +15,9 @@ class ShopController extends Controller
         $title = str_replace('-', ' ', $category);
         $category = Category::whereRaw("LOWER(title) = '$title'")->first();
         $products = $category->products;
+        // dd(Product::find(11)->get());
 
-        // dd((asset('/img/'.$products[0]->image1)));
+        // dd($products[0]->media);
 
         return view('shop.index', compact('category', 'products'));
     }
@@ -33,7 +34,7 @@ class ShopController extends Controller
         }
         $variants = $product->variants;
         $relateds = Product::where('category', $category->id)->where('id', '!=', $product->id)->limit(9)->get();
-        // dd($relateds);
+        // dd(($product->subinventory));
         return view('shop.single', compact('product', 'variants', 'relateds'));
     }
 

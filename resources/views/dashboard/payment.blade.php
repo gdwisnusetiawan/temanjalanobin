@@ -42,8 +42,8 @@
                                     <!-- <h5 class="mb-1 d-none" id="total-payment">{{ $payment->transactionmount }}</h5> -->
                                     <!-- <input type="hidden" value="{{ $payment->transactionmount }}" id="total-payment"> -->
                                     <span>
-                                        <a class="btn btn-xs btn-outline">View Details</a>
-                                        <a data-clipboard-text="{{ $payment->transactionmount }}" class="btn btn-xs btn-outline">Copy</a>
+                                        <button class="btn btn-xs btn-outline" data-target="#modal-details" data-toggle="modal">View Details</button>
+                                        <a data-clipboard-text="{{ $payment->grand_total }}" class="btn btn-xs btn-outline">Copy</a>
                                     </span>
                                 </div>
                             </li>
@@ -112,6 +112,7 @@
                         <form method="POST" action="{{ route('dashboard.confirmPayment', $payment) }}" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
+                            <input type="hidden" name="payment_id" value="{{ $payment->id }}">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
@@ -157,7 +158,7 @@
                         </form>
                         <div class="d-flex justify-content-end mt-3">
                             <!-- <button class="btn btn-danger" data-target="#modal-cancel" data-toggle="modal">Cancel Payment</button> -->
-                            <a href="{{ route('dashboard.invoice', $payment->order) }}" class="btn btn-light">Cancel Payment</a>
+                            <a href="{{ route('dashboard.invoice', $payment) }}" class="btn btn-light">Cancel Payment</a>
                             <button type="submit" class="btn" id="button-submit" form="form-payment-proof">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="button-spinner" style="display: none;"></span>
                                 <span class="btn-text">Confirm Payment</span>
@@ -243,6 +244,78 @@
     </div>
 </section>
 
+<!--Modal -->
+<div class="modal fade" id="modal-details" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-label">Payment Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="mr-3"><i class="icon-shopping-cart"></i> List of items</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($payment->transactions as $transaction)
+                                    <tr>
+                                        <th scope="row">{{ $loop->index + 1 }}</th>
+                                        <td>{{ $transaction->itemname }}</td>
+                                        <td>{{ $transaction->price_format }}</td>
+                                        <td>{{ $transaction->quantity }}</td>
+                                        <td>{{ $transaction->total_format }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mx-2">
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Subtotal:</span>
+                                    <span class="">{{ $payment->subtotal_format }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Shipping:</span>
+                                    <span class="">{{ $payment->shipping_cost_format }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="mr-1">Discount:</span>
+                                    <span class="">-{{ $payment->discount > 0 ? $payment->discount_format : '' }}</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong class="mr-1">Grand Total:</strong>
+                                    <span class="">{{ $payment->total_format }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-b btn-light" data-dismiss="modal">Close</button>
+                <!-- <button type="submit" class="btn btn-b btn-danger" id="button-cancel" form="form-cancel-order">
+                    <span class="spinner-border spinner-border-sm button-spinner" role="status" aria-hidden="true" style="display: none;"></span>
+                    <span class="btn-text">Cancel Order</span>
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: Modal -->
+
 <!-- DELIVERY INFO -->
 <!-- @include('shop.delivery') -->
 <!-- end: DELIVERY INFO -->
@@ -254,12 +327,15 @@
 <!-- Dropzone plugin files-->
 <script src="{{ asset('polo-5/plugins/dropzone/dropzone.js') }}"></script>
 <script>
-    $('#datetimepicker1').datetimepicker();
+    $('#datetimepicker1').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm'
+    });
 
     Dropzone.autoDiscover = false;
     //Form 1
     var paymentDropzone = new Dropzone('#fileUpload1', {
         url: "{{ route('dashboard.confirmPayment', $payment) }}",
+        // url: "{{ 'http://acp.pasarama.com/order/confirmation' }}",
         maxFiles: 1,
         maxFilesize: 10,
         acceptedFiles: "image/*",
@@ -305,6 +381,7 @@
             });
         },
         success: function(file, response) {
+            console.log(response);
             notify(response.notify, "Success");
             $('#form-payment-proof')[0].reset();
             $('#form-payment-proof').find('.is-valid').removeClass('is-valid');

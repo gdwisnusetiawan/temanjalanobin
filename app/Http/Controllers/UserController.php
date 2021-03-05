@@ -89,6 +89,27 @@ class UserController extends Controller
         return redirect()->route('dashboard.user.registration', [$user, 'tab' => 'billing']);
     }
 
+    public function changeAvatar(Request $request, User $user)
+    {
+        // upload file if exists
+        if($request->has('file'))
+        {
+            // delete old file
+            // unlink(asset($user->avatarfile));
+            // save new file
+            $file = $request->file('file');
+            $file_name = $file->getClientOriginalName();
+            $file_location = $file->move('img/user/', $file_name);
+            $user->avatarfile = $file_location;
+            $user->save();
+        }
+        else
+        {
+            return response()->json(['error' => 'Please upload a file']);
+        }
+        return response()->json(['notify' => 'User avatar changed']);
+    }
+
     public function upload(Request $request, User $user)
     {
         // upload file if exists

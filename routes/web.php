@@ -28,7 +28,7 @@ Route::get('register/{referal?}', 'Auth\RegisterController@showRegistrationForm'
 
 Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index')->name('home');
-Route::get('about', 'HomeController@about')->name('about');
+// Route::get('new-arrival', 'HomeController@newArrival')->name('newArrival');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
@@ -36,16 +36,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('welcome', 'DashboardController@welcome')->name('welcome');
         Route::prefix('transaction')->group(function () {
             Route::get('order', 'DashboardController@order')->name('order');
-            Route::get('invoice/{order}', 'DashboardController@invoice')->name('invoice');
+            Route::get('invoice/{payment}', 'DashboardController@invoice')->name('invoice');
             Route::get('payment/{payment}', 'DashboardController@payment')->name('payment');
             Route::put('confirm-payment/{payment}', 'DashboardController@confirmPayment')->name('confirmPayment');
             Route::put('cancel-payment/{payment}', 'DashboardController@cancelPayment')->name('cancelPayment');
+            Route::put('change-address/{payment}', 'DashboardController@changeAddress')->name('changeAddress');
             Route::put('cancel-order/{order}', 'DashboardController@cancelOrder')->name('cancelOrder');
         });
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('{user}', 'UserController@index')->name('index');
             Route::put('update/{user}', 'UserController@update')->name('update');
             Route::put('change-password/{user}', 'UserController@changePassword')->name('changePassword');
+            Route::put('change-avatar/{user}', 'UserController@changeAvatar')->name('changeAvatar');
             Route::put('billing/{user}', 'UserController@billing')->name('billing');
             Route::get('registration/{user}', 'UserController@registration')->name('registration');
             Route::put('register-business/{user}', 'UserController@registerBusiness')->name('registerBusiness');
@@ -53,13 +55,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
     Route::prefix('checkout')->name('checkout.')->group(function () {
-        Route::get('{order}', 'CheckoutController@index')->name('index');
+        Route::get('{payment}', 'CheckoutController@index')->name('index');
         Route::post('store', 'CheckoutController@store')->name('store');
-        Route::put('update/{order}', 'CheckoutController@update')->name('update');
+        Route::put('update/{payment}', 'CheckoutController@update')->name('update');
+        Route::post('shipping/{payment}', 'CheckoutController@shipping')->name('shipping');
+        Route::put('change-shipping/{payment}', 'CheckoutController@changeShipping')->name('changeShipping');
     });
 });
 
-Route::prefix('collections')->name('shop.')->group(function () {
+Route::prefix('categories')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
     Route::get('{category}', 'ShopController@index')->name('index');
     Route::get('{category}/products/{product}/{referal?}', 'ShopController@single')->name('single');
@@ -82,9 +86,20 @@ Route::prefix('news')->name('news.')->group(function () {
 });
 
 Route::prefix('rajaongkir')->name('rajaongkir.')->group(function () {
-    Route::get('province/{id?}', 'RajaOngkirController@province')->name('province');
-    Route::get('city/{province}/{id?}', 'RajaOngkirController@city')->name('city');
-    Route::post('cost', 'RajaOngkirController@city')->name('cost');
+    // Route::get('province/{id?}', 'RajaOngkirController@province')->name('province');
+    // Route::get('city/{province}/{id?}', 'RajaOngkirController@city')->name('city');
+    // Route::post('cost', 'RajaOngkirController@city')->name('cost');
+});
+
+Route::prefix('shipment')->name('shipment.')->group(function () {
+    Route::get('jnt/cost', 'ShipmentController@jntCost')->name('jnt.cost');
+    Route::get('jnt/order', 'ShipmentController@jntOrder')->name('jnt.order');
+    Route::get('jnt/track', 'ShipmentController@jntTrack')->name('jnt.track');
+    Route::get('ncs/cost', 'ShipmentController@ncsCost')->name('ncs.cost');
+    Route::get('ncs/track', 'ShipmentController@ncsTrack')->name('ncs.track');
+    Route::get('rajaongkir/province/{id?}', 'ShipmentController@rajaongkirProvince')->name('rajaongkir.province');
+    Route::get('rajaongkir/city/{province}/{id?}', 'ShipmentController@rajaongkirCity')->name('rajaongkir.city');
+    Route::post('rajaongkir/cost', 'ShipmentController@rajaongkirCost')->name('rajaongkir.cost');
 });
 
 Route::get('{slug}', 'PageController@index')->name('page.index');

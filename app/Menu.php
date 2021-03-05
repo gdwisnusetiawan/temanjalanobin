@@ -31,6 +31,7 @@ class Menu extends Model
         }
         else {
             $slug = Str::slug($this->title, '-');
+            // $slug = str_replace(' ', '-', $this->title);
         }
         return $slug;
     }
@@ -40,11 +41,17 @@ class Menu extends Model
         return $this->slug ? route('page.index', $this->slug) : url($this->slug);
     }
 
-    public function getSubmenusAttribute()
+    // public function getSubmenusAttribute()
+    // {
+    //     $submenuids = explode(',', $this->submenu);
+    //     $submenus = Menu::whereIn('id', $submenuids)->get();
+    //     $submenus = Menu::where('submenu', $this->id)->get();
+    //     return $submenus;
+    // }
+
+    public function submenus()
     {
-        $submenuids = explode(',', $this->submenu);
-        $submenus = Menu::whereIn('id', $submenuids)->get();
-        return $submenus;
+        return $this->hasMany('App\Menu', 'submenu', 'id');
     }
 
     public function isContains($column, $words)
@@ -54,6 +61,6 @@ class Menu extends Model
 
     public function isMegaMenu()
     {
-        return $this->submenus->count() > 8 || $this->isContains('title', ['belanja', 'shop']);
+        return $this->submenus->count() > 8 || $this->isContains('title', ['belanja', 'shop', 'categories']);
     }
 }

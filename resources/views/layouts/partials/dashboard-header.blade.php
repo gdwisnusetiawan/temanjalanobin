@@ -1,4 +1,4 @@
-<header id="header" class="dark submenu-light header-logo-center">
+<header id="header" class="light header-logo-center">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
@@ -6,8 +6,8 @@
                 <a href="{{ url('/') }}">
                     <!-- <span class="logo-default"><img src="{{ asset('logo.png') }}" alt="logo-tutoya-default" class="h-100"></span> -->
                     <!-- <span class="logo-dark">Tutoya</span> -->
-                    <img src="{{ asset($config->logo) }}" alt="logo-tutoya-dark" class="logo-default">
-                    <img src="{{ asset($config->logo_dark) }}" alt="logo-tutoya-dark" class="logo-dark">
+                    <img src="{{ isset($config) ? $config->logo_url : '#' }}" alt="logo" class="logo-default py-3">
+                    <img src="{{ isset($config) ? asset($config->logo_dark) : '#' }}" alt="logo-dark" class="logo-dark">
                 </a>
             </div>
             <!--End: Logo-->
@@ -67,31 +67,32 @@
                                     <li><a href="">Redeem Voucher</a></li>
                                 </ul>
                             </li>
-                            @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            @else
-                            <li class="dropdown">
-                                <a href="#">
-                                    <!-- {{ auth()->user()->name }} -->
-                                    <img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm">
-                                </a>
-                                <ul class="dropdown-menu active">
-                                    <li class="text-center">
+                            <li class="{{ request()->is('dashboard/user*') ? 'current' : '' }}"><a href="#">My Account</a>
+                                <ul class="dropdown-menu">
+                                    @guest
+                                    <li><a href="{{ route('login') }}">Login</a></li>
+                                    @else
+                                    <!-- <li class="text-center">
                                         <img src="{{ auth()->user()->avatar }}" class="avatar avatar-lg">
                                         <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a>
-                                    </li>
+                                    </li> -->
+                                    <li><a href="{{ route('dashboard.order') }}">Dashboard</a></li>
+                                    <li><a href="">History</a></li>
                                     <li><hr></li>
-                                    <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                                    <li><a href="{{ route('dashboard.order') }}">History</a></li>
-                                    <li><hr></li>
-                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Account Settings</a></li>
+                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Edit Profile</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+                                    @endguest
                                 </ul>
                             </li>
-                            @endguest
+                            @auth
+                            <li>
+                                <a href="{{ route('dashboard.welcome') }}"><img src="{{ auth()->user()->avatar }}" class="avatar avatar-sm"></a>
+                                <!-- <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a> -->
+                            </li>
+                            @endauth
                         </ul>
                     </nav>
                 </div>

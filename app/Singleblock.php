@@ -2,26 +2,15 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
-class Popup extends Model
+class Singleblock extends Model
 {
-    protected $table = 'popup';
+    protected $table = 'singleblock';
     public $timestamps = false;
     protected $connection = 'web';
-
-    public function getImageUrlAttribute()
-    {
-        if(Str::startsWith($this->image, 'http')) {
-            return $this->image;
-        }
-        else {
-            return is_file(public_path().'/img/'.$this->image) 
-                ? asset('img/'.$this->image) 
-                : asset('polo-5/images/shop-bg.jpg');
-        }
-    }
 
     public function getLinksAttribute()
     {
@@ -36,5 +25,10 @@ class Popup extends Model
         else {
             return '#';
         }
+    }
+
+    public function getMediaAttribute()
+    {
+        return Functions::media($this);
     }
 }

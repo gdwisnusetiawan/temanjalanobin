@@ -7,6 +7,7 @@ use App\Page;
 use App\Multipage;
 use App\Multisubpage;
 use App\DistributorLocation;
+use App\Product;
 use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -21,6 +22,12 @@ class PageController extends Controller
         // })->orWhereHas('multipage', function (Builder $query) use ($slug) {
         //     $query->where('slug', $slug);
         // })->first();
+        
+        if(Str::contains($slug, ['new', 'arrival'])) {
+            $products = Product::where('special', true)->get();
+            return view('new-arrival', compact('products'));
+        }
+
         if(Str::contains($slug, 'distributor')) {
             $locations = DistributorLocation::with('distributors')->get();
             return view('pages.distributor', compact('locations'));
@@ -33,6 +40,7 @@ class PageController extends Controller
         }
         $page = Page::where('slug', $slug)->where('is_active', true)->first() 
             ?? Multipage::with('submultipages')->where('slug', $slug)->where('is_active', true)->first();
+
         if(isset($page))
         {
             if($page->page_type == 'single') {
@@ -43,7 +51,7 @@ class PageController extends Controller
             }
             elseif($page->page_type == 'multiple') {
                 // $view = 'pages.multiple';
-                $multisubpages = Multisubpage::where('multipagesid', $page->id)->paginate(6);
+                $multisubpages = Multisubpage::where('is_active', true)->where('multipagesid', $page->id)->paginate(6);
                 return view('pages.multiple', compact('page', 'multisubpages'));
             }
         }
@@ -57,14 +65,21 @@ class PageController extends Controller
     public function show($parent, $slug)
     {
         $page = Multisubpage::where('slug', $slug)->where('is_active', true)->first();
-        $prev_page = Multisubpage::where('id', '<', $page->id)->orderBy('id', 'desc')->first();
-        $next_page = Multisubpage::where('id', '>', $page->id)->orderBy('id')->first();
-        $recents = Multipage::with('submultipages')->where('slug', $parent)->first()->submultipages->where('is_active', true)->sortBy('datetime')->take(3);
-        $populars = [];
+        $multipage = Multipage::with('submultipages')->where('slug', $parent)->first();
         $share_links = Functions::shareLink(url()->full());
+        $prev_page = null;
+        $next_page = null;
+        $recents = [];
+        $populars = [];
         // dd($recents);
+        if(isset($multipage)) {
+            $recents = $multipage->submultipages->where('is_active', true)->sortBy('datetime')->take(3);
+            $populars = $multipage->submultipages->where('is_active', true)->sortByDesc('views')->take(3);
+        }
         if(isset($page))
         {
+            $prev_page = Multisubpage::where('id', '<', $page->id)->orderBy('id', 'desc')->first();
+            $next_page = Multisubpage::where('id', '>', $page->id)->orderBy('id')->first();
             $page->views = $page->views + 1;
             $page->save();
             return view('pages.submultiple', compact('page', 'prev_page', 'next_page', 'recents', 'populars', 'share_links'));

@@ -12,19 +12,21 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    protected function summary($cart, $shipping = 0, $coupon = 0)
+    protected function summary($cart, $shipping_cost = 0, $coupon = 0)
     {
         $total = collect($cart['list'])->sum('total');
         $total_quantity = collect($cart['list'])->sum('quantity');
         $total_discount = collect($cart['list'])->sum('discount');
-        $grand_total = $total - $total_discount + $shipping;
+        $total_weight = collect($cart['list'])->sum('weight');
+        $grand_total = $total - $total_discount + $shipping_cost;
         return [
             'subtotal' => $total,
             'coupon' => $coupon,
-            'shipping' => $shipping,
             'total' => $grand_total,
             'total_quantity' => $total_quantity,
-            'total_discount' => $total_discount
+            'total_discount' => $total_discount,
+            'total_weight' => $total_weight,
+            // 'shipping' => array_key_exists('summary', $cart) ? $cart['summary']['shipping'] : null
         ];
     }
     /**
@@ -35,13 +37,10 @@ class CartController extends Controller
     public function index(Request $request)
     {
         // session()->forget('cart');
-        $city_json = asset('data/city.json');
-        $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
-        // $response = Http::withHeaders([
-        //     'content-type' => 'application/x-www-form-urlencoded',
-        //     'key' => 'a668420368d4731d3ca94321058bcea2'
-        //     ])->asForm()->get('https://api.rajaongkir.com/starter/province');
-        // dd(json_decode($response->body()));
+        // dd(session()->get('cart'));
+        // $city_json = asset('data/city.json');
+        // $cities = json_decode(file_get_contents($city_json), true)['rajaongkir']['results'];
+        $cities = [];
 
         return view('shop.cart', compact('cities'));
     }
@@ -56,6 +55,7 @@ class CartController extends Controller
     {
         $product = Product::find($request->product_id);
         $price = $product->getUserPrice($request->quantity);
+        // set price back to real price without discount
         if($product->discount > 0) {
             $price = $price + $product->discount;
         }
@@ -72,7 +72,9 @@ class CartController extends Controller
             'price' => $price,
             'quantity' => $quantity,
             'total' => $price * $quantity,
-            'discount' => $product->discount * $quantity
+            'discount' => $product->discount * $quantity,
+            'weight' => $product->gram * $quantity,
+            'shipping' => null,
         ];
 
         foreach($product->variants as $variant) {
@@ -123,6 +125,7 @@ class CartController extends Controller
             $cart['list'][$id]['quantity'] = $request->quantity;
             $cart['list'][$id]['total'] = $price * $request->quantity;
             $cart['list'][$id]['discount'] = $product->discount * $request->quantity;
+            $cart['list'][$id]['weight'] = $product->gram * $request->quantity;
         }
 
         $cart['summary'] = $this->summary($cart);
@@ -165,33 +168,69 @@ class CartController extends Controller
 
     public function shipping(Request $request)
     {
-        $response = Http::withHeaders([
-            'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
-            ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
-                'origin' => $request->origin,
-                'destination' => $request->destination,
-                'weight' => $request->weight,
-                'courier' => 'pos',
-                'courier' => 'jne',
-            ]);
-        $result = json_decode($response->body())->rajaongkir->results;
-        $shipping = $result[0]->costs[0]->cost[0]->value ?? 0;
+        // return response()->json($request->all());
+        if($request->origin == null && $request->destination == null) {
+            return false;
+        }
+        $couriers = ['pos','jne','tiki'];
+        foreach($couriers as $courier) {
+            $response = Http::withHeaders([
+                'content-type' => 'application/x-www-form-urlencoded',
+                'key' => 'a668420368d4731d3ca94321058bcea2'
+                ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+                    'origin' => $request->origin,
+                    'destination' => $request->destination,
+                    'weight' => $request->weight,
+                    'courier' => $courier,
+                ]);
+            $results[] = json_decode($response->body())->rajaongkir->results;
+        }
+        $result = $results[0];
+        $origin_details = json_decode($response->body())->rajaongkir->origin_details;
+        $destination_details = json_decode($response->body())->rajaongkir->destination_details;
+        $courier_code = $result[0]->code ?? '';
+        $courier_name = $result[0]->name ?? '';
+        $service = $result[0]->costs[0]->service ?? '';
+        $description = $result[0]->costs[0]->description ?? '';
+        $cost = $result[0]->costs[0]->cost[0]->value ?? 0;
+        $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
         $cart = session()->get('cart');
 
-        $cart['summary'] = $this->summary($cart, $shipping);
+        $cart['summary'] = $this->summary($cart, $cost);
+        $cart['summary']['shipping'] = [
+            'origin_details' => $origin_details,
+            'destination_details' => $destination_details,
+            'courier_code' => $courier_code,
+            'courier_name' => $courier_name,
+            'service' => $service,
+            'description' => $description,
+            'cost' => $cost,
+            'etd' => $etd,
+        ];
         session()->put('cart', $cart);
 
         $cart['message'] = 'Cart updated successfully';
         $cart['type'] = 'success';
-        return response()->json(['result' => $result, 'cart' => $cart]);
+        return response()->json(['results' => $results, 'cart' => $cart]);
     }
 
     public function changeShipping(Request $request)
     {
         $cart = session()->get('cart');
-
-        $cart['summary'] = $this->summary($cart, $request->shipping);
+        // return response()->json([$cart, $request->all()]);
+        $origin_details = $cart['summary']['shipping']['origin_details'];
+        $destination_details = $cart['summary']['shipping']['destination_details'];
+        $cart['summary'] = $this->summary($cart, $request->cost);
+        $cart['summary']['shipping'] = [
+            'origin_details' => $origin_details,
+            'destination_details' => $destination_details,
+            'courier_code' => $request->code,
+            'courier_name' => $request->name,
+            'service' => $request->service,
+            'description' => $request->description,
+            'cost' => $request->cost,
+            'etd' => $request->etd,
+        ];
         session()->put('cart', $cart);
 
         $cart['message'] = 'Cart updated successfully';
