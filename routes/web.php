@@ -96,7 +96,6 @@ Route::prefix('shipment')->name('shipment.')->group(function () {
     Route::get('jnt/order', 'ShipmentController@jntOrder')->name('jnt.order');
     Route::get('jnt/track', 'ShipmentController@jntTrack')->name('jnt.track');
     Route::get('ncs/cost', 'ShipmentController@ncsCost')->name('ncs.cost');
-    Route::get('ncs/track', 'ShipmentController@ncsTrack')->name('ncs.track');
     Route::get('rajaongkir/province/{id?}', 'ShipmentController@rajaongkirProvince')->name('rajaongkir.province');
     Route::get('rajaongkir/city/{province}/{id?}', 'ShipmentController@rajaongkirCity')->name('rajaongkir.city');
     Route::post('rajaongkir/cost', 'ShipmentController@rajaongkirCost')->name('rajaongkir.cost');

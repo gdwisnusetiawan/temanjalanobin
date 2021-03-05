@@ -67,7 +67,7 @@
                                     <ul class="dropdown-menu">
                                         @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
                                             @foreach($categories as $category)
-                                                <li><a href="{{ route('shop.index', $category) }}">{{ ucwords($category->title) }}</a></li>
+                                                <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach
                                         @endif
                                     </ul>
@@ -172,9 +172,10 @@
                                     <!-- <li class="text-center">
                                         <img src="{{ auth()->user()->avatar }}" class="avatar avatar-lg">
                                         <a href="{{ route('dashboard.welcome') }}"><span>{{ auth()->user()->fullname }}</span></a>
-                                    </li> -->
-                                    <li><a href="{{ route('dashboard.order') }}">Dashboard</a></li>
-                                    <li><a href="">History</a></li>
+                                    </li>
+                                    <li><hr></li> -->
+                                    <li><a href="{{ route('dashboard.order') }}">Billing</a></li>
+                                    <!-- <li><a href="">History</a></li> -->
                                     <li><hr></li>
                                     <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Edit Profile</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>

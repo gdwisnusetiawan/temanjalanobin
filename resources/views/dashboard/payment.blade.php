@@ -112,7 +112,6 @@
                         <form method="POST" action="{{ route('dashboard.confirmPayment', $payment) }}" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="payment_id" value="{{ $payment->id }}">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
@@ -327,15 +326,12 @@
 <!-- Dropzone plugin files-->
 <script src="{{ asset('polo-5/plugins/dropzone/dropzone.js') }}"></script>
 <script>
-    $('#datetimepicker1').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm'
-    });
+    $('#datetimepicker1').datetimepicker();
 
     Dropzone.autoDiscover = false;
     //Form 1
     var paymentDropzone = new Dropzone('#fileUpload1', {
         url: "{{ route('dashboard.confirmPayment', $payment) }}",
-        // url: "{{ 'http://acp.pasarama.com/order/confirmation' }}",
         maxFiles: 1,
         maxFilesize: 10,
         acceptedFiles: "image/*",
@@ -381,7 +377,6 @@
             });
         },
         success: function(file, response) {
-            console.log(response);
             notify(response.notify, "Success");
             $('#form-payment-proof')[0].reset();
             $('#form-payment-proof').find('.is-valid').removeClass('is-valid');

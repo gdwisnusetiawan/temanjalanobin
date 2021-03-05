@@ -71,10 +71,6 @@
     var locations = @json($locations);
     var latitude = @json($locations->first()->distributors->first()->lat);
     var longitude = @json($locations->first()->distributors->first()->lon);
-    if(latitude == null || longitude == null) {
-        latitude = -7.330806854743562;
-        longitude = 112.77575814271239;
-    }
     var map = L.map('map').setView([latitude, longitude], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

@@ -50,7 +50,6 @@ class DashboardController extends Controller
         $payment_proof->sender_account = $request->sender_account;
         $payment_proof->status = 1;
         // upload file if exists
-        // return response()->json($request->has('file'));
         if($request->has('file'))
         {
             // delete old file

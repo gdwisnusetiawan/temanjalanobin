@@ -79,21 +79,6 @@
                             <h4 class="m-0">Choose Shipping</h4>
                             <div class="spinner-border spinner-border-sm ml-1" id="shipping-spinner" role="status" aria-hidden="true" style="display: none"></div>
                         </div>
-                        <div class="row">
-                            @foreach($shipment_vendors as $shipment_vendor)
-                            <div class="col-lg-6">
-                                <div class="list-group">
-                                    <input type="radio" name="shipment_vendor" value="{{ $shipment_vendor }}" id="shipment-{{ $loop->index }}" onchange="shippingCost('{{ $loop->index }}', '{{ $shipment_vendor }}')" form="form-checkout"/>
-                                    <label class="list-group-item d-flex justify-content-between" for="shipment-{{ $loop->index }}">
-                                        <span id="shipment-name-{{ $loop->index }}">{{ $shipment_vendor }}</span>
-                                        @if(false)
-                                        <!-- <img height="24" alt="merchant logo" src="{{ $merchant->logo_url }}"> -->
-                                        @endif
-                                    </label>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <p id="shipping-message">Choose your destination province and city first</p>
@@ -376,10 +361,9 @@
         provinces();
         @if($payment->city != null)
         $('#shipping-message').hide();
-        // shippingCost();
+        shippingCost();
         @endif
     });
-
     function changePayment(id) {
         var buttonPayment = $('#button-checkout');
         if($('#shipping').html() !== '-') {
@@ -424,85 +408,12 @@
         });
     }
 
-    // function shippingCost(id, name) {
-    //     // var formData = $(form).serializeArray();
-    //     var formData = new FormData();
-    //     formData.append('origin', @json($payment->city));
-    //     formData.append('destination', '11');
-    //     formData.append('weight', @json($payment->weight));
-    //     formData.append('vendor', name);
-    //     $('#shipping-spinner').show();
-    //     // $('#button-shipping .btn-text').html('Loading...');
-    //     // $('#button-shipping').prop('disabled', true);
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '{{ route("checkout.shipping", $payment) }}',
-    //         // dataType: 'json',
-    //         contentType: false,
-    //         processData: false,
-    //         data: formData,
-    //         success: function(data) {
-    //             console.log(data);
-    //             $('#shipping').html(formatCurrency(data.shipping.cost));
-    //             $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
-    //             var html = '';
-    //             var count = 0;
-    //             data.results.forEach(function (results, i) {
-    //                 results.forEach(function (result, i) {
-    //                     result.costs.forEach(function (costs, j) {
-    //                         costs.cost.forEach(function (cost, k) {
-    //                             html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
-    //                                 onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
-    //                                         <div class="row">
-    //                                             <div class="col-md-4">
-    //                                                 <h5 class="mb-1">${result.code.toUpperCase()}</h5>
-    //                                                 <p class="mb-1">${result.name}</p>
-    //                                             </div>
-    //                                             <div class="col-md-4">
-    //                                                 <h5 class="mb-1">${costs.service}</h5>
-    //                                                 <p class="mb-1">${costs.description}</p>
-    //                                             </div>
-    //                                             <div class="col-md-4">
-    //                                                 <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
-    //                                                 <p class="mb-1">${cost.etd} days</p>
-    //                                             </div>
-    //                                         </div>
-    //                                     </li>`;
-    //                             count++;
-    //                         });
-    //                     });
-    //                 })
-    //             });
-    //             $('#shipping-list').html(html);
-    //             $('#shipping-spinner').hide();
-    //             // $('#button-shipping .btn-text').html('Calculate');
-    //             // $('#button-shipping').prop('disabled', false);
-    //             $('#form-checkout p').hide();
-    //             if($('[name="payment_name"]').is(':checked')) {
-    //                 $('#form-checkout button').prop('disabled', false);
-    //             }
-    //             // notify(data.message, data.type);
-    //         },
-    //         error: function(error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // }
-
-    function shippingCost(id, name) {
+    function shippingCost() {
         // var formData = $(form).serializeArray();
         var formData = new FormData();
-        // formData.append('origin', @json($payment->city));
-        // formData.append('destination', '11');
-        // formData.append('weight', @json($payment->weight));
-        formData.append('vendor', name);
-        formData.append('cusName', 'TUTOYA');
-        formData.append('sendSiteCode', 'JAKARTA');
-        formData.append('destAreaCode', 'KALIDERES');
-        formData.append('weight', 1.31);
-        formData.append('productType', 'EZ');
-        formData.append('origin', 'SUB3578');
-        formData.append('destination', 'MDN3577');
+        formData.append('origin', @json($payment->city));
+        formData.append('destination', '11');
+        formData.append('weight', @json($payment->weight));
         $('#shipping-spinner').show();
         // $('#button-shipping .btn-text').html('Loading...');
         // $('#button-shipping').prop('disabled', true);
@@ -520,25 +431,30 @@
                 var html = '';
                 var count = 0;
                 data.results.forEach(function (results, i) {
-                    console.log(results.courier_code);
-                    html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${results.courier_code+count}" 
-                        onclick="changeShipping('${results.courier_code+count}', '${results.courier_code}', '${results.courier_name}', '${results.service}', '${results.description}', '${results.cost}', '${results.etd}')">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h5 class="mb-1">${results.courier_code.toUpperCase()}</h5>
-                                        <p class="mb-1">${results.courier_name}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5 class="mb-1">${results.service}</h5>
-                                        <p class="mb-1">${results.description}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5 class="mb-1">${formatCurrency(results.cost)}</h5>
-                                        <p class="mb-1">${results.etd} days</p>
-                                    </div>
-                                </div>
-                            </li>`;
-                    count++;
+                    results.forEach(function (result, i) {
+                        result.costs.forEach(function (costs, j) {
+                            costs.cost.forEach(function (cost, k) {
+                                html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
+                                    onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h5 class="mb-1">${result.code.toUpperCase()}</h5>
+                                                    <p class="mb-1">${result.name}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h5 class="mb-1">${costs.service}</h5>
+                                                    <p class="mb-1">${costs.description}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
+                                                    <p class="mb-1">${cost.etd} days</p>
+                                                </div>
+                                            </div>
+                                        </li>`;
+                                count++;
+                            });
+                        });
+                    })
                 });
                 $('#shipping-list').html(html);
                 $('#shipping-spinner').hide();
