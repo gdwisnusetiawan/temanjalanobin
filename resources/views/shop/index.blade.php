@@ -30,7 +30,7 @@
                 </div>
                 <!--end: Heading text-->
 
-                <div class="row m-b-20">
+                <!-- <div class="row m-b-20"> -->
                     <!-- <div class="col-lg-6 p-t-10 m-b-20">
                         <h3 class="m-b-20">{{ ucwords($category->title) }}</h3>
                     </div> -->
