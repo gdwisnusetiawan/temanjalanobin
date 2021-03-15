@@ -24,10 +24,12 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
+                            @isset($merchant->bankowner)
                             <li class="list-group-item flex-column align-items-start">
                                 <p class="mb-1">Bank Owner</p>
-                                <h5 class="mb-1">{{ $merchant->customeraccount }}</h5>
+                                <h5 class="mb-1">{{ $merchant->bankowner }}</h5>
                             </li>
+                            @endisset
                             <li class="list-group-item">
                                 <p class="mb-1">Bank Number</p>
                                 <div class="d-flex justify-content-between">
