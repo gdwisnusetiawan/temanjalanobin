@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Slider;
 use App\Product;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,6 +26,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $customers = User::all();
+        foreach($customers as $customer) {
+            if($customer->email_verified_at == null && $customer->status) {
+                $customer->email_verified_at = date('Y-m-d H:i:s');
+                $customer->save();
+            }
+        }
         // http error
         // abort(404);
         $sliders = Slider::all();

@@ -13,6 +13,7 @@ class Merchant extends Model
 
     public function getLogoUrlAttribute()
     {
+        $img = '';
         $img_folder = '/img/logo/';
         if(Str::startsWith($this->logo, 'http') || $this->logo == null) {
             $img = $this->logo;

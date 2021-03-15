@@ -57,11 +57,12 @@
                         <h5 class="ac-title">ATM</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
+                                <!-- <li>Lorem ipsum dolor sit amet.</li>
                                 <li>Lorem ipsum dolor sit amet consectetur.</li>
                                 <li>Lorem ipsum dolor sit.</li>
                                 <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                                <li>Lorem ipsum dolor sit amet.</li> -->
+                                {!! $merchant->atm !!}
                             </ol>
                         </div>
                     </div>
@@ -69,11 +70,7 @@
                         <h5 class="ac-title">Mobile Banking</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
-                                <li>Lorem ipsum dolor sit amet consectetur.</li>
-                                <li>Lorem ipsum dolor sit.</li>
-                                <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                            {!! $merchant->mobile !!}
                             </ol>
                         </div>
                     </div>
@@ -81,11 +78,7 @@
                         <h5 class="ac-title">Internet Banking</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
-                                <li>Lorem ipsum dolor sit amet consectetur.</li>
-                                <li>Lorem ipsum dolor sit.</li>
-                                <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                            {!! $merchant->internet !!}
                             </ol>
                         </div>
                     </div>
@@ -151,7 +144,7 @@
                                     </div>
                                     <!-- end: From -->
                                 </div>
-                                <small id="dropzoneHelp" class="form-text text-muted">Max file size is 2MB and max number of files is 10.</small>
+                                <small id="dropzoneHelp" class="form-text text-muted">Max file size is 2MB and max number of files is 1.</small>
                             </div>
                             <!--end: File upload 1-->
                         </form>
@@ -332,6 +325,14 @@
     //Form 1
     var paymentDropzone = new Dropzone('#fileUpload1', {
         url: "{{ route('dashboard.confirmPayment', $payment) }}",
+        // headers: {
+        //     'Access-Control-Allow-Origin' :"*",
+        //     'Access-Control-Allow-Methods' :"GET, PUT, POST, DELETE, OPTIONS",
+        //     'Access-Control-Allow-Headers' :"Authorization, Content-Type, Accept, X-Mashape-Authorization"
+        //     // remove Cache-Control and X-Requested-With
+        //     // to be sent along with the request
+        // },
+        // url: "{{ 'http://acp.rebut.xyz/order/confirmation' }}",
         maxFiles: 1,
         maxFilesize: 10,
         acceptedFiles: "image/*",

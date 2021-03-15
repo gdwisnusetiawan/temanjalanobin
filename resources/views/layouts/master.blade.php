@@ -4,8 +4,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="author" content="WEBIDUS">
-	<meta name="description" content="@hasSection('meta-description') @yield('meta-description') @else new e-commerce, webidus digital marketing and technology @endif">
+    <meta name="author" content="">
+	<meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" type="image/png" href="@isset($config) {{ asset($config->favicon_url) }} @endisset">
     <!-- CSRF Token -->

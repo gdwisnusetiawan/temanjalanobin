@@ -24,7 +24,7 @@ class Payment extends Model
 
     public function merchant()
     {
-        return $this->belongsTo('App\Merchant');
+        return $this->belongsTo('App\Merchant', 'merchant_id', 'merchantid');
     }
 
     public function paymentProofs()
