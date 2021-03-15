@@ -45,7 +45,8 @@ class AppServiceProvider extends ServiceProvider
         $menus = Functions::menu();
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::orderBy('id', 'desc')->first();
-        $marquee = Marquee::first();
+        $marquee = Marquee::where('is_active', true)->first();
+        // dd(($marquee));
         $categories = Category::all();
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
