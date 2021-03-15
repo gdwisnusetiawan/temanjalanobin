@@ -102,9 +102,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('dashboard.confirmPayment', $payment) }}" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
+                        <form method="POST" action="http://acp.rebut.xyz/order/confirmation" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
@@ -133,19 +131,21 @@
                                     <input type="text" class="form-control" name="sender_account" placeholder="Enter your account name" required>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">Example file input</label>
+                                <!-- <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
+                            </div>
                             <!--File upload 1-->
-                            <div class="form-row">
+                            <!-- <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <!-- From -->
                                     <div id="fileUpload1" class="dropzone">
                                         <div class="fallback">
                                             <input name="file" type="file" required/>
                                         </div>
                                     </div>
-                                    <!-- end: From -->
                                 </div>
                                 <small id="dropzoneHelp" class="form-text text-muted">Max file size is 2MB and max number of files is 1.</small>
-                            </div>
+                            </div> -->
                             <!--end: File upload 1-->
                         </form>
                         <div class="d-flex justify-content-end mt-3">
@@ -321,90 +321,166 @@
 <script>
     $('#datetimepicker1').datetimepicker();
 
-    Dropzone.autoDiscover = false;
-    //Form 1
-    var paymentDropzone = new Dropzone('#fileUpload1', {
-        url: "{{ route('dashboard.confirmPayment', $payment) }}",
-        // headers: {
-        //     'Access-Control-Allow-Origin' :"*",
-        //     'Access-Control-Allow-Methods' :"GET, PUT, POST, DELETE, OPTIONS",
-        //     'Access-Control-Allow-Headers' :"Authorization, Content-Type, Accept, X-Mashape-Authorization"
-        //     // remove Cache-Control and X-Requested-With
-        //     // to be sent along with the request
-        // },
-        // url: "{{ 'http://acp.rebut.xyz/order/confirmation' }}",
-        maxFiles: 1,
-        maxFilesize: 10,
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        autoProcessQueue: false,
-        renameFile: function(file) {
-            var dt = new Date();
-            var time = dt.getTime();
-            return time +'-{{ $payment->transactionno }}';
-        },
-        removedfile: function(file) 
-        {
-            var name = file.upload.filename;
-            // $.ajax({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            //     },
-            //     type: "POST",
-            //     url: "#",
-            //     data: { _method: 'DELETE', payment_file: name },
-            //     success: function (data) {
-            //         console.log('File has been successfully removed!!');
-            //     },
-            //     error: function(e) {
-            //         console.log(e);
-            //     }
-            // });
-            $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
-            var fileRef;
-            return (fileRef = file.previewElement) != null ? 
-            fileRef.parentNode.removeChild(file.previewElement) : void 0;
-        },
-        // accept: function(file, done) {
-        //     if (file.size == 0) {
-        //         console.log(file.size)
-        //         done("Empty files will not be uploaded.");
-        //     }
-        //     else { done(); }
-        // },
-        sending: function(file, xhr, formData) {
-            $('#form-payment-proof').serializeArray().forEach(function (item, index) {
-                formData.append(item.name, item.value);
-            });
-        },
-        success: function(file, response) {
-            notify(response.notify, "Success");
-            $('#form-payment-proof')[0].reset();
-            $('#form-payment-proof').find('.is-valid').removeClass('is-valid');
-            $('#success-section').show();
-            $('#payment-section').hide();
-            scrollTop();
+    // Dropzone.autoDiscover = false;
+    // //Form 1
+    // var paymentDropzone = new Dropzone('#fileUpload1', {
+    //     url: "{{ route('dashboard.confirmPayment', $payment) }}",
+    //     // headers: {
+    //     //     'Access-Control-Allow-Origin' :"*",
+    //     //     'Access-Control-Allow-Methods' :"GET, PUT, POST, DELETE, OPTIONS",
+    //     //     'Access-Control-Allow-Headers' :"Authorization, Content-Type, Accept, X-Mashape-Authorization"
+    //     //     // remove Cache-Control and X-Requested-With
+    //     //     // to be sent along with the request
+    //     // },
+    //     // url: "{{ 'http://acp.rebut.xyz/order/confirmation' }}",
+    //     maxFiles: 1,
+    //     maxFilesize: 10,
+    //     acceptedFiles: "image/*",
+    //     addRemoveLinks: true,
+    //     autoProcessQueue: false,
+    //     renameFile: function(file) {
+    //         var dt = new Date();
+    //         var time = dt.getTime();
+    //         return time +'-{{ $payment->transactionno }}';
+    //     },
+    //     removedfile: function(file) 
+    //     {
+    //         var name = file.upload.filename;
+    //         // $.ajax({
+    //         //     headers: {
+    //         //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         //     },
+    //         //     type: "POST",
+    //         //     url: "#",
+    //         //     data: { _method: 'DELETE', payment_file: name },
+    //         //     success: function (data) {
+    //         //         console.log('File has been successfully removed!!');
+    //         //     },
+    //         //     error: function(e) {
+    //         //         console.log(e);
+    //         //     }
+    //         // });
+    //         $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+    //         var fileRef;
+    //         return (fileRef = file.previewElement) != null ? 
+    //         fileRef.parentNode.removeChild(file.previewElement) : void 0;
+    //     },
+    //     // accept: function(file, done) {
+    //     //     if (file.size == 0) {
+    //     //         console.log(file.size)
+    //     //         done("Empty files will not be uploaded.");
+    //     //     }
+    //     //     else { done(); }
+    //     // },
+    //     sending: function(file, xhr, formData) {
+    //         $('#form-payment-proof').serializeArray().forEach(function (item, index) {
+    //             formData.append(item.name, item.value);
+    //         });
+    //     },
+    //     success: function(file, response) {
+    //         notify(response.notify, "Success");
+    //         $('#form-payment-proof')[0].reset();
+    //         $('#form-payment-proof').find('.is-valid').removeClass('is-valid');
+    //         $('#success-section').show();
+    //         $('#payment-section').hide();
+    //         scrollTop();
 
-            var name = file.upload.filename;
-            var fileRef;
-            return (fileRef = file.previewElement) != null ? 
-            fileRef.parentNode.removeChild(file.previewElement) : void 0;
-        },
-        error: function(response) {
-            console.log('Error: ', response)
-            return false;
-        }
-    });
+    //         var name = file.upload.filename;
+    //         var fileRef;
+    //         return (fileRef = file.previewElement) != null ? 
+    //         fileRef.parentNode.removeChild(file.previewElement) : void 0;
+    //     },
+    //     error: function(response) {
+    //         console.log('Error: ', response)
+    //         return false;
+    //     }
+    // });
+
+
+    // console.log($('#button-submit'));
+    // $('#button-submit').click(function () {
+    //     var form = $('#form-payment-proof');
+    //     var formData = $(form).serializeArray();
+    //     $.ajax({
+    //         type: $(form).attr('method'),
+    //         url: $(form).attr('action'),
+    //         dataType: 'json',
+    //         data: formData,
+    //         success: function(data) {
+    //             console.log(data);
+    //             // $('#shipping').html(formatCurrency(data.shipping.cost));
+    //             // $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
+    //             // $('.list-group-item.list-group-item-action').each(function () {
+    //             //     $(this).removeClass('active text-white');
+    //             // });
+    //             // $('#'+id).addClass('active text-white');
+    //             // $('#shipping-list').html(html);
+    //             // $('#shipping-spinner').hide();
+    //             // $('#button-shipping .btn-text').html('Calculate');
+    //             // $('#button-shipping').prop('disabled', false);
+    //             // notify(data.message, data.type);
+    //         },
+    //         error: function(error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // })
 
     $('#form-payment-proof').submit(function (e) {
         e.preventDefault();
-        if(paymentDropzone.getQueuedFiles().length > 0) {
-            paymentDropzone.processQueue();
-            $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
-        }
-        else {
-            $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
-        }
+        // $.ajax({
+        //     type: 'GET',
+        //     url: 'http://acp.rebut.xyz/',
+        //     success: function(token) {
+        //         console.log(token);
+                var formData = $(this).serializeArray();
+        //         formData.push({name:"_token", value:token});
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    // headers: {
+                    //     // 'Content-Type':'application/json',
+                    //     'Access-Control-Allow-Headers': '*',
+                    //     'Access-Control-Allow-Origin': 'http://acp.rebut.xyz/',
+                    //     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+                    // },
+                    // dataType: 'json',
+                    // enctype: 'multipart/form-data',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        console.log(data);
+                        // $('#shipping').html(formatCurrency(data.shipping.cost));
+                        // $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
+                        // $('.list-group-item.list-group-item-action').each(function () {
+                        //     $(this).removeClass('active text-white');
+                        // });
+                        // $('#'+id).addClass('active text-white');
+                        // $('#shipping-list').html(html);
+                        // $('#shipping-spinner').hide();
+                        // $('#button-shipping .btn-text').html('Calculate');
+                        // $('#button-shipping').prop('disabled', false);
+                        // notify(data.message, data.type);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+        //     },
+        //     error: function(error) {
+        //         console.log(error);
+        //     }
+        // });
+        
+        // if(paymentDropzone.getQueuedFiles().length > 0) {
+        //     paymentDropzone.processQueue();
+        //     $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+        // }
+        // else {
+        //     $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
+        // }
     });
 </script>
 @endpush

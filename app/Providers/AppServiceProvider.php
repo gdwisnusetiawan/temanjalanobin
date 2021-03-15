@@ -7,6 +7,7 @@ use App\Footer;
 use App\Category;
 use App\Marquee;
 use App\Popup;
+use App\User;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if(env('REDIRECT_HTTPS') === true) {
+            \URL::forceScheme('https');
+        }
+
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
@@ -46,11 +51,9 @@ class AppServiceProvider extends ServiceProvider
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::orderBy('id', 'desc')->first();
         $marquee = Marquee::where('is_active', true)->first();
-        // dd(($marquee));
         $categories = Category::all();
+        $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
-        $user_referer = \App\User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
-        // dd($categories);
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,
