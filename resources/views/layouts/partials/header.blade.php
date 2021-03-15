@@ -54,13 +54,13 @@
                     <nav>
                         <!-- left menu -->
                         <ul>
-                            <li class="{{ request()->is('categories*') ? 'current' : '' }}"><a href="#">Categories</a>
+                            <!-- <li class="{{ request()->is('categories*') ? 'current' : '' }}"><a href="#">Categories</a>
                                 <ul class="dropdown-menu">
                                     @foreach($categories as $category)
                                         <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                     @endforeach
                                 </ul>
-                            </li>
+                            </li> -->
                         @if($menus->count() > 0)
                             @foreach($menus[0] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
@@ -71,13 +71,13 @@
                                         @endforeach
                                     </ul>
                                     @elseif($menu->isMegaMenu())
-                                    <!-- <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu">
                                         @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
                                             @foreach($categories as $category)
                                                 <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach
                                         @endif
-                                    </ul> -->
+                                    </ul>
                                     @endif
                                 </li>
                             @endforeach
@@ -162,13 +162,13 @@
                                         @endforeach
                                     </ul>
                                     @elseif($menu->isMegaMenu())
-                                    <!-- <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu">
                                         @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
                                             @foreach($categories as $category)
                                                 <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach
                                         @endif
-                                    </ul> -->
+                                    </ul>
                                     @endif
                                 </li>
                             @endforeach
