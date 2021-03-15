@@ -103,6 +103,8 @@
                 <div class="card">
                     <div class="card-body">
                         <form method="POST" action="http://acp.rebut.xyz/order/confirmation" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
+                            <input type="hidden" name="redirect_url" value="{{ route('dashboard.payment', $payment) }}">
+                            <input type="hidden" name="payment_id" value="{{ $payment->id }}">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
@@ -133,7 +135,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Example file input</label>
-                                <!-- <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
+                                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
                             </div>
                             <!--File upload 1-->
                             <!-- <div class="form-row">
@@ -396,91 +398,54 @@
     //     }
     // });
 
+    // $('#form-payment-proof').submit(function (e) {
+    //     e.preventDefault();
+    //     // if(paymentDropzone.getQueuedFiles().length > 0) {
+    //     //     paymentDropzone.processQueue();
+    //     //     $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+    //     // }
+    //     // else {
+    //     //     $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
+    //     // }
+    // });
 
-    // console.log($('#button-submit'));
-    // $('#button-submit').click(function () {
-    //     var form = $('#form-payment-proof');
-    //     var formData = $(form).serializeArray();
-    //     $.ajax({
-    //         type: $(form).attr('method'),
-    //         url: $(form).attr('action'),
-    //         dataType: 'json',
-    //         data: formData,
-    //         success: function(data) {
-    //             console.log(data);
-    //             // $('#shipping').html(formatCurrency(data.shipping.cost));
-    //             // $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
-    //             // $('.list-group-item.list-group-item-action').each(function () {
-    //             //     $(this).removeClass('active text-white');
-    //             // });
-    //             // $('#'+id).addClass('active text-white');
-    //             // $('#shipping-list').html(html);
-    //             // $('#shipping-spinner').hide();
-    //             // $('#button-shipping .btn-text').html('Calculate');
-    //             // $('#button-shipping').prop('disabled', false);
-    //             // notify(data.message, data.type);
-    //         },
-    //         error: function(error) {
-    //             console.log(error);
-    //         }
-    //     });
-    // })
-
-    $('#form-payment-proof').submit(function (e) {
-        e.preventDefault();
-        // $.ajax({
-        //     type: 'GET',
-        //     url: 'http://acp.rebut.xyz/',
-        //     success: function(token) {
-        //         console.log(token);
-                var formData = $(this).serializeArray();
-        //         formData.push({name:"_token", value:token});
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    // headers: {
-                    //     // 'Content-Type':'application/json',
-                    //     'Access-Control-Allow-Headers': '*',
-                    //     'Access-Control-Allow-Origin': 'http://acp.rebut.xyz/',
-                    //     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
-                    // },
-                    // dataType: 'json',
-                    // enctype: 'multipart/form-data',
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    data: formData,
-                    success: function(data) {
-                        console.log(data);
-                        // $('#shipping').html(formatCurrency(data.shipping.cost));
-                        // $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
-                        // $('.list-group-item.list-group-item-action').each(function () {
-                        //     $(this).removeClass('active text-white');
-                        // });
-                        // $('#'+id).addClass('active text-white');
-                        // $('#shipping-list').html(html);
-                        // $('#shipping-spinner').hide();
-                        // $('#button-shipping .btn-text').html('Calculate');
-                        // $('#button-shipping').prop('disabled', false);
-                        // notify(data.message, data.type);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-        //     },
-        //     error: function(error) {
-        //         console.log(error);
-        //     }
-        // });
-        
-        // if(paymentDropzone.getQueuedFiles().length > 0) {
-        //     paymentDropzone.processQueue();
-        //     $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
-        // }
-        // else {
-        //     $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
-        // }
-    });
+    // $('#form-payment-proof').submit(function (e) {
+    //     e.preventDefault();
+    //     // $.ajax({
+    //     //     type: 'GET',
+    //     //     url: 'http://acp.rebut.xyz/',
+    //     //     success: function(token) {
+    //     //         console.log(token);
+    //             var formData = $(this).serializeArray();
+    //     //         formData.push({name:"_token", value:token});
+    //             $.ajax({
+    //                 type: 'GET',
+    //                 url: 'http://acp.rebut.xyz/tes',
+    //                 // headers: {
+    //                 //     // 'Content-Type':'application/json',
+    //                 //     'Access-Control-Allow-Headers': '*',
+    //                 //     'Access-Control-Allow-Origin': 'http://acp.rebut.xyz/',
+    //                 //     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+    //                 // },
+    //                 dataType: 'json',
+    //                 // enctype: 'multipart/form-data',
+    //                 // contentType: false,
+    //                 // cache: false,
+    //                 // processData: false,
+    //                 data: formData,
+    //                 success: function(data) {
+    //                     console.log(data);
+    //                     // notify(data.message, data.type);
+    //                 },
+    //                 error: function(error) {
+    //                     console.log(error);
+    //                 }
+    //             });
+    //     //     },
+    //     //     error: function(error) {
+    //     //         console.log(error);
+    //     //     }
+    //     // });
+    // });
 </script>
 @endpush
