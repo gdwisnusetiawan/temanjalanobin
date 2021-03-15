@@ -412,7 +412,7 @@
         // var formData = $(form).serializeArray();
         var formData = new FormData();
         formData.append('origin', @json($payment->city));
-        formData.append('destination', '11');
+        formData.append('destination', @json($config->city));
         formData.append('weight', @json($payment->weight));
         $('#shipping-spinner').show();
         // $('#button-shipping .btn-text').html('Loading...');
