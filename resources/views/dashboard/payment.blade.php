@@ -104,7 +104,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="http://acp.rebut.xyz/order/confirmation" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
+                        <form method="POST" action="{{ env('APP_STORAGE_URL') }}order/confirmation" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
                             <input type="hidden" name="redirect_url" value="{{ route('dashboard.payment', $payment) }}">
                             <input type="hidden" name="payment_id" value="{{ $payment->id }}">
                             <div class="form-row">
