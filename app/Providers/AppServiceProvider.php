@@ -43,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         if($config == null || $config->is_active == false) {
             abort(503);
         }
+
         $modal_type = rand(0,7);
         $modal_type = 0;
         $popup = Popup::where('is_active', true)->first();
@@ -50,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $menus = Functions::menu();
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::orderBy('id', 'desc')->first();
+        // dd($footer->contents);
         $marquee = Marquee::where('is_active', true)->first();
         $categories = Category::all();
         $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();

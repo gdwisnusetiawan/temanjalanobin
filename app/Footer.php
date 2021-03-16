@@ -51,7 +51,8 @@ class Footer extends Model
         $contents = [];
         for ($i=1; $i <= $rows; $i++) {
             $type = 'default';
-            if(strpos( strtolower($this->{'title'.$i}), 'newsletter' ) !== false && $this->newsletter) {
+            // if(strpos( strtolower($this->{'title'.$i}), 'newsletter' ) !== false && $this->newsletter) {
+            if($i == $rows && $this->newsletter) {
                 $type = 'newsletter';
             }
             $contents[$type][$i]['title'] = $this->{'title'.$i};

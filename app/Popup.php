@@ -13,13 +13,17 @@ class Popup extends Model
 
     public function getImageUrlAttribute()
     {
+        $cdn = env('APP_STORAGE_URL').'foto/';
+        $classname = strtolower(class_basename($this));
+        $url = $cdn.$classname.'/'.$this->id.'/';
         if(Str::startsWith($this->image, 'http')) {
             return $this->image;
         }
         else {
-            return is_file(public_path().'/img/'.$this->image) 
-                ? asset('img/'.$this->image) 
-                : asset('polo-5/images/shop-bg.jpg');
+            // return is_file(public_path().'/img/'.$this->image) 
+            //     ? asset('img/'.$this->image) 
+            //     : asset('polo-5/images/shop-bg.jpg');
+            return $url.'image';
         }
     }
 
