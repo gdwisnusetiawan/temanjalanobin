@@ -187,7 +187,7 @@
                                                     <strong>Shipping</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount" id="shipping">{{ $payment->shipping_cost_format }}</span>
+                                                    <span class="amount" id="shipping">{{ $payment->shipping_cost > 0 ? $payment->shipping_cost_format : '-' }}</span>
                                                 </td>
                                             </tr>
                                             <!-- <tr>
@@ -411,8 +411,8 @@
     function shippingCost() {
         // var formData = $(form).serializeArray();
         var formData = new FormData();
-        formData.append('origin', @json($payment->city));
-        formData.append('destination', @json($config->city));
+        formData.append('origin', @json($config->city));
+        formData.append('destination', @json($payment->city));
         formData.append('weight', @json($payment->weight));
         $('#shipping-spinner').show();
         // $('#button-shipping .btn-text').html('Loading...');

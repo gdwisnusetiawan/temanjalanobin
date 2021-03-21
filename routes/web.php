@@ -21,6 +21,14 @@ Route::get('/modal', function () {
     return view('modal');
 });
 
+Route::get('mailable', function () {
+    $user = App\User::find(3);
+    $payment = App\Payment::find(11);
+
+    // return new App\Mail\Registered($user);
+    return new App\Mail\Ordered($payment);
+});
+
 Auth::routes(['verify' => true]);
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.provider');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');

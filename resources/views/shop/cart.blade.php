@@ -147,7 +147,7 @@
                                         <strong>Discount</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="discount">-{{ $functions->formatCurrency(session('cart')['summary']['total_discount']) }}</span>
+                                        <span class="amount" id="discount">-{{ session('cart')['summary']['total_discount'] > 0 ? $functions->formatCurrency(session('cart')['summary']['total_discount']) : '' }}</span>
                                     </td>
                                 </tr>
                                 <tr>

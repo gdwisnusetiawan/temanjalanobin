@@ -7,8 +7,10 @@ use App\Suborder;
 use App\Payment;
 use App\Transaction;
 use App\Merchant;
+use App\Mail\Ordered;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
@@ -87,6 +89,7 @@ class CheckoutController extends Controller
         // $payment->insertid = $last_payment->insertid + 1;
         // $payment->currency = 'IDR';
         $payment->save();
+        Mail::to($payment->user)->send(new Ordered($payment));
 
         // foreach($order->suborders as $suborder) {
         //     $transaction = new Transaction();
@@ -105,7 +108,7 @@ class CheckoutController extends Controller
     public function shipping(Request $request, Payment $payment)
     {
         // return response()->json($request->all());
-        if($request->origin == null && $request->destination == null) {
+        if($request->origin == null || $request->destination == null) {
             return false;
         }
         $couriers = ['pos','jne','tiki'];
@@ -119,6 +122,7 @@ class CheckoutController extends Controller
                     'weight' => $request->weight > 0 ? $request->weight : 1,
                     'courier' => $courier,
                 ]);
+                // return response()->json(['results' => json_decode($response->body())->rajaongkir]);
             $results[] = json_decode($response->body())->rajaongkir->results;
         }
         $result = $results[0];

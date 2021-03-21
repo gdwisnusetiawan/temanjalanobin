@@ -31,9 +31,8 @@ class Category extends Model
         return Product::where('category', $this->id)->get();
     }
     
-
-    public function getSlugAttribute()
-    {
-        return Str::slug($this->title, '-');
-    }
+    // public function getSlugAttribute()
+    // {
+    //     return Str::slug($this->title, '-');
+    // }
 }
