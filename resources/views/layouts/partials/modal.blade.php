@@ -21,7 +21,7 @@
                         <h2>{{ $popup->title }}</h2>
                         <p class="m-b-20">{!! $popup->description !!}</p>
                         <a href="{{ $popup->links }}" class="btn btn-shadow btn-rounded btn-block m-t-10">{{ $popup->button }}</a><small class="t300">
-                            <p class="text-center"><em>* Limited time Offer</em></p>
+                            <!-- <p class="text-center"><em>* Limited time Offer</em></p> -->
                         </small>
                     </div>
                 </div>
