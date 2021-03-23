@@ -28,7 +28,7 @@ class ShopController extends Controller
         $category_title = str_replace('-', ' ', $category);
         // $product = Product::with('variants')->whereRaw("LOWER(title) = '$title'")->first();
         $product = Product::with('variants')->where('slug', $product)->first();
-        $category = Category::whereRaw("LOWER(title) = '$category_title'")->first();
+        $category = Category::where('slug', $category)->first();
         if(!isset($product)) {
             request()->session()->flash('notify', ['message' => 'Product doesn\'t exists', 'type' => 'danger']);
             return redirect()->route('shop.index', [$category, $product]);
