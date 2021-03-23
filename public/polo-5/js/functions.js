@@ -2386,6 +2386,9 @@ var INSPIRO = {},
               if (typeof Cookies.get(elemCookieName) == "undefined") {
                 /*Cookie Notify*/
                 var t = setTimeout(function () {
+                  var expireTime = new Date().getTime();
+                  expireTime += (elemCookieExpire) * 60 * 1000;
+                  var expireDate = new Date(expireTime);
                   $.magnificPopup.open({
                       items: {
                         src: elem
@@ -2403,13 +2406,10 @@ var INSPIRO = {},
                             $(this.content).find("video").get(0).play();
                           }
                           cookieConfirm.click(function () {
-                            let expiresIn = new Date();
-                            let time = expiresIn.getTime();
-                            time += (elemCookieExpire) * 60 * 60 * 1000;
-                            expiresIn.setTime(time);
-                            Cookies.set(elemCookieName, true, {
-                              expires: expiresIn.toLocaleString("en-US", {timeZone: "Asia/Jakarta"})
-                            })
+                            // Cookies.set(elemCookieName, true, {
+                            //   expires: Number(elemCookieExpire)
+                            // })
+                            document.cookie = elemCookieName + "=" + true + ";expires=" + expireDate + ";path=/";
                             $.magnificPopup.close();
                             cookieNotify.removeClass(modalShowClass);
                             return false
@@ -2420,9 +2420,10 @@ var INSPIRO = {},
                             $(this.content).find("video").get(0).load();
                           };
 
-                          Cookies.set(elemCookieName, true, {
-                            expires: Number(elemCookieExpire)
-                          })
+                          // Cookies.set(elemCookieName, true, {
+                          //   expires: Number(elemCookieExpire)
+                          // })
+                          document.cookie = elemCookieName + "=" + true + ";expires=" + expireDate + ";path=/";
                         }
                       }
                     },

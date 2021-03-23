@@ -2,7 +2,7 @@
 @switch($popup->type)
     @case(1)
         <!-- Modal Text -->
-        <div id="modal-auto-open" class="modal modal-auto-open text-center cookie-notify" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieModal{{ $popup->id }}" data-cookie-expire="1">
+        <div id="modal-auto-open" class="modal modal-auto-open text-center" data-delay="{{ $popup->duration }}" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}">
             <h2 class="modal-title">{{ $popup->title }}</h2>
             <p>{!! $popup->description !!}</p>
             <a class="btn btn-light modal-close" href="#">Dismiss</a>
@@ -11,7 +11,7 @@
         @break
     @case(2)
         <!-- Modal Shop -->
-        <div id="modalShop" class="modal modal-auto-open no-padding" data-delay="0" style="max-width: 700px;">
+        <div id="modalShop" class="modal modal-auto-open no-padding cookie-notify" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="max-width: 700px;">
             <div class="row">
                 <div class="col-md-6 d-none d-sm-block no-padding" style="background: transparent url({{ $popup->image_url }}) no-repeat scroll center top / cover; height:470px;"></div>
                 <div class="col-md-6">
@@ -31,7 +31,7 @@
         @break
     @case(3)
         <!-- Modal Subscription -->
-        <div id="modalSubscriptionForm" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" style="background: url({{ $popup->image_url }}) no-repeat; background-size: cover; background-position: center top;  max-width: 700px; min-height:380px">
+        <div id="modalSubscriptionForm" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="background: url({{ $popup->image_url }}) no-repeat; background-size: cover; background-position: center top;  max-width: 700px; min-height:380px">
             <div style="max-width:350px;" class="text-light p-t-30">
                 <h2 class="m-b-0">{{ $popup->title }}</h2>
                 <h5>{!! $popup->description !!}</h5>
@@ -49,7 +49,7 @@
         @break
     @case(4)
         <!-- Modal Login -->
-        <div id="modalLogin" class="modal modal-auto-open no-padding" data-delay="{{ $popup->duration }}" style="max-width: 780px;">
+        <div id="modalLogin" class="modal modal-auto-open no-padding" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="max-width: 780px;">
             <div class="row">
                 <div class="col-md-6 no-padding" style="background: transparent url({{ asset('polo-5/images/login-bg.jpg') }}) no-repeat scroll center top / cover; height:470px;">
                 </div>
@@ -85,7 +85,7 @@
         @break
     @case(5)
         <!-- Modal Youtube -->
-        <div id="modalYoutube" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" style="max-width: 700px; min-height:380px">
+        <div id="modalYoutube" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="max-width: 700px; min-height:380px">
             <div class="p-t-30 text-center">
                 <h2 class="m-b-0">{{ $popup->title }}</h2>
                 <h5>{!! $popup->description !!}</h5>
@@ -99,7 +99,7 @@
         @break
     @case(6)
         <!-- Modal Video -->
-        <div id="modalVideo" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" style="max-width: 700px; min-height:380px">
+        <div id="modalVideo" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="max-width: 700px; min-height:380px">
             <div class="p-t-30 text-center">
                 <h2 class="m-b-0">{{ $popup->title }}</h2>
                 <h5>{!! $popup->description !!}</h5>
@@ -116,7 +116,7 @@
         @break
     @case(7)
         <!-- Modal Audio -->
-        <div id="modalAudio" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" style="background: url('{{ asset('polo-5/images/audio-bg.jpg') }}') no-repeat; background-size: cover; background-position: center top;  max-width: 700px; min-height:380px">
+        <div id="modalAudio" class="modal modal-auto-open" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}" style="background: url('{{ asset('polo-5/images/audio-bg.jpg') }}') no-repeat; background-size: cover; background-position: center top;  max-width: 700px; min-height:380px">
             <div style="max-width:300px;" class="p-t-30">
                 <h2 class="m-b-0">{{ $popup->title }}</h2>
                 <h5>{!! $popup->description !!}</h5>
@@ -132,7 +132,7 @@
         @break
     @default
         <!-- Modal Text -->
-        <div id="modal-auto-open" class="modal modal-auto-open text-center cookie-notify" data-delay="{{ $popup->duration }}" data-cookie-enabled="false" data-cookie-name="cookieModal{{ $popup->id }}" data-cookie-expire="1">
+        <div id="modal-auto-open" class="modal modal-auto-open text-center cookie-notify" data-delay="{{ $popup->duration }}" data-cookie-enabled="true" data-cookie-name="cookieAutoModal{{ $popup->id }}" data-cookie-expire="{{ $popup->durationcookies }}">
             <h2 class="modal-title">{{ $popup->title }}</h2>
             <p>{!! $popup->description !!}</p>
             <a class="btn btn-light modal-close" href="#">Dismiss</a>
