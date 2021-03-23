@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Slider;
 use App\Product;
 use App\User;
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -26,15 +27,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $customers = User::all();
-        foreach($customers as $customer) {
-            if($customer->email_verified_at == null && $customer->status) {
-                $customer->email_verified_at = date('Y-m-d H:i:s');
-                $customer->save();
-            }
-        }
+        // $customers = User::all();
+        // foreach($customers as $customer) {
+        //     if($customer->email_verified_at == null && $customer->status) {
+        //         $customer->email_verified_at = date('Y-m-d H:i:s');
+        //         $customer->save();
+        //     }
+        // }
         // http error
         // abort(404);
+
         $sliders = Slider::all();
         $products = Product::where('special', true)->get();
         $top_rateds = Product::inRandomOrder()->limit(3)->get();

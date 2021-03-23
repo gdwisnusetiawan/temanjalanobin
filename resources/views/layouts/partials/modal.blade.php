@@ -1,4 +1,4 @@
-@if($popup)
+@if($popup_check)
 @switch($popup->type)
     @case(1)
         <!-- Modal Text -->
