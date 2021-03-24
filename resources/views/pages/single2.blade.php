@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
             <!-- content -->
-            <div class="content col-lg-9">
+            <div class="content col-lg-12">
                 <!-- Blog -->
                 <div id="blog" class="single-post">
                     <!-- Post single item-->
@@ -51,7 +51,7 @@
                                     <span class="post-meta-date"><i class="fa fa-calendar-o"></i>{{ $page->datetime_format }}</span>
                                     <!-- <span class="post-meta-comments"><a href=""><i class="fa fa-comments-o"></i>33 Comments</a></span> -->
                                     <!-- <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>News</a></span> -->
-                                    <span class="post-meta-category"><a href=""><i class="fa fa-eye"></i>{{ $page->views ?? 0 }} Views</a></span>
+                                    <!-- <span class="post-meta-category"><a href=""><i class="fa fa-eye"></i>{{ $page->views ?? 0 }} Views</a></span> -->
                                     <div class="post-meta-share">
                                         <a href="{{ $share_links['facebook'] }}" target="_BLANK" class="btn btn-xs btn-slide btn-facebook" data-width="105">
                                             <i class="fab fa-facebook-f"></i>
@@ -83,86 +83,12 @@
                                 <a href="#">Tech</a>
                                 <a href="#">Travel</a>
                             </div> -->
-                            <div class="post-navigation">
-                                @if($prev_page && $prev_page->multipage)
-                                <a href="{{ route('page.show', [$prev_page->multipage->slug, $prev_page->slug]) }}" class="post-prev">
-                                    <div class="post-prev-title"><span>Previous Post</span>{{ $prev_page->title }}</div>
-                                </a>
-                                @endif
-                                <a href="{{ route('page.index', $page->multipage->slug) }}" class="post-all">
-                                    <i class="icon-grid"> </i>
-                                </a>
-                                @if($next_page && $next_page->multipage)
-                                <a href="{{ route('page.show', [$next_page->multipage->slug, $next_page->slug]) }}" class="post-next">
-                                    <div class="post-next-title"><span>Next Post</span>{{ $next_page->title }}</div>
-                                </a>
-                                @endif
-                            </div>
                         </div>
                     </div>
                     <!-- end: Post single item-->
                 </div>
             </div>
             <!-- end: content -->
-            <!-- Sidebar-->
-            <div class="sidebar sticky-sidebar col-lg-3">
-                <!--widget newsletter-->
-                <div class="widget  widget-newsletter">
-                    <form id="widget-search-form-sidebar" action="search-results-page.html" method="get">
-                <div class="input-group">
-                    <input type="text" aria-required="true" name="q" class="form-control widget-search-form" placeholder="Search for pages...">
-                    <div class="input-group-append">
-                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                    </div>
-                </div>
-            </form></div>
-                <!--end: widget newsletter-->
-                <!--Tabs with Posts-->
-                <div class="widget">
-                    <div class="tabs">
-                        <ul class="nav nav-tabs" id="tabs-posts" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#popular" role="tab" aria-controls="popular" aria-selected="true">Popular</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#recent" role="tab" aria-controls="recent" aria-selected="false">Recent</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="tabs-posts-content">
-                            <div class="tab-pane fade show active" id="popular" role="tabpanel" aria-labelledby="popular-tab">
-                                <div class="post-thumbnail-list">
-                                    @foreach($populars as $popular)
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ $popular->media['url'][0] }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">{{ $popular->title }}</a>
-                                            <span class="post-date"><i class="icon-clock"></i> {{ $popular->datetime_diff }}</span>
-                                            <span class="post-category"><i class="fa fa-eye"></i> {{ $popular->views }} views</span>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="recent" role="tabpanel" aria-labelledby="recent-tab">
-                                <div class="post-thumbnail-list">
-                                    @foreach($recents as $recent)
-                                    <div class="post-thumbnail-entry">
-                                        <img alt="" src="{{ $recent->media['url'][0] }}">
-                                        <div class="post-thumbnail-content">
-                                            <a href="#">{{ $recent->title }}</a>
-                                            <span class="post-date"><i class="icon-clock"></i> {{ $recent->datetime_diff }}</span>
-                                            <!-- <span class="post-category"><i class="fa fa-tag"></i> Tag</span> -->
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--End: Tabs with Posts-->
-            </div>
-            <!-- end: Sidebar-->
         </div>
     </div>
 </section>

@@ -61,7 +61,7 @@ class Payment extends Model
 
     public function getExpireFormatAttribute()
     {
-        return Functions::datetimeFormat($this->transactionexpire);
+        return Functions::datetimeFormat($this->transactionexpire, 'F jS, Y H:i:s');
     }
 
     public function getInvoiceDateFormatAttribute()

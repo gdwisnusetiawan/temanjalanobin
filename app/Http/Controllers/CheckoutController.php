@@ -20,7 +20,7 @@ class CheckoutController extends Controller
     {
         $user = $payment->user;
         $merchants = Merchant::all();
-        if($payment->paymentProofs->count() > 0) {
+        if($payment->paymentProofs->count() > 0 || $payment->merchant != null) {
             return redirect()->route('dashboard.payment', $payment);
         }
         // $shippings = $this->shipping(444, $payment->city, $payment->weight);
@@ -34,18 +34,17 @@ class CheckoutController extends Controller
         $cart = session()->get('cart');
         $key = sha1(time());
         $invoiceno = time();
-
+        $config = Config::first();
         $summary = $cart['summary'];
 
         $last_payment = Payment::orderBy('insertid', 'desc')->first();
-
         $payment = new Payment();
         $payment->user()->associate(auth()->user());
         // $payment->merchant()->associate($request->payment_merchant);
         $payment->transactionno = $invoiceno;
         $payment->transactionmount = $summary['subtotal'];
         $payment->transactiondate = Carbon::now();
-        $payment->transactionexpire = Carbon::now()->addDays(7);
+        $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
         // $payment->shipping_cost = $summary['shipping']['cost'];
         $payment->discount = $summary['total_discount'];
         $payment->weight = $summary['total_weight'];
@@ -62,6 +61,7 @@ class CheckoutController extends Controller
         foreach($cart['list'] as $cart)
         {
             $product = $cart['product'];
+            $variants = $cart['variants'] ?? [];
             $transaction = new Transaction();
             $transaction->payment()->associate($payment);
             $transaction->transactionno = $payment->transactionno;
@@ -69,6 +69,12 @@ class CheckoutController extends Controller
             $transaction->itemname = $product->title;
             $transaction->quantity = $cart['quantity'];
             $transaction->price = $product->price;
+            $variant_string = '';
+            foreach($variants as $group => $variant) {
+                $variant_string .= $group .' : '. ucfirst($variant). ',';
+            }
+            $variant_string = rtrim($variant_string, ',');
+            $transaction->variants = $variant_string;
             $transaction->save();
         }
         
@@ -129,6 +135,8 @@ class CheckoutController extends Controller
         $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
 
         $payment->shipping_cost = $cost;
+        $payment->shipping_vendor = $courier_code;
+        $payment->shipping_service = $service;
         $payment->save();
 
         $shipping = [
@@ -174,6 +182,8 @@ class CheckoutController extends Controller
         // $destination_details = $cart['summary']['shipping']['destination_details'];
         // $cart['summary'] = $this->summary($cart, $request->cost);
         $payment->shipping_cost = $request->cost;
+        $payment->shipping_vendor = $request->code;
+        $payment->shipping_service = $request->service;
         $payment->save();
 
         $shipping = [

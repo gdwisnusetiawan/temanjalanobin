@@ -67,8 +67,8 @@
                             <td class="cart-product-description">
                             @if($product->variants->isNotEmpty())
                                 <p>
-                                    @foreach($variants as $variant)
-                                        {{ ucfirst($variant) }} @if(!$loop->last) {{ ',' }} @endif
+                                    @foreach($variants as $group => $variant)
+                                    {{ ($group) }} : {{ ucfirst($variant) }} @if(!$loop->last) {{ ',' }} @endif
                                     @endforeach
                                 </p>
                             @endif

@@ -35,7 +35,7 @@ class ShopController extends Controller
         }
         $variants = $product->variants;
         $relateds = Product::where('category', $category->id)->where('id', '!=', $product->id)->limit(9)->get();
-        // dd($relateds);
+        // dd($product->category_model);
         return view('shop.single', compact('product', 'variants', 'relateds'));
     }
 

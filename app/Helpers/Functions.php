@@ -24,9 +24,9 @@ class Functions
         return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
     }
 
-    public static function datetimeFormat($datetime)
+    public static function datetimeFormat($datetime, $format = 'F jS, Y')
     {
-        return Carbon::parse($datetime)->format('F jS, Y');
+        return Carbon::parse($datetime)->format($format);
     }
 
     public static function datetimeDiff($datetime)

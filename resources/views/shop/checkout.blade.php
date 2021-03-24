@@ -66,6 +66,9 @@
                                         <td class="cart-product-description">
                                             <p>{!! $transaction->product->description !!}</p>
                                         </td>
+                                        <td class="cart-product-description">
+                                            <p><p>{{ $transaction->variants }}</p></p>
+                                        </td>
                                         <td class="cart-product-subtotal">
                                             <span class="amount">{{ $transaction->price_format }}</span>
                                         </td>
