@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Config;
 use App\Order;
 use App\Suborder;
 use App\Payment;
@@ -19,7 +20,7 @@ class CheckoutController extends Controller
     {
         $user = $payment->user;
         $merchants = Merchant::all();
-        if($payment->paymentProofs->count() > 0) {
+        if($payment->paymentProofs->count() > 0 || $payment->merchant != null) {
             return redirect()->route('dashboard.payment', $payment);
         }
         // $shippings = $this->shipping(444, $payment->city, $payment->weight);
@@ -33,18 +34,17 @@ class CheckoutController extends Controller
         $cart = session()->get('cart');
         $key = sha1(time());
         $invoiceno = time();
-
+        $config = Config::first();
         $summary = $cart['summary'];
 
         $last_payment = Payment::orderBy('insertid', 'desc')->first();
-
         $payment = new Payment();
         $payment->user()->associate(auth()->user());
         // $payment->merchant()->associate($request->payment_merchant);
         $payment->transactionno = $invoiceno;
         $payment->transactionmount = $summary['subtotal'];
         $payment->transactiondate = Carbon::now();
-        $payment->transactionexpire = Carbon::now()->addDays(7);
+        $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
         // $payment->shipping_cost = $summary['shipping']['cost'];
         $payment->discount = $summary['total_discount'];
         $payment->weight = $summary['total_weight'];
@@ -61,6 +61,7 @@ class CheckoutController extends Controller
         foreach($cart['list'] as $cart)
         {
             $product = $cart['product'];
+            $variants = $cart['variants'] ?? [];
             $transaction = new Transaction();
             $transaction->payment()->associate($payment);
             $transaction->transactionno = $payment->transactionno;
@@ -68,6 +69,12 @@ class CheckoutController extends Controller
             $transaction->itemname = $product->title;
             $transaction->quantity = $cart['quantity'];
             $transaction->price = $product->price;
+            $variant_string = '';
+            foreach($variants as $group => $variant) {
+                $variant_string .= $group .' : '. ucfirst($variant). ',';
+            }
+            $variant_string = rtrim($variant_string, ',');
+            $transaction->variants = $variant_string;
             $transaction->save();
         }
         
@@ -77,41 +84,33 @@ class CheckoutController extends Controller
 
     public function update(Request $request, Payment $payment)
     {
-        // $payment->user()->associate(auth()->user());
         $payment->merchant()->associate($request->payment_merchant);
-        // $payment->transactionno = $invoiceno;
-        // $payment->transactionmount = $payment->transactionmount;
-        // $payment->transactiondate = Carbon::now();
-        // $payment->transactionexpire = Carbon::now()->addDays(7);
-        // $payment->shipping_cost = 0;
-        // // status: pending
-        // $payment->status = 1;
-        // $payment->insertid = $last_payment->insertid + 1;
-        // $payment->currency = 'IDR';
         $payment->save();
         Mail::to($payment->user)->send(new Ordered($payment));
-
-        // foreach($order->suborders as $suborder) {
-        //     $transaction = new Transaction();
-        //     $transaction->payment()->associate($payment);
-        //     $transaction->order()->associate($order);
-        //     $transaction->product()->associate($suborder->product);
-        //     $transaction->itemname = $suborder->product->title;
-        //     $transaction->quantity = $suborder->product->qty;
-        //     $transaction->price = $suborder->product->price;
-        //     $transaction->save();
-        // }
 
         return redirect()->route('dashboard.payment', $payment);
     }
 
     public function shipping(Request $request, Payment $payment)
     {
-        // return response()->json($request->all());
+        $config = Config::first();
         if($request->origin == null || $request->destination == null) {
             return false;
         }
-        $couriers = ['pos','jne','tiki'];
+        $couriers = [];
+        if($config->pos) {
+            $couriers[] = 'pos';
+        }
+        if($config->jne) {
+            $couriers[] = 'jne';
+        }
+        if($config->tiki) {
+            $couriers[] = 'tiki';
+        }
+        // default couriers jne
+        if(!$config->pos && !$config->jne && !$config->tiki) {
+            $couriers[] = 'jne';
+        }
         foreach($couriers as $courier) {
             $response = Http::withHeaders([
                 'content-type' => 'application/x-www-form-urlencoded',
@@ -122,7 +121,7 @@ class CheckoutController extends Controller
                     'weight' => $request->weight > 0 ? $request->weight : 1,
                     'courier' => $courier,
                 ]);
-                // return response()->json(['results' => json_decode($response->body())->rajaongkir]);
+            // return response()->json(json_decode($response->body()));
             $results[] = json_decode($response->body())->rajaongkir->results;
         }
         $result = $results[0];
@@ -136,6 +135,8 @@ class CheckoutController extends Controller
         $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
 
         $payment->shipping_cost = $cost;
+        $payment->shipping_vendor = $courier_code;
+        $payment->shipping_service = $service;
         $payment->save();
 
         $shipping = [
@@ -147,7 +148,8 @@ class CheckoutController extends Controller
             'description' => $description,
             'cost' => $cost,
             'etd' => $etd,
-            'total' => $payment->grand_total
+            'total' => $payment->grand_total,
+            'insurance' => $payment->insurance
         ];
         
         // dd($results);
@@ -180,6 +182,8 @@ class CheckoutController extends Controller
         // $destination_details = $cart['summary']['shipping']['destination_details'];
         // $cart['summary'] = $this->summary($cart, $request->cost);
         $payment->shipping_cost = $request->cost;
+        $payment->shipping_vendor = $request->code;
+        $payment->shipping_service = $request->service;
         $payment->save();
 
         $shipping = [
@@ -191,7 +195,8 @@ class CheckoutController extends Controller
             'description' => $request->description,
             'cost' => $request->cost,
             'etd' => $request->etd,
-            'total' => $payment->grand_total
+            'total' => $payment->grand_total,
+            'insurance' => $payment->insurance
         ];
         // session()->put('cart', $cart);
 

@@ -8,6 +8,7 @@ use App\Category;
 use App\Marquee;
 use App\Popup;
 use App\User;
+use App\Ip;
 use App\Helpers\Functions;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -46,7 +47,26 @@ class AppServiceProvider extends ServiceProvider
 
         $modal_type = rand(0,7);
         $modal_type = 0;
+        $ip = Functions::getIp('203.78.117.178');
         $popup = Popup::where('is_active', true)->first();
+        $popup_check = false;
+        if($ip != null && $popup != null) {
+            if($popup->valid == 1) {
+                if(strtolower($popup->filter) == strtolower($ip->city)) {
+                    $popup_check = true;
+                }
+            }
+            elseif($popup->valid == 2) {
+                if(strtolower($popup->filter) == strtolower($ip->regionname)) {
+                    $popup_check = true;
+                }
+            }
+            if($popup->valid == 3) {
+                if(strtolower($popup->filter) == strtolower($ip->country)) {
+                    $popup_check = true;
+                }
+            }
+        }
         $loader = 2;
         $menus = Functions::menu();
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
@@ -59,6 +79,7 @@ class AppServiceProvider extends ServiceProvider
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,
+            'popup_check' => $popup_check,
             'loader' => $loader,
             'menus' => $menus,
             'config' => $config,
