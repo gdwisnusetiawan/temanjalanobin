@@ -111,3 +111,6 @@ Route::prefix('shipment')->name('shipment.')->group(function () {
 
 Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');
+
+
+URL::forceScheme('https');
