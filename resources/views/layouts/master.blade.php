@@ -60,9 +60,11 @@
 
     </div>
     <!-- Whatsapp float -->
+    @if($config->wa)
     <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? (isset($config) ? $config->wa : '') }}?text={{ $config->wa_text }}" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
+    @endif
     <!-- Scroll top -->
     <a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>
     <!--Plugins-->
