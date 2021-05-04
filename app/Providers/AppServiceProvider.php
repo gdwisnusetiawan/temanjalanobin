@@ -35,9 +35,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // if(env('REDIRECT_HTTPS') === true) {
-        //     \URL::forceScheme('http');
-        // }
+        if(env('REDIRECT_HTTPS') === true) {
+            \URL::forceScheme('http');
+        }
 
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
