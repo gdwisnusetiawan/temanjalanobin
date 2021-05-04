@@ -96,7 +96,7 @@ class CheckoutController extends Controller
                 $variant_string .= $group .' : '. ucfirst($variant). ',';
             }
             $variant_string = rtrim($variant_string, ',');
-            $transaction->variants = $variant_string;
+            // $transaction->variants = $variant_string;
             $transaction->save();
         }
         

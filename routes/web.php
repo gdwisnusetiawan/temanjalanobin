@@ -121,4 +121,4 @@ Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');
 
 
-URL::forceScheme('https');
+// URL::forceScheme('https');
