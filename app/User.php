@@ -79,7 +79,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAddressLineAttribute()
     {
-        return $this->address .', '. ucwords($this->city_name) .', '. ucwords($this->province_name) .', '. $this->postcode;
+        if($this->national()) {
+            return $this->address .', '. ucwords($this->city_name) .', '. ucwords($this->province_name) .', '. $this->postcode;
+        }
+        else {
+            return $this->address .', '. ucwords($this->country_name);
+        }
     }
 
     public function pricing($product_id)
@@ -123,5 +128,24 @@ class User extends Authenticatable implements MustVerifyEmail
             $city = $result->city_name;
         }
         return $city;
+    }
+
+    public function getCountryNameAttribute()
+    {
+        $response = Http::withHeaders([
+            'content-type' => 'application/x-www-form-urlencoded',
+            'key' => 'a668420368d4731d3ca94321058bcea2'
+            ])->get('https://pro.rajaongkir.com/api/v2/internationalDestination?id='.$this->country);
+        $result = json_decode($response->body())->rajaongkir->results;
+        $country = '';
+        if(!is_array($result)) {
+            $country = $result->country_name;
+        }
+        return $country;
+    }
+
+    public function national()
+    {
+        return !Config::first()->poslnr || ($this->country == null || $this->country == 0);
     }
 }

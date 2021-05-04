@@ -3,8 +3,11 @@
 namespace App\Helpers;
 
 use App\Menu;
+use App\Currency;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class Functions
 {
@@ -139,7 +142,8 @@ class Functions
 
     public static function formatCurrency($price, $currency = 'Rp')
     {
-        return $currency.number_format($price,2,',','.');
+        // return $currency.number_format($price,2,',','.');
+        return Self::currencyConvert($price);
     }
 
     public static function shareLink($url, $text = '')
@@ -154,5 +158,33 @@ class Functions
             'linkedin' => $linkedin,
             'whatsapp' => $whatsapp
         ];
+    }
+
+    public static function currencyConvert($value, $origin = null, $formated = true) {
+        $result = '';
+        $request = new Request();
+        if($origin != null) {
+            $origin_currency = Currency::whereRaw("LOWER(symbol) like '%".strtolower($origin)."%'")->first();
+            $rate = $origin_currency->rate;
+            $value = $value/$rate;
+        }
+        $currency = Currency::find(Cookie::get('currency'));
+        $currency = $currency == null ? Currency::first() : $currency;
+        $rate = $currency->rate;
+        if($rate != ''){
+            $symbol = $currency->symbol;
+            $decimaldigit = $currency->decimaldigit;
+            $convert = $value*$rate;
+            if($origin != null && strtolower($origin) == strtolower($symbol)) {
+                $convert = $value*$origin_currency->rate;
+            }
+            if($formated) {
+                $result = $symbol.' '.number_format($convert,$decimaldigit == '' ? 0 : $decimaldigit);
+            }
+            else {
+                $result = $convert;
+            }
+        }
+        return $result;
     }
 }

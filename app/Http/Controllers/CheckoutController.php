@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Config;
 use App\Order;
 use App\Suborder;
 use App\Payment;
 use App\Transaction;
 use App\Merchant;
+use App\Currency;
 use App\Mail\Ordered;
 use Carbon\Carbon;
+use App\Helpers\Functions;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -21,6 +24,25 @@ class CheckoutController extends Controller
         $merchants = Merchant::all();
         if($payment->paymentProofs->count() > 0) {
             return redirect()->route('dashboard.payment', $payment);
+        }
+        
+        foreach($merchants as $item){
+            if($item->name == "Paypal"){
+                $path = base_path('.env');
+                $value="https://www.paypal.com/sdk/js?client-id=".$item->merchantid."&disable-funding=credit,card";
+                if(env("PAYPAL_CLIENT")===null){
+                    $old = 'null';
+                }
+                else{
+                    $old = env("PAYPAL_CLIENT");
+                }
+                if (file_exists($path)) {
+                    file_put_contents($path, str_replace(
+                        "PAYPAL_CLIENT=".$old, "PAYPAL_CLIENT=".$value, file_get_contents($path)
+                    ));
+                }
+                break;
+            }
         }
         // $shippings = $this->shipping(444, $payment->city, $payment->weight);
         $shippings = [];
@@ -56,6 +78,7 @@ class CheckoutController extends Controller
         $payment->province = auth()->user()->province;
         $payment->city = auth()->user()->city;
         $payment->postcode = auth()->user()->postcode;
+        $payment->country = auth()->user()->country;
         $payment->save();
 
         foreach($cart['list'] as $cart)
@@ -111,17 +134,45 @@ class CheckoutController extends Controller
         if($request->origin == null || $request->destination == null) {
             return false;
         }
-        $couriers = ['pos','jne','tiki'];
+        $config = Config::first();
+        $couriers = [];
+        if($config->pos) {
+            $couriers[] = 'pos';
+        }
+        if($config->jne) {
+            $couriers[] = 'jne';
+        }
+        if($config->tiki) {
+            $couriers[] = 'tiki';
+        }
+        if(!$payment->national()) {
+            $couriers = ['pos', 'slis', 'expedito'];
+        }
         foreach($couriers as $courier) {
-            $response = Http::withHeaders([
-                'content-type' => 'application/x-www-form-urlencoded',
-                'key' => env('RAJAONGKIR_API_KEY')
-                ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
+            if($payment->national()) {
+                $url = env('RAJAONGKIR_API_URL').'/cost';
+                $data = [
+                    'origin' => $request->origin,
+                    'originType' => 'city',
+                    'destination' => $request->destination,
+                    'destinationType' => 'city',
+                    'weight' => $request->weight > 0 ? $request->weight : 1,
+                    'courier' => $courier,
+                ];
+            }
+            else {
+                $url = env('RAJAONGKIR_API_URL_V2').'/internationalCost';
+                $data = [
                     'origin' => $request->origin,
                     'destination' => $request->destination,
                     'weight' => $request->weight > 0 ? $request->weight : 1,
                     'courier' => $courier,
-                ]);
+                ];
+            }
+            $response = Http::withHeaders([
+                'content-type' => 'application/x-www-form-urlencoded',
+                'key' => env('RAJAONGKIR_API_KEY')
+                ])->asForm()->post($url, $data);
                 // return response()->json(['results' => json_decode($response->body())->rajaongkir]);
             $results[] = json_decode($response->body())->rajaongkir->results;
         }
@@ -130,12 +181,20 @@ class CheckoutController extends Controller
         $destination_details = json_decode($response->body())->rajaongkir->destination_details;
         $courier_code = $result[0]->code ?? '';
         $courier_name = $result[0]->name ?? '';
-        $service = $result[0]->costs[0]->service ?? '';
-        $description = $result[0]->costs[0]->description ?? '';
-        $cost = $result[0]->costs[0]->cost[0]->value ?? 0;
-        $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
+        if($payment->national()) {
+            $service = $result[0]->costs[0]->service ?? '';
+            $description = $result[0]->costs[0]->description ?? '';
+            $cost = $result[0]->costs[0]->cost[0]->value ?? 0;
+            $etd = $result[0]->costs[0]->cost[0]->etd ?? 0;
+        }
+        else {
+            $service = $result[0]->costs[0]->service ?? '';
+            $description = '';
+            $cost = $result[0]->costs[0]->cost ?? 0;
+            $etd = $result[0]->costs[0]->etd ?? 0;
+        }
 
-        $payment->shipping_cost = $cost;
+        $payment->shipping_cost = round($cost/Currency::whereRaw("LOWER(symbol) like '%rp%'")->first()->rate);
         $payment->save();
 
         $shipping = [
@@ -145,9 +204,10 @@ class CheckoutController extends Controller
             'courier_name' => $courier_name,
             'service' => $service,
             'description' => $description,
-            'cost' => $cost,
+            'cost' => Functions::currencyConvert($cost, 'Rp'),
             'etd' => $etd,
-            'total' => $payment->grand_total
+            'total' => $payment->total_format,
+            'grand_total' => $payment->grand_total,
         ];
         
         // dd($results);
@@ -179,7 +239,7 @@ class CheckoutController extends Controller
         // $origin_details = $cart['summary']['shipping']['origin_details'];
         // $destination_details = $cart['summary']['shipping']['destination_details'];
         // $cart['summary'] = $this->summary($cart, $request->cost);
-        $payment->shipping_cost = $request->cost;
+        $payment->shipping_cost = round($request->cost/Currency::whereRaw("LOWER(symbol) like '%rp%'")->first()->rate);
         $payment->save();
 
         $shipping = [
@@ -189,9 +249,10 @@ class CheckoutController extends Controller
             'courier_name' => $request->name,
             'service' => $request->service,
             'description' => $request->description,
-            'cost' => $request->cost,
+            'cost' => Functions::currencyConvert($request->cost, 'Rp'),
             'etd' => $request->etd,
-            'total' => $payment->grand_total
+            'total' => $payment->total_format,
+            'grand_total' => $payment->grand_total,
         ];
         // session()->put('cart', $cart);
 

@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Page title -->
-<section id="page-title">
+<section id="page-title" data-bg-parallax="{{ asset('img/image-9.jpg') }}">
     <div class="container">
         <div class="page-title">
             <h1>Checkout</h1>
@@ -20,6 +20,7 @@
     </div>
 </section>
 <!-- end: Page title -->
+
 @if($payment->status == 1)
 <!-- SHOP CHECKOUT -->
 <section id="shop-checkout">
@@ -74,7 +75,7 @@
                                 </tbody>
                             </table>
                         </div>
-
+                        @if(!$config->shipmentDisabled())
                         <div class="d-flex align-items-center mb-3">
                             <h4 class="m-0">Choose Shipping</h4>
                             <div class="spinner-border spinner-border-sm ml-1" id="shipping-spinner" role="status" aria-hidden="true" style="display: none"></div>
@@ -89,7 +90,7 @@
                                             @foreach($result->costs as $costs)
                                                 @foreach($costs->cost as $cost)
                                                 <li class="list-group-item list-group-item-action" id="{{ $result->code.$count }}" 
-                                                onclick="changeShipping('{{ $result->code.$count }}', '{{ $result->code }}', '{{ $result->name }}', '{{ $costs->service }}', '{{ $costs->description }}', '{{ $cost->value }}', '{{ $cost->etd }}')">
+                                                    onclick="changeShipping('{{ $result->code.$count }}', '{{ $result->code }}', '{{ $result->name }}', '{{ $costs->service }}', '{{ $costs->description }}', '{{ $cost->value }}', '{{ $cost->etd }}')">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <h5 class="mb-1">{{ strtoupper($result->code) }}</h5>
@@ -112,6 +113,7 @@
                                 </ul>
                             </div>
                         </div>
+                        @endif
                         <!-- <form method="POST" action="{{ route('cart.shipping') }}" class="row" id="form-shipping">
                             @csrf
                             <div class="col-lg-6 m-b-20">
@@ -182,6 +184,7 @@
                                                     <span class="amount">{{ $payment->subtotal_format }}</span>
                                                 </td>
                                             </tr>
+                                            @if(!$config->shipmentDisabled())
                                             <tr>
                                                 <td class="cart-product-name">
                                                     <strong>Shipping</strong>
@@ -190,6 +193,7 @@
                                                     <span class="amount" id="shipping">{{ $payment->shipping_cost > 0 ? $payment->shipping_cost_format : '-' }}</span>
                                                 </td>
                                             </tr>
+                                            @endif
                                             <!-- <tr>
                                                 <td class="cart-product-name">
                                                     <strong>Coupon</strong>
@@ -214,6 +218,12 @@
                                                     <span class="amount color lead" id="total"><strong>{{ $payment->total_format }}</strong></span>
                                                 </td>
                                             </tr>
+                                            <tr style="display: none">
+                                                <td class="cart-product-name">
+                                                    <strong>Grand Total</strong>
+                                                    <input type="hidden" id="grand-total" />
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -225,7 +235,7 @@
                             <div class="col-lg-12">
                                 <div class="list-group">
                                     @foreach($chunks as $merchant)
-                                    <input type="radio" name="payment_merchant" value="{{ $merchant->merchantid }}" id="merchant-{{ $merchant->merchantid }}" onchange="changePayment('{{ $merchant->merchantid }}')" form="form-checkout"/>
+                                    <input type="radio" name="payment_merchant" value="{{ $merchant->id }}" id="merchant-{{ $merchant->merchantid }}" onchange="changePayment('{{ $merchant->merchantid }}')" form="form-checkout"/>
                                     <label class="list-group-item d-flex justify-content-between" for="merchant-{{ $merchant->merchantid }}">
                                         <span id="merchant-name-{{ $merchant->merchantid }}">{{ $merchant->name }}</span>
                                         @if($merchant->logo_url)
@@ -237,13 +247,14 @@
                             </div>
                             @endforeach
                             <div class="col-lg-12">
-                                <form method="POST" action="{{ route('checkout.update', $payment) }}" id="form-checkout" class="text-right">
+                                <form method="POST" action="{{ route('checkout.update', $payment) }}" id="form-checkout">
                                     @csrf
                                     @method('PUT')
                                     <!-- <a href="{{ route('checkout.update', $payment) }}" class="btn icon-left float-right mt-3"><span>Proceed to PayPal</span></a> -->
                                     <p class="text-muted" style="display: none">Choose your shipment and payment method before checkout.</p>
-                                    <button type="submit" class="btn icon-left" id="button-checkout" disabled><span>Choose Payment Method</span></button>
+                                    <button type="submit" class="btn btn-block icon-left" id="button-checkout" disabled><span>Choose Payment Method</span></button>
                                 </form>
+                                <div id="btnPayment"></div>
                             </div>
                         </div>
                     </div>
@@ -298,11 +309,42 @@
                         <form method="POST" action="{{ route('dashboard.changeAddress', $payment) }}" id="form-change-address" onsubmit="onSubmitButton('#button-change-address')">
                             @csrf
                             @method('PUT')
+                            @if($config->poslnr)
                             <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" name="region" id="national" value="national" type="radio" onclick="changeRegion(this)" {{ $payment->national() ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="national">
+                                            National
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" name="region" id="international" value="international" type="radio" onclick="changeRegion(this)" {{ !$payment->national() ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="international">
+                                            International
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            <div class="form-row form-international" style="{{ $payment->national() ? 'display: none' : '' }}">
+                                <div class="form-group col-md-6">
+                                    <label for="country">Country</label>
+                                    <div class="input-group">
+                                        <select name="country" class="form-control select2" required>
+                                            <option selected disabled>Select country</option>
+                                        </select>
+                                        <div class="spinner-loader-inside" id="spinner-country" style="display: none">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-national" style="{{ !$payment->national() ? 'display: none' : '' }}">
                                 <div class="form-group col-md-6">
                                     <label for="province">Province</label>
                                     <div class="input-group">
-                                        <select name="province" class="form-control" required onchange="cities(this)">
+                                        <select name="province" class="form-control select2" required onchange="cities(this)">
                                             <option selected disabled>Select province</option>
                                             <!-- <option value="jawa timur" {{ $user->province == 'jawa timur' ? 'selected' : '' }}>Jawa Timur</option> -->
                                         </select>
@@ -314,7 +356,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="city">City</label>
                                     <div class="input-group">
-                                        <select name="city" class="form-control" required>
+                                        <select name="city" class="form-control select2" required onchange="postalCode(this); subdistricts(this)">
                                             <option selected disabled>Select city</option>
                                             <!-- <option value="surabaya" {{ $user->city == 'surabaya' ? 'selected' : '' }}>Surabaya</option> -->
                                         </select>
@@ -324,14 +366,32 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="address">Address</label>
-                                    <input type="text" class="form-control" name="address" value="{{ $payment->address }}" placeholder="Enter your Street Address" required>
-                                </div>
+                            <div class="form-row form-national" style="{{ !$payment->national() ? 'display: none' : '' }}">
+                                <!-- <div class="form-group col-md-6">
+                                    <label for="subdistrict">Subdistrict</label>
+                                    <div class="input-group">
+                                        <select name="subdistrict" class="form-control select2" required>
+                                            <option selected disabled>Select subdistrict</option>
+                                        </select>
+                                        <div class="spinner-loader-inside" id="spinner-subdistrict" style="display: none">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div> -->
                                 <div class="form-group col-md-6">
                                     <label>Post Code:</label>
-                                    <input type="number" class="form-control" name="postcode" value="{{ $payment->postcode }}" placeholder="Enter Post Code" required>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="postcode" value="{{ $payment->postcode }}" placeholder="Enter Post Code" disabled required>
+                                        <div class="spinner-loader-inside" id="spinner-postcode" style="display: none">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" name="address" value="{{ $payment->address }}" placeholder="Enter your Street Address" required>
                                 </div>
                             </div>
                         </form>
@@ -356,12 +416,14 @@
 @endsection
 
 @push('scripts')
+<script src="{{ env('PAYPAL_CLIENT', '') }}"></script>
 <script>
     jQuery(document).ready(function () {
+        countries();
         provinces();
-        @if($payment->city != null)
-        $('#shipping-message').hide();
-        shippingCost();
+        @if(($payment->national() && $payment->city != null) || (!$payment->national() && $payment->country != null))
+            $('#shipping-message').hide();
+            shippingCost();
         @endif
     });
     function changePayment(id) {
@@ -369,8 +431,101 @@
         if($('#shipping').html() !== '-') {
             buttonPayment.prop('disabled', false);
         }
-        buttonPayment.find('span').html('Proceed to ' + $('#merchant-name-'+id).html());
+        if($('#merchant-name-'+id).html() == 'Paypal'){
+            $('#button-checkout').css('display','none')
+            paypal.Buttons({
+                    style : {
+                        color: 'blue',
+                        shape: 'rect',
+                    },
+                    createOrder: function (data, actions) {
+                        return actions.order.create({
+                            purchase_units : [{
+                                amount: {
+                                    value: $('#grand-total').val()
+                                }
+                            }]
+                        });
+                    },
+                    onApprove: function (data, actions) {
+                                console.log("data", data)
+                                console.log("action", actions)
+                            actions.order.capture().then(function (details) {
+                                console.log("detail", details)
+                                var formData = new FormData();
+                                formData.append('status', 3);
+                                formData.append('sender_account', details.payer.name.given_name)
+                                formData.append('transfer_amount', details.purchase_units[0].amount.value)
+                                formData.append('payment_merchant', $('[name="payment_merchant"]').val())
+                                var act = "{{ route('dashboard.changePaymentStatus', $payment->transactionno) }}"
+                                $.ajax({
+                                    type: 'POST',
+                                    url: act,
+                                    contentType: false,
+                                    processData: false,
+                                    data: formData,
+                                    success: function(data) {
+                                        if(data.notify.type == 'success'){
+                                            window.location.href = "{{ route('dashboard.payment', $payment->transactionno) }}"
+                                            // location.reload();
+                                        }
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            })
+                    },
+                    onCancel: function (data) {
+                        // window.location.replace("http://localhost:63342/tutorial/paypal/Oncancel.php")
+                        console.log("Gagal")
+                    }
+            }).render('#btnPayment');
+
+        } else {
+            $('#btnPayment').html('')
+            $('#button-checkout').css('display','block')
+            buttonPayment.find('span').html('Proceed to ' + $('#merchant-name-'+id).html());
+        }
+        
         // console.log(id, buttonPayment, buttonPayment.find('span').html(), $('#merchant-name-'+id).html());
+    }
+
+    function changeRegion(regionEl) {
+        var region = $(regionEl).val();
+        if(region == 'national') {
+            $('.form-national').show();
+            $('.form-international').hide();
+            $('select[name="country"').prop('required', false);
+            $('select[name="province"').prop('required', true);
+            $('select[name="city"').prop('required', true);
+            $('[name="postcode"').prop('required', true);
+        }
+        else {
+            $('.form-national').hide();
+            $('.form-international').show();
+            $('select[name="country"').prop('required', true);
+            $('select[name="province"').prop('required', false);
+            $('select[name="city"').prop('required', false);
+            $('[name="postcode"').prop('required', false);
+        }
+    }
+
+    function countries() {
+        $('#spinner-country').show();
+        $.getJSON(@json(route('shipment.rajaongkir.country')), function(result){
+            $.each(result, function(i, field){
+                $('select[name="country"').append(`<option value="${field.country_id}">${field.country_name}</option>`);
+            });
+            $('#spinner-country').hide();
+            
+            var country = @json($payment->country);
+            // console.log(country);
+            if(country != null) {
+                $('select[name="country"]').val(country).change();
+                // cities('select[name="country"]');
+            }
+        });
     }
 
     function provinces() {
@@ -408,11 +563,40 @@
         });
     }
 
+    function subdistricts(cityElement) {
+        city = $(cityElement).find(':selected').val();
+        $('#spinner-subdistrict').show();
+        $('select[name="subdistrict"').html(`<option selected disabled>Select subdistrict</option>`);
+        // console.log(city);
+        $.getJSON(@json(url('shipment/rajaongkir/subdistrict'))+'/'+city, function(result){
+            $.each(result, function(i, field){
+                $('select[name="subdistrict"').append(`<option value="${field.subdistrict_id}">${field.subdistrict_name}</option>`);
+            });
+            $('#spinner-subdistrict').hide();
+
+            // var subdistrict = @json($payment->city);
+            // if(subdistrict != null) {
+            //     $('select[name="subdistrict"]').val(subdistrict).change();
+            // }
+        });
+    }
+
+    function postalCode(cityEl) {
+        var cityId = $(cityEl).val();
+        $('#spinner-postcode').show();
+        $.getJSON(@json(url('shipment/rajaongkir/city'))+'/'+province+'/'+cityId, function(result){
+            // console.log(result)
+            $('input[name="postcode"]').val(result.postal_code);
+            $('#spinner-postcode').hide();
+        });
+    }
+
     function shippingCost() {
+        var national = @json($payment->national());
         // var formData = $(form).serializeArray();
         var formData = new FormData();
         formData.append('origin', @json($config->city));
-        formData.append('destination', @json($payment->city));
+        formData.append('destination', @json($payment->destination));
         formData.append('weight', @json($payment->weight));
         $('#shipping-spinner').show();
         // $('#button-shipping .btn-text').html('Loading...');
@@ -426,36 +610,65 @@
             data: formData,
             success: function(data) {
                 // console.log(data);
-                $('#shipping').html(formatCurrency(data.shipping.cost));
-                $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
+                $('#shipping').html((data.shipping.cost));
+                $('#total').html('<strong>'+(data.shipping.total)+'</strong>');
+                $('#grand-total').val(data.shipping.grand_total);
                 var html = '';
                 var count = 0;
-                data.results.forEach(function (results, i) {
-                    results.forEach(function (result, i) {
-                        result.costs.forEach(function (costs, j) {
-                            costs.cost.forEach(function (cost, k) {
-                                html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
-                                    onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <h5 class="mb-1">${result.code.toUpperCase()}</h5>
-                                                    <p class="mb-1">${result.name}</p>
+                if(national) {
+                    data.results.forEach(function (results, i) {
+                        results.forEach(function (result, i) {
+                            result.costs.forEach(function (costs, j) {
+                                costs.cost.forEach(function (cost, k) {
+                                    html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
+                                        onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.description}', '${cost.value}', '${cost.etd}')">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${result.code.toUpperCase()}</h5>
+                                                        <p class="mb-1">${result.name}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${costs.service}</h5>
+                                                        <p class="mb-1">${costs.description}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
+                                                        <p class="mb-1">${cost.etd} days</p>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <h5 class="mb-1">${costs.service}</h5>
-                                                    <p class="mb-1">${costs.description}</p>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <h5 class="mb-1">${formatCurrency(cost.value)}</h5>
-                                                    <p class="mb-1">${cost.etd} days</p>
-                                                </div>
-                                            </div>
-                                        </li>`;
-                                count++;
+                                            </li>`;
+                                    count++;
+                                });
                             });
-                        });
-                    })
-                });
+                        })
+                    });
+                }
+                else {
+                    data.results.forEach(function (results, i) {
+                        results.forEach(function (result, i) {
+                            result.costs.forEach(function (costs, j) {
+                                    html += `<li class="list-group-item list-group-item-action ${count == 0 ? 'active text-white' : ''}" id="${result.code+count}" 
+                                        onclick="changeShipping('${result.code+count}', '${result.code}', '${result.name}', '${costs.service}', '${costs.currency}', '${costs.cost}', '${costs.etd}')">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${result.code.toUpperCase()}</h5>
+                                                        <p class="mb-1">${result.name}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${costs.service}</h5>
+                                                        <p class="mb-1">${costs.currency}</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h5 class="mb-1">${formatCurrency(costs.cost)}</h5>
+                                                        <p class="mb-1">${costs.etd} days</p>
+                                                    </div>
+                                                </div>
+                                            </li>`;
+                                    count++;
+                            });
+                        })
+                    });
+                }
                 $('#shipping-list').html(html);
                 $('#shipping-spinner').hide();
                 // $('#button-shipping .btn-text').html('Calculate');
@@ -493,8 +706,9 @@
             },
             success: function(data) {
                 // console.log(data);
-                $('#shipping').html(formatCurrency(data.shipping.cost));
-                $('#total').html('<strong>'+formatCurrency(data.shipping.total)+'</strong>');
+                $('#shipping').html((data.shipping.cost));
+                $('#total').html('<strong>'+(data.shipping.total)+'</strong>');
+                $('#grand-total').val(data.shipping.grand_total);
                 $('.list-group-item.list-group-item-action').each(function () {
                     $(this).removeClass('active text-white');
                 });

@@ -10,8 +10,9 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(Request $request, User $user)
+    public function index(Request $request)
     {
+        $user = auth()->user();
         $tab = $request->tab ?? null;
         return view('dashboard.user.index', compact('user', 'tab'));
     }
@@ -34,7 +35,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
         request()->session()->flash('notify', ['message' => 'User profile updated', 'type' => 'success']);
-        return redirect()->route('dashboard.user.index', [$user, 'tab' => 'profile']);
+        return redirect()->route('dashboard.user.index', ['tab' => 'profile']);
     }
 
     public function changePassword(Request $request, User $user)
@@ -55,22 +56,31 @@ class UserController extends Controller
         }
         else {
             $error['old_password'] = 'Old password doesn\'t match';
-            return redirect('dashboard/user/'.$user->id.'?tab=password')->withErrors($error);
+            return redirect('dashboard/user/?tab=password')->withErrors($error);
         }
     }
 
     public function billing(Request $request, User $user)
     {
+        $user->address = $request->address;
         $user->province = $request->province;
         $user->city = $request->city;
-        $user->address = $request->address;
         $user->postcode = $request->postcode;
+        $user->country = $request->country;
+        if($request->region == 'national') {
+            $user->country = null;
+        }
+        if($request->region == 'international') {
+            $user->province = null;
+            $user->city = null;
+            $user->postcode = null;
+        }
         $user->bankname = $request->bank_name;
         $user->banknumber = $request->bank_number;
         $user->bankowner = $request->bank_owner;
         $user->save();
         request()->session()->flash('notify', ['message' => 'User billing information changed', 'type' => 'success']);
-        return redirect()->route('dashboard.user.index', [$user, 'tab' => 'billing']);
+        return redirect()->route('dashboard.user.index', ['tab' => 'billing']);
     }
 
     public function registration(Request $request, User $user)

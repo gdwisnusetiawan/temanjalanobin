@@ -205,7 +205,7 @@
         <div class="p-t-10 m-b-20 text-center">
             <div class="text-center">
                 <h1 class="icon text-success"> <i class="fa fa-check-circle"></i> </h1>
-                <h3>Congratulations! Your confirmation has been sent!</h3>
+                <h3>Congratulations! Your {{ $payment->status == 2 ? 'confirmation' : 'payemnt' }} has been sent!</h3>
                 <p>Your order is number #{{ $payment->transactionno }}. You can
                     <a href="{{ route('dashboard.order') }}" class="text-underline">
                         <mark>view your order</mark>

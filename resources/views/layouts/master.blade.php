@@ -26,6 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/settings.css') }}" media="screen" />
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/layers.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/navigation.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .cart-product-quantity .qty {
             max-width: 60px;
@@ -78,6 +79,8 @@
     <!--Pageloader plugin files-->
     <script src="{{ asset('polo-5/plugins/pageloader/pageloader.js') }}"></script>
     <script src="{{ asset('polo-5/plugins/pageloader/pageloader.init.js') }}"></script>
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- SLIDER REVOLUTION 5.x SCRIPTS  -->
     <script type="text/javascript" src="{{ asset('polo-5/plugins/slider-revolution/js/jquery.themepunch.tools.min.js') }}"></script>
@@ -101,9 +104,81 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        function setCookie(key, value) {
+            $.ajax({
+                method: 'POST',
+                url: @json(route('cookie.set')),
+                data: { key: key, value: value }
+            })
+            .done(function( data ) {
+                console.log(data);
+            });
+        }
+
+        async function getCookie(key) {
+            $.ajax({
+                method: 'POST',
+                url: @json(route('cookie.get')),
+                async: false,
+                data: { key: key }
+            })
+            .done(function( data ) {
+                cookies[key] = data;
+            });
+        }
+
+        async function getCurrency(id) {
+            $.ajax({
+                method: 'POST',
+                url: @json(route('currency')),
+                async: false,
+                data: { id: id }
+            })
+            .done(function( data ) {
+                currency = data;
+            });
+        }
+
+        function convertCurrency(value) {
+            $.getJSON(@json(url('currency/convert'))+'/'+value, function(result){
+                console.log(result)
+                return result;
+            });
+        }
         
         function formatCurrency(nominal, currency = 'Rp') {
-            return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
+            // return currency+nominal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")+',00';
+            var converted = 0;
+            $.ajax({
+                'async': false,
+                'type': "GET",
+                'dataType': 'json',
+                'url': @json(url('currency/convert'))+'/'+nominal,
+                'success': function (data) {
+                    converted = data;
+                }
+            });
+            return converted;
+        }
+
+        function changeCurrency(value) {
+            // var form = $('#form-change-currency');
+            // form.find('[name="value"]').val(value);
+            // form.submit();
+            setCookie('currency', value);
+            location.replace(location.href+'?reload');
+        }
+
+        function checkReload() {
+            const params = new URLSearchParams(window.location.search)
+            if(params.has('reload')) {
+                // params.delete('reload')
+                url = location.href;
+                url = url.replace('?reload', '');
+                console.log(url)
+                location.replace(url)
+            }
         }
 
         function onSubmit() {
@@ -289,7 +364,13 @@
         var tpj = jQuery;
 
         var revapi33;
+        var cookies = [];
+        var currency = null;
         tpj(document).ready(function () {
+            $('.select2').select2({
+                width: '100%'
+            });
+
             @if(session('notify'))
                 notify("{{ session('notify')['message'] }}", "{{ session('notify')['type'] }}");
             @endif
@@ -298,6 +379,15 @@
             // notify("Testing", "Warning");
             // notify("Testing", "Info");
             // loading();
+            getCookie('currency');
+            getCurrency(cookies['currency']);
+            $('#currency-symbol').html(currency.symbol);
+            if(cookies['currency'] == '') {
+                setCookie('currency', @json($currency->id));
+                console.log(cookies)
+            }
+            checkReload();
+            // console.log(currency, cookies)
             if (tpj("#rev_slider_33_1").revolution == undefined) {
                 revslider_showDoubleJqueryError("#rev_slider_33_1");
             } else {

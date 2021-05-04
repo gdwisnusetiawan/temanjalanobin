@@ -212,11 +212,42 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="h5 mb-4">Mailing Address</div>
+                                        @if($config->poslnr)
                                         <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" name="region" id="national" value="national" type="radio" {{ $user->national() ? 'checked' : '' }} onclick="changeRegion(this)">
+                                                    <label class="form-check-label" for="national">
+                                                        National
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" name="region" id="international" value="international" type="radio" {{ !$user->national() ? 'checked' : '' }} onclick="changeRegion(this)">
+                                                    <label class="form-check-label" for="international">
+                                                        International
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        <div class="form-row form-international" style="{{ $user->national() ? 'display: none' : '' }}">
+                                            <div class="form-group col-md-6">
+                                                <label for="country">Country</label>
+                                                <div class="input-group">
+                                                    <select name="country" class="form-control select2" required>
+                                                        <option selected disabled>Select country</option>
+                                                    </select>
+                                                    <div class="spinner-loader-inside" id="spinner-country" style="display: none">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row form-national" style="{{ !$user->national() ? 'display: none' : '' }}">
                                             <div class="form-group col-md-6">
                                                 <label for="province">Province</label>
                                                 <div class="input-group">
-                                                    <select name="province" class="form-control" required onchange="cities(this)">
+                                                    <select name="province" class="form-control select2" required onchange="cities(this)">
                                                         <option selected disabled>Select province</option>
                                                         <!-- <option value="jawa timur" {{ $user->province == 'jawa timur' ? 'selected' : '' }}>Jawa Timur</option> -->
                                                     </select>
@@ -228,7 +259,7 @@
                                             <div class="form-group col-md-6">
                                                 <label for="city">City</label>
                                                 <div class="input-group">
-                                                    <select name="city" class="form-control" required>
+                                                    <select name="city" class="form-control select2" required onchange="postalCode(this); subdistricts(this)">
                                                         <option selected disabled>Select city</option>
                                                         <!-- <option value="surabaya" {{ $user->city == 'surabaya' ? 'selected' : '' }}>Surabaya</option> -->
                                                     </select>
@@ -238,14 +269,32 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="address">Address</label>
-                                                <input type="text" class="form-control" name="address" value="{{ $user->address }}" placeholder="Enter your Street Address" required>
-                                            </div>
+                                        <div class="form-row form-national" style="{{ !$user->national() ? 'display: none' : '' }}">
+                                            <!-- <div class="form-group col-md-6">
+                                                <label for="subdistrict">Subdistrict</label>
+                                                <div class="input-group">
+                                                    <select name="subdistrict" class="form-control select2" required>
+                                                        <option selected disabled>Select subdistrict</option>
+                                                    </select>
+                                                    <div class="spinner-loader-inside" id="spinner-subdistrict" style="display: none">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                            </div> -->
                                             <div class="form-group col-md-6">
                                                 <label>Post Code:</label>
-                                                <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required>
+                                                    <div class="spinner-loader-inside" id="spinner-postcode" style="display: none">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="address">Address</label>
+                                                <input type="text" class="form-control" name="address" value="{{ $user->address }}" placeholder="Enter your Street Address" required>
                                             </div>
                                         </div>
                                         <!-- <div class="row my-4">
@@ -308,6 +357,7 @@
             defaultDate: '{{ $user->dateofbirth }}'
         });
 
+        countries();
         provinces();
     });
     Dropzone.autoDiscover = false;
@@ -370,6 +420,35 @@
         }
     });
 
+    function changeRegion(regionEl) {
+        var region = $(regionEl).val();
+        if(region == 'national') {
+            $('.form-national').show();
+            $('.form-international').hide();
+        }
+        else {
+            $('.form-national').hide();
+            $('.form-international').show();
+        }
+    }
+
+    function countries() {
+        $('#spinner-country').show();
+        $.getJSON(@json(route('shipment.rajaongkir.country')), function(result){
+            $.each(result, function(i, field){
+                $('select[name="country"').append(`<option value="${field.country_id}">${field.country_name}</option>`);
+            });
+            $('#spinner-country').hide();
+            
+            var country = @json($user->country);
+            // console.log(country);
+            if(country != null) {
+                $('select[name="country"]').val(country).change();
+                // cities('select[name="country"]');
+            }
+        });
+    }
+
     function provinces() {
         $('#spinner-province').show();
         $.getJSON(@json(route('shipment.rajaongkir.province')), function(result){
@@ -402,6 +481,34 @@
             if(city != null) {
                 $('select[name="city"]').val(city).change();
             }
+        });
+    }
+
+    function subdistricts(cityElement) {
+        city = $(cityElement).find(':selected').val();
+        $('#spinner-subdistrict').show();
+        $('select[name="subdistrict"').html(`<option selected disabled>Select subdistrict</option>`);
+        // console.log(city);
+        $.getJSON(@json(url('shipment/rajaongkir/subdistrict'))+'/'+city, function(result){
+            $.each(result, function(i, field){
+                $('select[name="subdistrict"').append(`<option value="${field.subdistrict_id}">${field.subdistrict_name}</option>`);
+            });
+            $('#spinner-subdistrict').hide();
+
+            // var subdistrict = @json($user->city);
+            // if(subdistrict != null) {
+            //     $('select[name="subdistrict"]').val(subdistrict).change();
+            // }
+        });
+    }
+
+    function postalCode(cityEl) {
+        var cityId = $(cityEl).val();
+        $('#spinner-postcode').show();
+        $.getJSON(@json(url('shipment/rajaongkir/city'))+'/'+province+'/'+cityId, function(result){
+            // console.log(result)
+            $('input[name="postcode"]').val(result.postal_code);
+            $('#spinner-postcode').hide();
         });
     }
 </script>

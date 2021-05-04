@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Config;
+use App\Currency;
 use App\Footer;
 use App\Category;
 use App\Marquee;
@@ -10,6 +11,8 @@ use App\Popup;
 use App\User;
 use App\Helpers\Functions;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,9 +34,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(env('REDIRECT_HTTPS') === true) {
-            \URL::forceScheme('https');
-        }
+        // if(env('REDIRECT_HTTPS') === true) {
+        //     \URL::forceScheme('http');
+        // }
 
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
@@ -44,6 +47,14 @@ class AppServiceProvider extends ServiceProvider
             abort(503);
         }
 
+        $request = new Request();
+        $currency = Currency::where('name', $request->cookie('currency'))->first();
+        if($currency == null) {
+            $currency = Currency::first();
+        //     $response = new Response('Hello World');
+        //     $response->withCookie(cookie()->forever('currency', $currency->name));
+        }
+
         $modal_type = rand(0,7);
         $modal_type = 0;
         $popup = Popup::where('is_active', true)->first();
@@ -51,10 +62,10 @@ class AppServiceProvider extends ServiceProvider
         $menus = Functions::menu();
         // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
         $footer = Footer::orderBy('id', 'desc')->first();
-        // dd($footer->contents);
         $marquee = Marquee::where('is_active', true)->first();
         $categories = Category::all();
         $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
+        $currencies = Currency::all();
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         view()->share([
             'modal_type' => $modal_type,
@@ -64,7 +75,9 @@ class AppServiceProvider extends ServiceProvider
             'config' => $config,
             'footer' => $footer,
             'marquee' => $marquee,
-            'categories' => $categories
+            'categories' => $categories,
+            'currencies' => $currencies,
+            'currency' => $currency
         ]);
     }
 }

@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Slider;
 use App\Product;
 use App\User;
+use App\Currency;
+use App\Helpers\Functions;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller
 {
@@ -24,8 +28,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        // Cookie::queue(Cookie::forget('currency'));
+        // dd(Cookie::get('currency'));
         $customers = User::all();
         foreach($customers as $customer) {
             if($customer->email_verified_at == null && $customer->status) {
@@ -75,5 +81,32 @@ class HomeController extends Controller
     public function distributor()
     {
         return view('distributor');
+    }
+
+    public function currency(Request $request)
+    {
+        $currency = Currency::find($request->id);
+        $currency = $currency == null ? Currency::first() : $currency;
+        return response()->json($currency);
+    }
+
+    public function convertCurrency(Request $request)
+    {
+        $converted = Functions::currencyConvert($request->value, $request->origin ?? 'Rp');
+        return response()->json($converted);
+    }
+
+    public function setCookie(Request $request){
+        // Cookie::queue(Cookie::forget($request->key));
+        // return (Cookie::get('currency'));
+        $response = new Response('Hello World');
+        $response->withCookie(cookie()->forever($request->key, $request->value));
+        // return $request->cookie($request->key);
+        return $response;
+    }
+
+    public function getCookie(Request $request){
+        $value = $request->cookie($request->key);
+        return $value;
     }
 }

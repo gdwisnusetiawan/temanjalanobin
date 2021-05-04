@@ -1,8 +1,8 @@
 APP_NAME="Favor Apparel"
 APP_ENV=local
-APP_KEY=
-APP_DEBUG=false
-APP_URL=https://favorapparel.id/
+APP_KEY=base64:CggmvM5L1Y43d3u3MmIX4fRokUC6ejfO7lznZnbPQOY=
+APP_DEBUG=true
+APP_URL=http://favorapparel.id/
 APP_STORAGE_URL=http://acp.favorapparel.id/
 REDIRECT_HTTPS=false
 # ASSET_URL="${APP_URL}"
@@ -76,7 +76,8 @@ FACEBOOK_CLIENT_SECRET=abafc66b3cf3eb292ab150524393b1fe
 
 # SHIPMENT
 
-RAJAONGKIR_API_URL=https://pro.rajaongkir.com/api/province
+RAJAONGKIR_API_URL=https://pro.rajaongkir.com/api/
+RAJAONGKIR_API_URL_V2=https://pro.rajaongkir.com/api/v2/
 RAJAONGKIR_API_KEY=a668420368d4731d3ca94321058bcea2
 
 JNT_ORDER_URL=http://test-jk.jet.co.id/jandt_ecommerce/api/onlineOrder.action
@@ -90,3 +91,5 @@ JNT_TRACK_PASSWORD=500b54a0cc9f57445514
 NCS_URL=https://sandbox-api.ptncs.com/bot/checkprice
 NCS_USERNAME=tutoyademo
 NCS_PASSWORD=tutoya
+
+PAYPAL_CLIENT=https://www.paypal.com/sdk/js?client-id=AVeHtG39fYnGYhQZds_oCDom11GjbetD12V1M_I9wVQAQK7zQWE4qIMECeiof5ZTDURZIJiyCldnch3U&disable-funding=credit,card

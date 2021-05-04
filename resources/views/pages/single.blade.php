@@ -13,7 +13,7 @@
     <div class="bg-overlay"></div>
     <div class="container">
         <div class="page-title">
-            <span class="post-meta-category"><a href="">Tutoya</a></span>
+            <!-- <span class="post-meta-category"><a href="">Tutoya</a></span> -->
             <h1>{{ $page->title }}</h1>
             <div class="small m-b-20">{{ $page->datetime_format }} | <a href="#">by admin</a></div>
             <div class="align-center">
