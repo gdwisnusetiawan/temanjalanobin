@@ -4,10 +4,12 @@ namespace App\Helpers;
 
 use App\Menu;
 use App\Currency;
+use App\Ip;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class Functions
 {
@@ -25,9 +27,9 @@ class Functions
         return $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
     }
 
-    public static function datetimeFormat($datetime)
+    public static function datetimeFormat($datetime, $format = 'F jS, Y')
     {
-        return Carbon::parse($datetime)->format('F jS, Y');
+        return Carbon::parse($datetime)->format($format);
     }
 
     public static function datetimeDiff($datetime)
@@ -160,7 +162,8 @@ class Functions
         ];
     }
 
-    public static function currencyConvert($value, $origin = null, $formated = true) {
+    public static function currencyConvert($value, $origin = null, $formated = true)
+    {
         $result = '';
         $request = new Request();
         if($origin != null) {
@@ -186,5 +189,54 @@ class Functions
             }
         }
         return $result;
+    }
+    
+    public static function ipApi($ip)
+    {
+        $url = "http://ip-api.com/json/$ip";
+        $response = Http::get($url, [
+            'fields' => 'status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,offset,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query',
+        ]);
+        return json_decode($response->body());
+    }
+
+    public static function getIp($ip)
+    {
+        $ip_model = Ip::where('ip', '203.78.117.158')->orderBy('date_time', 'desc')->first();
+        if($ip_model == null) {
+            $ip_response = self::ipApi($ip);
+            $ip_new = new Ip();
+            $ip_new->ip = $ip_response->query;
+            $ip_new->status = $ip_response->status;
+            $ip_new->continent = $ip_response->continent;
+            $ip_new->continentcode = $ip_response->continentCode;
+            $ip_new->country = $ip_response->country;
+            $ip_new->countrycode = $ip_response->countryCode;
+            $ip_new->region = $ip_response->region;
+            $ip_new->regionname = $ip_response->regionName;
+            $ip_new->city = $ip_response->city;
+            $ip_new->district = $ip_response->district;
+            $ip_new->zip = $ip_response->zip;
+            $ip_new->lat = $ip_response->lat;
+            $ip_new->lon = $ip_response->status;
+            $ip_new->timezone = $ip_response->timezone;
+            $ip_new->timezoneoffset = $ip_response->offset;
+            $ip_new->currency = $ip_response->currency;
+            $ip_new->isp = $ip_response->isp;
+            $ip_new->org = $ip_response->org;
+            $ip_new->asnumber = $ip_response->as;
+            $ip_new->asname = $ip_response->asname;
+            $ip_new->reverse = $ip_response->reverse;
+            $ip_new->mobile = $ip_response->mobile;
+            $ip_new->proxy = $ip_response->proxy;
+            $ip_new->hosting = $ip_response->hosting;
+            $ip_new->token = md5(uniqid(rand(), true));
+            $ip_new->date_time = gmdate("Y-m-d\TH:i:s\Z");
+            $ip_new->is_processed = false;
+            $ip_new->save();
+            $ip_model = $ip_new;
+        }
+        return $ip_model;
+        // dd($ip_response);
     }
 }

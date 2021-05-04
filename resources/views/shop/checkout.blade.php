@@ -67,6 +67,9 @@
                                         <td class="cart-product-description">
                                             <p>{!! $transaction->product->description !!}</p>
                                         </td>
+                                        <td class="cart-product-description">
+                                            <p><p>{{ $transaction->variants }}</p></p>
+                                        </td>
                                         <td class="cart-product-subtotal">
                                             <span class="amount">{{ $transaction->price_format }}</span>
                                         </td>
@@ -194,14 +197,34 @@
                                                 </td>
                                             </tr>
                                             @endif
-                                            <!-- <tr>
+                                            @if($config->insurance > 0)
+                                            <tr>
                                                 <td class="cart-product-name">
-                                                    <strong>Coupon</strong>
+                                                    <strong>Shipping Insurance ({{ $config->insurance }}%)</strong>
                                                 </td>
                                                 <td class="cart-product-name text-right">
-                                                    <span class="amount">-{{ $payment->coupon }}%</span>
+                                                    <span class="amount" id="insurance">{{ $payment->insurance > 0 ? $payment->insurance_format : '-' }}</span>
                                                 </td>
-                                            </tr> -->
+                                            </tr>
+                                            @endif
+                                            @if($config->tax > 0)
+                                            <tr>
+                                                <td class="cart-product-name">
+                                                    <strong>Tax ({{ $config->tax }}%)</strong>
+                                                </td>
+                                                <td class="cart-product-name text-right">
+                                                    <span class="amount">{{ $payment->tax > 0 ? $payment->tax_format : '-' }}</span>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                            <tr id="admin_fee_row" style="{{ $payment->is_credit ? 'display: block' : 'display: none' }}">
+                                                <td class="cart-product-name">
+                                                    <strong>Admin Fees ({{ $payment->admin_fee_percent }}%)</strong>
+                                                </td>
+                                                <td class="cart-product-name text-right">
+                                                    <span class="amount" id="admin_fee">{{ $payment->admin_fee > 0 ? $payment->admin_fee_format : '-' }}</span>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td class="cart-product-name">
                                                     <strong>Discount</strong>
@@ -486,9 +509,22 @@
             $('#btnPayment').html('')
             $('#button-checkout').css('display','block')
             buttonPayment.find('span').html('Proceed to ' + $('#merchant-name-'+id).html());
+            var merchantName = $('#merchant-name-'+id).html().toLowerCase();
+            var adminFee = @json($payment->admin_fee);
+            var grandTotal = @json($payment->grand_total);
+            if(merchantName.includes('credit') || merchantName.includes('kredit')) {
+                // $('#admin_fee').html(formatCurrency(admin_fee));
+                $('#admin_fee_row').show();
+                finalTotal = parseFloat((grandTotal + adminFee).toFixed(2));
+                // console.log(grandTotal, adminFee, finalTotal);
+                $('#total').html('<strong>'+formatCurrency(finalTotal)+'</strong>');
+            }
+            else {
+                $('#admin_fee_row').hide();
+                $('#total').html('<strong>'+formatCurrency(grandTotal)+'</strong>');
+            }
+            // console.log(id, buttonPayment, buttonPayment.find('span').html(), $('#merchant-name-'+id).html());
         }
-        
-        // console.log(id, buttonPayment, buttonPayment.find('span').html(), $('#merchant-name-'+id).html());
     }
 
     function changeRegion(regionEl) {
@@ -611,6 +647,7 @@
             success: function(data) {
                 // console.log(data);
                 $('#shipping').html((data.shipping.cost));
+                $('#insurance').html(formatCurrency(data.shipping.insurance));
                 $('#total').html('<strong>'+(data.shipping.total)+'</strong>');
                 $('#grand-total').val(data.shipping.grand_total);
                 var html = '';
@@ -707,6 +744,7 @@
             success: function(data) {
                 // console.log(data);
                 $('#shipping').html((data.shipping.cost));
+                $('#insurance').html(formatCurrency(data.shipping.insurance));
                 $('#total').html('<strong>'+(data.shipping.total)+'</strong>');
                 $('#grand-total').val(data.shipping.grand_total);
                 $('.list-group-item.list-group-item-action').each(function () {

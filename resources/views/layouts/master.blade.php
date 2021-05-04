@@ -235,7 +235,7 @@
                 $(".body-inner").fadeIn("slow");
                 $("body").find(".animsition-loading").fadeOut("slow");
 
-            }, 3000);
+            }, 1000);
         }
 
         // Bootstrap Notify Generator

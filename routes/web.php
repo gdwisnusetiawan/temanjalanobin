@@ -119,3 +119,6 @@ Route::post('cookie/set', 'HomeController@setCookie')->name('cookie.set');
 
 Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');
+
+
+URL::forceScheme('https');

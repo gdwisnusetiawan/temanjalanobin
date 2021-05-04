@@ -30,17 +30,16 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // Cookie::queue(Cookie::forget('currency'));
-        // dd(Cookie::get('currency'));
-        $customers = User::all();
-        foreach($customers as $customer) {
-            if($customer->email_verified_at == null && $customer->status) {
-                $customer->email_verified_at = date('Y-m-d H:i:s');
-                $customer->save();
-            }
-        }
+        // $customers = User::all();
+        // foreach($customers as $customer) {
+        //     if($customer->email_verified_at == null && $customer->status) {
+        //         $customer->email_verified_at = date('Y-m-d H:i:s');
+        //         $customer->save();
+        //     }
+        // }
         // http error
         // abort(404);
+
         $sliders = Slider::all();
         $products = Product::where('special', true)->get();
         $top_rateds = Product::inRandomOrder()->limit(3)->get();

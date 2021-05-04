@@ -3,14 +3,26 @@
 namespace App;
 
 use App\Helpers\Functions;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Payment extends Model
 {
     protected $table = 'payment';
     public $timestamps = false;
     protected $connection = 'paymentgateway';
+
+    protected function getConfigAttribute()
+    {
+        return Config::first();
+    }
+
+    // public $insurance_percent = 2;
+    // public $tax_percent = 10;
+    // public $admin_fee_percent = 3;
 
     public function getRouteKeyName()
     {
@@ -49,7 +61,7 @@ class Payment extends Model
 
     public function getExpireFormatAttribute()
     {
-        return Functions::datetimeFormat($this->transactionexpire);
+        return Functions::datetimeFormat($this->transactionexpire, 'F jS, Y H:i:s');
     }
 
     public function getInvoiceDateFormatAttribute()
@@ -68,12 +80,41 @@ class Payment extends Model
         if(Config::first()->shipmentDisabled()) {
             $shipping_cost = 0;
         }
-        return $this->transactionmount - $this->discount + $shipping_cost;
+        $total = $this->transactionmount - $this->discount + $shipping_cost + $this->insurance + $this->tax;
+        if($this->is_credit) {
+            $total += $this->admin_fee;
+        }
+        return $total;
     }
 
     public function getBalanceAttribute()
     {
         return $this->grand_total - $this->paymentProofs->where('status', 2)->sum('transfer_amount');
+    }
+
+    public function getInsuranceAttribute()
+    {
+        return $this->shipping_cost * $this->config->insurance / 100;
+    }
+    
+        public function getTaxAttribute()
+        {
+            return $this->transactionmount * $this->config->tax / 100;
+        }
+
+    public function getAdminFeeAttribute()
+    {
+        return $this->transactionmount * $this->config->admin_fee / 100;
+    }
+
+    public function getIsCreditAttribute()
+    {
+        if(isset($this->merchant)) {
+            return Str::contains($this->merchant->name, ['credit', 'kredit']) ? true : false;
+        }
+        else {
+            return false;
+        }
     }
 
     public function getShippingCostFormatAttribute()
@@ -99,6 +140,21 @@ class Payment extends Model
     public function getBalanceFormatAttribute()
     {
         return Functions::formatCurrency($this->balance);
+    }
+
+    public function getInsuranceFormatAttribute()
+    {
+        return Functions::formatCurrency($this->insurance);
+    }
+    
+        public function getTaxFormatAttribute()
+        {
+            return Functions::formatCurrency($this->tax);
+        }
+
+    public function getAdminFeeFormatAttribute()
+    {
+        return Functions::formatCurrency($this->admin_fee);
     }
 
     public function getStatusDescAttribute()
