@@ -6,6 +6,16 @@ use App\Slider;
 use App\Product;
 use App\User;
 use App\Currency;
+use App\Promotion;
+use App\Flashsale;
+use App\Flashsaleproduct;
+use App\Singleblock;
+use App\Partner;
+use App\Subpartner;
+use App\Testimonial;
+use App\Subtestimonial;
+use App\Video;
+use App\Subcategory;
 use App\Helpers\Functions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,16 +50,59 @@ class HomeController extends Controller
         // http error
         // abort(404);
 
+        // $sliders = Slider::all();
+        // $products = Product::where('special', true)->get();
+        // $top_rateds = Product::inRandomOrder()->limit(3)->get();
+        // $on_sales = Product::inRandomOrder()->limit(3)->get();
+        // $recommendeds = Product::inRandomOrder()->limit(3)->get();
+        // $populars = Product::inRandomOrder()->limit(3)->get();
+
+        // dd((asset('/img/'.$products[0]->image1)));
+
+        // return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars'));
         $sliders = Slider::all();
         $products = Product::where('special', true)->get();
         $top_rateds = Product::inRandomOrder()->limit(3)->get();
         $on_sales = Product::inRandomOrder()->limit(3)->get();
         $recommendeds = Product::inRandomOrder()->limit(3)->get();
         $populars = Product::inRandomOrder()->limit(3)->get();
+        $promotion = Promotion::first();
+        $flashsale = Flashsale::first();
+        $flashsaleproducts = Flashsaleproduct::all();
+        $singleblock = Singleblock::first();
+        $testimonial = Testimonial::first();
+        $partner = Partner::first();
+        $subpartners = Subpartner::all();
+        $subtestimonials = Subtestimonial::limit($testimonial->total)->get();
+        if($testimonial->random) {
+            $subtestimonials_count = Subtestimonial::all()->count();
+            $testimonial_total = $testimonial->total;
+            if($subtestimonials_count < $testimonial->total) {
+                $testimonial_total = $subtestimonials_count;
+            }
+            $subtestimonials = Subtestimonial::all()->random($testimonial_total);
+        }
+        $videos = Video::all();
+        $subcategories = Subcategory::all();
 
-        // dd((asset('/img/'.$products[0]->image1)));
-
-        return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars'));
+        return view('home', compact(
+            'sliders', 
+            'products', 
+            'top_rateds', 
+            'on_sales', 
+            'recommendeds', 
+            'populars', 
+            'promotion', 
+            'flashsale', 
+            'flashsaleproducts', 
+            'singleblock',
+            'partner',
+            'subpartners',
+            'testimonial',
+            'subtestimonials',
+            'videos',
+            'subcategories'
+        ));
     }
 
     // public function welcome()

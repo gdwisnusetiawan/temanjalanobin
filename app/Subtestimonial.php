@@ -5,31 +5,11 @@ namespace App;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
-class Subcategory extends Model
+class Subtestimonial extends Model
 {
-    protected $table = 'subcategory';
+    protected $table = 'subtestimonial';
     public $timestamps = false;
     protected $connection = 'web';
-
-    public function categories()
-    {
-        return $this->hasMany('App\Category', 'subcat', 'id');
-    }
-
-    public function categoryModel()
-    {
-        return $this->belongsTo('App\Category', 'category', 'id');
-    }
-
-    public function getSlugAttribute()
-    {
-        return $this->id;
-    }
-
-    public function getTitleAttribute()
-    {
-        return $this->name;
-    }
 
     public function getImageUrlAttribute()
     {
