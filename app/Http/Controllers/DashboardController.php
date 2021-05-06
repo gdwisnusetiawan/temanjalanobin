@@ -107,6 +107,7 @@ class DashboardController extends Controller
             $payment_proof->transfer_amount = $request->transfer_amount;
             $payment_proof->sender_account = $request->sender_account;
             $payment_proof->status = $request->status;
+            $payment_proof->save();
             $message = 'Your payment has been sent';
         }
         if($request->status == 4) {

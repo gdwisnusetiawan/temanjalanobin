@@ -284,7 +284,7 @@
                                             <div class="form-group col-md-6">
                                                 <label>Post Code:</label>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required>
+                                                    <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required readonly>
                                                     <div class="spinner-loader-inside" id="spinner-postcode" style="display: none">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </div>
