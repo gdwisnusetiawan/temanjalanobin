@@ -14,6 +14,9 @@ class Video extends Model
     public function getVideoUrlAttribute()
     {
         if($this->video != null) {
+            if(Str::startsWith($this->video, 'http')) {
+                return $this->video;
+            }
             $cdn = env('APP_STORAGE_URL').'foto/';
             $classname = strtolower(class_basename($this));
             if($classname == 'config') {
@@ -35,6 +38,29 @@ class Video extends Model
         else {
             return 'https://www.youtube.com/watch?v=S7SLep244ss';
             // return 'https://www.youtube.com/embed/S7SLep244ss?rel=0&amp;showinfo=0&amp;autoplay=1';
+        }
+    }
+
+    public function getThumbnailAttribute()
+    {
+        if($this->video != null) {
+            return asset('polo-5/images/other/youtube.gif');
+        }
+        elseif($this->youtube != null) {
+            return 'https://img.youtube.com/vi/'.$this->youtube.'/0.jpg';
+        }
+        else {
+            return 'https://img.youtube.com/vi/S7SLep244ss/0.jpg';
+        }
+    }
+
+    public function getMimeTypeAttribute()
+    {
+        if($this->video != null) {
+            return mime_content_type($this->video);
+        }
+        else {
+            return 'youtube';
         }
     }
 }

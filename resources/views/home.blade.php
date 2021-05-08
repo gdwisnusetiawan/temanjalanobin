@@ -31,13 +31,66 @@
 <!--end: Inspiro Slider -->
 @endisset
 
-<!-- SHOP CATEGORIES -->
+<!-- Shop products CAROUSEL -->
+@if($products->count() > 0)
 <section>
+<div class="container">
+    <div class="heading-text heading-line text-center">
+        <h4>New Arrival </h4>
+    </div>
+    <div class="carousel shop-products" data-margin="20" data-dots="false">
+        @foreach($products as $product)
+        <div class="product">
+            <div class="product-image">
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="link-fit"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" class="img-fit"></a>
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" class="link-fit"></a>
+                <!-- <span class="product-new">NEW</span> -->
+                <span class="product-wishlist">
+                    <a href="#"><i class="fa fa-heart"></i></a>
+                </span>
+                <!-- <div class="product-overlay">
+                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
+                </div> -->
+            </div>
+
+            <div class="product-description">
+                <!-- <div class="product-category">Women</div> -->
+                <div class="product-title">
+                    <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
+                </div>
+                <div class="product-title">
+                    @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                        <del>{{ $product->real_price }}</del>
+                    @endif
+                    <ins>{{ $product->getPriceFormat() }}</ins>
+                </div>
+                <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
+                <!-- <div class="product-rate">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                </div>
+                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+</section>
+@endif
+<!--END: Shop products CAROUSEL -->
+
+@isset($webcategory)
+<!-- SHOP CATEGORIES -->
+<section class="p-t-0">
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <div class="heading-text heading-line text-center">
-                <h4>Browser our categories</h4>
+                <h4>{{ $webcategory->title }}</h4>
             </div>
 
         </div>
@@ -60,7 +113,7 @@
     </div> -->
     
     <div class="carousel" data-items="3">
-        @foreach($subcategories->take(4) as $subcategory)
+        @foreach($subcategories as $subcategory)
         @if($subcategory->categoryModel)
         <div class="product">
             <div class="product-image">
@@ -78,9 +131,11 @@
     </div>
 </div>
 </section>
+@endisset
 <!-- end: SHOP CATEGORIES -->
 
 <!-- BOXES -->
+@isset($promotion)
 <section class="p-t-0">
 <div class="container">
     <div class="row">
@@ -103,9 +158,11 @@
 
 </div>
 </section>
+@endisset
 <!-- end: BOXES -->
 
 <!-- SUMMER SALE -->
+@isset($flashsale)
 <section class="section-pattern p-t-60 p-b-30" style="background: url({{ asset('polo-5/images/pattern/pattern19.png') }})">
 <div class="container">
     <div class="text-center mb-5">
@@ -149,6 +206,7 @@
     </div>
 </div>
 </section>
+@endisset
 <!-- end: SUMMER SALE -->
 
 <!-- Shop products CAROUSEL -->
@@ -163,60 +221,67 @@
 <!--END: Shop products CAROUSEL -->
 
 <!-- SECTION DEFAULT (LIGHT) -->
+@isset($singleblock)
 <section class="p-b-0">
-    <div class="container">
-        <div class="row align-items-center">
-            @if($singleblock->posistion == 'left')
-            <div class="col-lg-6"> 
-                <div class="carousel" data-items="1" data-dots="false"> 
-                    @foreach($singleblock->media['url'] as $media)
-                        <img src="{{ $media }}" alt="image" />
-                    @endforeach
-                    @if($singleblock->video)
-                        <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
-                            <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
-                            <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
-                        </video> -->
-                        <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
-                    @endif
-                </div>
+<div class="container">
+    <div class="row align-items-center">
+        @if($singleblock->posistion == 'left')
+        <div class="col-lg-6"> 
+            <div class="carousel" data-items="1" data-dots="false"> 
+                @foreach($singleblock->media['url'] as $media)
+                    <img src="{{ $media }}" alt="image" />
+                @endforeach
+                @if($singleblock->video)
+                    <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
+                    </video> -->
+                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
+                @endif
             </div>
-            <div class="col-lg-6">
-                <div class="heading-text heading-section">
-                    <h4>{{ $singleblock->title }}</h4>
-                    <p>{!! $singleblock->description !!}</p>
-                    <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
-                </div>
-            </div>
-            @else
-            <div class="col-lg-6">
-                <div class="heading-text heading-section">
-                    <h4>{{ $singleblock->title }}</h4>
-                    <p>{!! $singleblock->description !!}</p>
-                    <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
-                </div>
-            </div>
-            <div class="col-lg-6"> 
-                <div class="carousel" data-items="1" data-dots="false"> 
-                    @foreach($singleblock->media['url'] as $media)
-                        <img src="{{ $media }}" alt="image" />
-                    @endforeach
-                    @if($singleblock->video)
-                        <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
-                            <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
-                            <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
-                        </video> -->
-                        <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
-                    @endif
-                </div>
-            </div>
-            @endif
         </div>
+        <div class="col-lg-6">
+            <div class="heading-text heading-section">
+                <h4>{{ $singleblock->title }}</h4>
+                <p>{!! $singleblock->description !!}</p>
+                @if($singleblock->button != null)
+                <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
+                @endif
+            </div>
+        </div>
+        @else
+        <div class="col-lg-6">
+            <div class="heading-text heading-section">
+                <h4>{{ $singleblock->title }}</h4>
+                <p>{!! $singleblock->description !!}</p>
+                @if($singleblock->button != null)
+                <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-6"> 
+            <div class="carousel" data-items="1" data-dots="false"> 
+                @foreach($singleblock->media['url'] as $media)
+                    <img src="{{ $media }}" alt="image" />
+                @endforeach
+                @if($singleblock->video)
+                    <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
+                    </video> -->
+                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
+                @endif
+            </div>
+        </div>
+        @endif
     </div>
+</div>
 </section>
+@endisset
 <!-- end: SECTION DEFAULT (LIGHT) -->
 
 <!-- Clients CAROUSEL -->
+@isset($partner)
 <section>
 <div class="container">
     <!-- <h4>Carousel</h4> -->
@@ -232,8 +297,10 @@
     </div>
 </div>
 </section>
+@endisset
 
 <!-- Testimonial Carousel -->
+@isset($testimonial)
 <section class="background-grey">
 <div class="container-fluid">
     <div class="heading-text heading-line text-center">
@@ -257,23 +324,35 @@
     <!-- end: Testimonials -->
 </div>
 </section>
+@endisset
 <!-- end: Testimonial Carousel -->
 
 <!--Image Carousel -->
+@if($videos->count() > 0)
 <section>
 <div class="container">
     <!-- <h4 class="mb-4">Images</h4> -->
     <div class="heading-text heading-line text-center">
         <h4>Promotion Video</h4>
     </div>
+    @foreach($videos as $video)
+        <!-- <video controls>
+        <source src="{{ $video->video_url }}" type="video/mp4">
+        </video> -->
+        @endforeach
     <div class="carousel" data-items="3" data-dots="false">
         @foreach($videos as $video)
         <div data-lightbox="gallery">
             <div class="grid-item">
                 <div class="grid-item-wrap">
-                    <div class="grid-image"> <img alt="Image Lightbox" src="{{ asset('polo-5/images/other/youtube.gif') }}" /> </div>
+                    <div class="grid-image"> <img alt="Image Lightbox" src="{{ $video->thumbnail }}" /> </div>
                     <div class="grid-description">
+                        @if($video->video != null)
+                        <!-- <a href="video-ajax.blade.php" data-lightbox="ajax"><i class="icon-play"></i></a> -->
+                        <a href="#" data-target="#modal-video-{{ $video->id }}" data-toggle="modal"><i class="icon-play"></i></a>
+                        @else
                         <a href="{{ $video->video_url }}" data-lightbox="iframe"><i class="icon-play"></i></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -281,8 +360,34 @@
         <!-- <iframe width="1280" height="720" src="{{ $video->video_url }}" allowfullscreen></iframe> -->
         @endforeach
     </div>
-</section>
 </div>
+</section>
+@foreach($videos as $video)
+    @if($video->video != null)
+    <div class="modal fade" id="modal-video-{{ $video->id }}" tabindex="-1" role="modal" aria-labelledby="modal-label-3" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+                    <h4 id="modal-label-3" class="modal-title">Large Modal</h4>
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                </div> -->
+                <div class="modal-body">
+                    <div class="portfolio-ajax-page" id="video-ajax">
+                        <video width="1280" height="720" controls>
+                            <source src="{{ $video->video_url }}">
+                        </video>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-b" type="button">Close</button>
+                    <button class="btn btn-b" type="button">Save Changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    @endif
+@endforeach
+@endif
 <!--end: Image Carousel -->
 
 @if(false)

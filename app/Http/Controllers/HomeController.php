@@ -15,6 +15,7 @@ use App\Subpartner;
 use App\Testimonial;
 use App\Subtestimonial;
 use App\Video;
+use App\Webcategory;
 use App\Subcategory;
 use App\Helpers\Functions;
 use Illuminate\Http\Request;
@@ -66,23 +67,27 @@ class HomeController extends Controller
         $on_sales = Product::inRandomOrder()->limit(3)->get();
         $recommendeds = Product::inRandomOrder()->limit(3)->get();
         $populars = Product::inRandomOrder()->limit(3)->get();
-        $promotion = Promotion::first();
-        $flashsale = Flashsale::first();
+        $promotion = Promotion::where('is_active', true)->first();
+        $flashsale = Flashsale::where('is_active', true)->first();
         $flashsaleproducts = Flashsaleproduct::all();
-        $singleblock = Singleblock::first();
-        $testimonial = Testimonial::first();
-        $partner = Partner::first();
+        $singleblock = Singleblock::where('is_active', true)->first();
+        $testimonial = Testimonial::where('is_active', true)->first();
+        $partner = Partner::where('is_active', true)->first();
         $subpartners = Subpartner::all();
-        $subtestimonials = Subtestimonial::limit($testimonial->total)->get();
-        if($testimonial->random) {
-            $subtestimonials_count = Subtestimonial::all()->count();
-            $testimonial_total = $testimonial->total;
-            if($subtestimonials_count < $testimonial->total) {
-                $testimonial_total = $subtestimonials_count;
+        $subtestimonials = collect([]);
+        if(isset($testimonial)) {
+            $subtestimonials = Subtestimonial::limit($testimonial->total)->get();
+            if($testimonial->random) {
+                $subtestimonials_count = Subtestimonial::all()->count();
+                $testimonial_total = $testimonial->total;
+                if($subtestimonials_count < $testimonial->total) {
+                    $testimonial_total = $subtestimonials_count;
+                }
+                $subtestimonials = Subtestimonial::all()->random($testimonial_total);
             }
-            $subtestimonials = Subtestimonial::all()->random($testimonial_total);
         }
         $videos = Video::all();
+        $webcategory = Webcategory::where('is_active', true)->first();
         $subcategories = Subcategory::all();
 
         return view('home', compact(
@@ -101,7 +106,8 @@ class HomeController extends Controller
             'testimonial',
             'subtestimonials',
             'videos',
-            'subcategories'
+            'webcategory',
+            'subcategories',
         ));
     }
 

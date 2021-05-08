@@ -1,4 +1,5 @@
 <footer id="footer">
+    @isset($footer)
     <div class="footer-content">
         <div class="container">
             <div class="row">
@@ -108,6 +109,7 @@
             </div> -->
         </div>
     </div>
+    @endisset
     <div class="copyright-content">
         <div class="container">
             <div class="row">
