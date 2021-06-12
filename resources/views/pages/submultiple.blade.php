@@ -50,7 +50,7 @@
                                 <div class="post-meta">
                                     <span class="post-meta-date"><i class="fa fa-calendar-o"></i>{{ $page->datetime_format }}</span>
                                     <!-- <span class="post-meta-comments"><a href=""><i class="fa fa-comments-o"></i>33 Comments</a></span> -->
-                                    <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>News</a></span>
+                                    <!-- <span class="post-meta-category"><a href=""><i class="fa fa-tag"></i>News</a></span> -->
                                     <span class="post-meta-category"><a href=""><i class="fa fa-eye"></i>{{ $page->views ?? 0 }} Views</a></span>
                                     <div class="post-meta-share">
                                         <a href="{{ $share_links['facebook'] }}" target="_BLANK" class="btn btn-xs btn-slide btn-facebook" data-width="105">

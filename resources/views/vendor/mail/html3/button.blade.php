@@ -1,0 +1,1 @@
+<a href="{{ $url }}" class="btn btn-{{ $color ?? 'primary' }}" target="_blank">{{ $slot }}</a>

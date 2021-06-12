@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Page title -->
-<section id="page-title" data-bg-parallax="{{ asset('polo-5/images/parallax/5.jpg') }}">
+<section id="page-title" data-bg-parallax="{{ asset('img/image-9.jpg') }}">
     <div class="container">
         <div class="page-title">
             <h1>User login</h1>

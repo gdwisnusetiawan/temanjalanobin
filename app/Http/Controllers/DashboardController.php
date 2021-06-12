@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Payment;
 use App\PaymentProof;
+use App\Mail\Ordered;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -90,12 +92,51 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.invoice', $order);
     }
 
+    public function changePaymentStatus(Request $request, Payment $payment)
+    {
+        $payment->merchant()->associate($request->payment_merchant);
+        $payment->status = $request->status;
+        $payment->save();
+        Mail::to($payment->user)->send(new Ordered($payment));
+
+        $message = 'Success';
+        $type = 'success';
+        if($request->status == 2) {
+            $message = 'Your confirmation has been sent';
+        }
+        if($request->status == 3) {
+            $payment_proof = new PaymentProof();
+            $payment_proof->payment()->associate($payment);
+            $payment_proof->payment_date = Carbon::now()->format('Y-m-d H:i:s');
+            $payment_proof->transfer_amount = $request->transfer_amount;
+            $payment_proof->sender_account = $request->sender_account;
+            $payment_proof->status = $request->status;
+            $payment_proof->save();
+            $message = 'Your payment has been sent';
+        }
+        if($request->status == 4) {
+            $message = 'Your payment has been canceled';
+        }
+        // request()->session()->flash('notify', ['message' => $message, 'type' => $type]);
+        // return redirect()->route('dashboard.payment', $payment);
+        return response()->json(['notify' => ['message' => $message, 'type' => $type]]);
+    }
+
     public function changeAddress(Request $request, Payment $payment)
     {
         $payment->address = $request->address;
         $payment->province = $request->province;
         $payment->city = $request->city;
         $payment->postcode = $request->postcode;
+        $payment->country = $request->country;
+        if($request->region == 'national') {
+            $payment->country = null;
+        }
+        if($request->region == 'international') {
+            $payment->province = null;
+            $payment->city = null;
+            $payment->postcode = null;
+        }
         $payment->save();
         request()->session()->flash('notify', ['message' => 'You changed the address', 'type' => 'success']);
         return redirect()->route('checkout.index', $payment);

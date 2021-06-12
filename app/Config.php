@@ -26,4 +26,9 @@ class Config extends Model
     {
         return env('APP_STORAGE_URL').'foto/general/'.$this->id.'/favicon';
     }
+
+    public function shipmentDisabled()
+    {
+        return $this->jne == false && $this->tiki == false && $this->pos == false;
+    }
 }

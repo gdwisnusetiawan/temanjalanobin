@@ -86,7 +86,7 @@
                         <h5 class="card-title">Invoice To:</h5>
                         <strong>{{ $user->fullname }}</strong> <br>
                         <!-- Shelby Company Limited <br> -->
-                        {{ $user->address_line }} <br>
+                        {{ $payment->address_line }} <br>
                         {{ $user->email }} <br>
                         {{ $user->nohp }} <br>
                     </div>

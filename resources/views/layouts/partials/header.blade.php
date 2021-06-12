@@ -34,14 +34,22 @@
                     <!-- <li><a class="btn">
                         <i class="icon-shopping-cart"></i> <span class="badge badge-light">4</span>
                     </a></li> -->
-                    <!-- <li>
-                        <div class="p-dropdown"> <a href="#"><i class="icon-globe"></i><span>EN</span></a>
+                    @if($currencies->count() > 1)
+                    <li>
+                        <div class="p-dropdown"> <a href="#" id="currency-symbol">{{ $currency->symbol }}</a>
                             <ul class="p-dropdown-content">
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">Indonesia</a></li>
+                                @foreach($currencies as $currency)
+                                <li><a href="#" onclick="changeCurrency('{{ $currency->id }}')">{{ $currency->name }} ({{ $currency->symbol }})</a></li>
+                                @endforeach
                             </ul>
                         </div>
-                    </li> -->
+                        <!-- <form method="POST" action="{{ route('cookie.set') }}" id="form-change-currency">
+                            @csrf
+                            <input type="hidden" name="key" value="currency">
+                            <input type="hidden" name="value">
+                        </form> -->
+                    </li>
+                    @endif
                 </ul>
             </div>
             <!--end: Header Extras-->
@@ -52,9 +60,16 @@
             <div id="mainMenu" class="menu-creative">
                 <div class="container">
                     <nav>
-                        @isset($menus)
                         <!-- left menu -->
                         <ul>
+                            <!-- <li class="{{ request()->is('categories*') ? 'current' : '' }}"><a href="#">Categories</a>
+                                <ul class="dropdown-menu">
+                                    @foreach($categories as $category)
+                                        <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </li> -->
+                        @if($menus->count() > 0)
                             @foreach($menus[0] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
@@ -145,6 +160,8 @@
                         </ul>
                         <!-- right menu -->
                         <ul>
+                        <!-- <ul> -->
+                            @isset($menus[1])
                             @foreach($menus[1] as $menu)
                                 <li class="{{ request()->is($menu->slug.'*') ? 'current' : '' }}"><a href="{{ !$menu->isMegaMenu() ? $menu->url : '#' }}">{{ $menu->title }}</a>
                                     @if($menu->submenus->count() > 0 && $menu->submenus->count() <= 8)
@@ -164,6 +181,8 @@
                                     @endif
                                 </li>
                             @endforeach
+                            @endisset
+                        @endif
                             <li class="{{ request()->is('dashboard*') ? 'current' : '' }}"><a href="#">My Account</a>
                                 <ul class="dropdown-menu">
                                     @guest
@@ -177,7 +196,7 @@
                                     <li><a href="{{ route('dashboard.order') }}">Billing</a></li>
                                     <!-- <li><a href="">History</a></li> -->
                                     <li><hr></li>
-                                    <li><a href="{{ route('dashboard.user.index', auth()->user()) }}">Edit Profile</a></li>
+                                    <li><a href="{{ route('dashboard.user.index') }}">Edit Profile</a></li>
                                     <li><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -192,7 +211,6 @@
                             </li>
                             @endauth
                         </ul>
-                        @endisset
                     </nav>
                 </div>
             </div>

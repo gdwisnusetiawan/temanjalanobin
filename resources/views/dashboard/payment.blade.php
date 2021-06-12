@@ -24,10 +24,12 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
+                            @isset($merchant->bankowner)
                             <li class="list-group-item flex-column align-items-start">
                                 <p class="mb-1">Bank Owner</p>
-                                <h5 class="mb-1">{{ $merchant->customeraccount }}</h5>
+                                <h5 class="mb-1">{{ $merchant->bankowner }}</h5>
                             </li>
+                            @endisset
                             <li class="list-group-item">
                                 <p class="mb-1">Bank Number</p>
                                 <div class="d-flex justify-content-between">
@@ -57,11 +59,12 @@
                         <h5 class="ac-title">ATM</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
+                                <!-- <li>Lorem ipsum dolor sit amet.</li>
                                 <li>Lorem ipsum dolor sit amet consectetur.</li>
                                 <li>Lorem ipsum dolor sit.</li>
                                 <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                                <li>Lorem ipsum dolor sit amet.</li> -->
+                                {!! $merchant->atm !!}
                             </ol>
                         </div>
                     </div>
@@ -69,11 +72,7 @@
                         <h5 class="ac-title">Mobile Banking</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
-                                <li>Lorem ipsum dolor sit amet consectetur.</li>
-                                <li>Lorem ipsum dolor sit.</li>
-                                <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                            {!! $merchant->mobile !!}
                             </ol>
                         </div>
                     </div>
@@ -81,11 +80,7 @@
                         <h5 class="ac-title">Internet Banking</h5>
                         <div class="ac-content">
                             <ol class="mx-4">
-                                <li>Lorem ipsum dolor sit amet.</li>
-                                <li>Lorem ipsum dolor sit amet consectetur.</li>
-                                <li>Lorem ipsum dolor sit.</li>
-                                <li>Lorem ipsum dolor sit, amet consectetur adipisicing.</li>
-                                <li>Lorem ipsum dolor sit amet.</li>
+                            {!! $merchant->internet !!}
                             </ol>
                         </div>
                     </div>
@@ -109,9 +104,9 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('dashboard.confirmPayment', $payment) }}" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
+                        <form method="POST" action="{{ env('APP_STORAGE_URL') }}order/confirmation" id="form-payment-proof" class="form-validate" enctype="multipart/form-data">
+                            <input type="hidden" name="redirect_url" value="{{ route('dashboard.payment', $payment) }}">
+                            <input type="hidden" name="payment_id" value="{{ $payment->id }}">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="gender">Date and Time of Payment</label>
@@ -140,19 +135,21 @@
                                     <input type="text" class="form-control" name="sender_account" placeholder="Enter your account name" required>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">Example file input</label>
+                                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                            </div>
                             <!--File upload 1-->
-                            <div class="form-row">
+                            <!-- <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <!-- From -->
                                     <div id="fileUpload1" class="dropzone">
                                         <div class="fallback">
                                             <input name="file" type="file" required/>
                                         </div>
                                     </div>
-                                    <!-- end: From -->
                                 </div>
-                                <small id="dropzoneHelp" class="form-text text-muted">Max file size is 2MB and max number of files is 10.</small>
-                            </div>
+                                <small id="dropzoneHelp" class="form-text text-muted">Max file size is 2MB and max number of files is 1.</small>
+                            </div> -->
                             <!--end: File upload 1-->
                         </form>
                         <div class="d-flex justify-content-end mt-3">
@@ -208,7 +205,7 @@
         <div class="p-t-10 m-b-20 text-center">
             <div class="text-center">
                 <h1 class="icon text-success"> <i class="fa fa-check-circle"></i> </h1>
-                <h3>Congratulations! Your confirmation has been sent!</h3>
+                <h3>Congratulations! Your {{ $payment->status == 2 ? 'confirmation' : 'payemnt' }} has been sent!</h3>
                 <p>Your order is number #{{ $payment->transactionno }}. You can
                     <a href="{{ route('dashboard.order') }}" class="text-underline">
                         <mark>view your order</mark>
@@ -328,82 +325,129 @@
 <script>
     $('#datetimepicker1').datetimepicker();
 
-    Dropzone.autoDiscover = false;
-    //Form 1
-    var paymentDropzone = new Dropzone('#fileUpload1', {
-        url: "{{ route('dashboard.confirmPayment', $payment) }}",
-        maxFiles: 1,
-        maxFilesize: 10,
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        autoProcessQueue: false,
-        renameFile: function(file) {
-            var dt = new Date();
-            var time = dt.getTime();
-            return time +'-{{ $payment->transactionno }}';
-        },
-        removedfile: function(file) 
-        {
-            var name = file.upload.filename;
-            // $.ajax({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            //     },
-            //     type: "POST",
-            //     url: "#",
-            //     data: { _method: 'DELETE', payment_file: name },
-            //     success: function (data) {
-            //         console.log('File has been successfully removed!!');
-            //     },
-            //     error: function(e) {
-            //         console.log(e);
-            //     }
-            // });
-            $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
-            var fileRef;
-            return (fileRef = file.previewElement) != null ? 
-            fileRef.parentNode.removeChild(file.previewElement) : void 0;
-        },
-        // accept: function(file, done) {
-        //     if (file.size == 0) {
-        //         console.log(file.size)
-        //         done("Empty files will not be uploaded.");
-        //     }
-        //     else { done(); }
-        // },
-        sending: function(file, xhr, formData) {
-            $('#form-payment-proof').serializeArray().forEach(function (item, index) {
-                formData.append(item.name, item.value);
-            });
-        },
-        success: function(file, response) {
-            notify(response.notify, "Success");
-            $('#form-payment-proof')[0].reset();
-            $('#form-payment-proof').find('.is-valid').removeClass('is-valid');
-            $('#success-section').show();
-            $('#payment-section').hide();
-            scrollTop();
+    // Dropzone.autoDiscover = false;
+    // //Form 1
+    // var paymentDropzone = new Dropzone('#fileUpload1', {
+    //     url: "{{ route('dashboard.confirmPayment', $payment) }}",
+    //     // headers: {
+    //     //     'Access-Control-Allow-Origin' :"*",
+    //     //     'Access-Control-Allow-Methods' :"GET, PUT, POST, DELETE, OPTIONS",
+    //     //     'Access-Control-Allow-Headers' :"Authorization, Content-Type, Accept, X-Mashape-Authorization"
+    //     //     // remove Cache-Control and X-Requested-With
+    //     //     // to be sent along with the request
+    //     // },
+    //     // url: "{{ 'http://acp.rebut.xyz/order/confirmation' }}",
+    //     maxFiles: 1,
+    //     maxFilesize: 10,
+    //     acceptedFiles: "image/*",
+    //     addRemoveLinks: true,
+    //     autoProcessQueue: false,
+    //     renameFile: function(file) {
+    //         var dt = new Date();
+    //         var time = dt.getTime();
+    //         return time +'-{{ $payment->transactionno }}';
+    //     },
+    //     removedfile: function(file) 
+    //     {
+    //         var name = file.upload.filename;
+    //         // $.ajax({
+    //         //     headers: {
+    //         //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    //         //     },
+    //         //     type: "POST",
+    //         //     url: "#",
+    //         //     data: { _method: 'DELETE', payment_file: name },
+    //         //     success: function (data) {
+    //         //         console.log('File has been successfully removed!!');
+    //         //     },
+    //         //     error: function(e) {
+    //         //         console.log(e);
+    //         //     }
+    //         // });
+    //         $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+    //         var fileRef;
+    //         return (fileRef = file.previewElement) != null ? 
+    //         fileRef.parentNode.removeChild(file.previewElement) : void 0;
+    //     },
+    //     // accept: function(file, done) {
+    //     //     if (file.size == 0) {
+    //     //         console.log(file.size)
+    //     //         done("Empty files will not be uploaded.");
+    //     //     }
+    //     //     else { done(); }
+    //     // },
+    //     sending: function(file, xhr, formData) {
+    //         $('#form-payment-proof').serializeArray().forEach(function (item, index) {
+    //             formData.append(item.name, item.value);
+    //         });
+    //     },
+    //     success: function(file, response) {
+    //         notify(response.notify, "Success");
+    //         $('#form-payment-proof')[0].reset();
+    //         $('#form-payment-proof').find('.is-valid').removeClass('is-valid');
+    //         $('#success-section').show();
+    //         $('#payment-section').hide();
+    //         scrollTop();
 
-            var name = file.upload.filename;
-            var fileRef;
-            return (fileRef = file.previewElement) != null ? 
-            fileRef.parentNode.removeChild(file.previewElement) : void 0;
-        },
-        error: function(response) {
-            console.log('Error: ', response)
-            return false;
-        }
-    });
+    //         var name = file.upload.filename;
+    //         var fileRef;
+    //         return (fileRef = file.previewElement) != null ? 
+    //         fileRef.parentNode.removeChild(file.previewElement) : void 0;
+    //     },
+    //     error: function(response) {
+    //         console.log('Error: ', response)
+    //         return false;
+    //     }
+    // });
 
-    $('#form-payment-proof').submit(function (e) {
-        e.preventDefault();
-        if(paymentDropzone.getQueuedFiles().length > 0) {
-            paymentDropzone.processQueue();
-            $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
-        }
-        else {
-            $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
-        }
-    });
+    // $('#form-payment-proof').submit(function (e) {
+    //     e.preventDefault();
+    //     // if(paymentDropzone.getQueuedFiles().length > 0) {
+    //     //     paymentDropzone.processQueue();
+    //     //     $('.dz-default.dz-message > span').text('Drop files here to upload').removeClass('text-danger');
+    //     // }
+    //     // else {
+    //     //     $('.dz-default.dz-message > span').text('Please upload a file').addClass('text-danger');
+    //     // }
+    // });
+
+    // $('#form-payment-proof').submit(function (e) {
+    //     e.preventDefault();
+    //     // $.ajax({
+    //     //     type: 'GET',
+    //     //     url: 'http://acp.rebut.xyz/',
+    //     //     success: function(token) {
+    //     //         console.log(token);
+    //             var formData = $(this).serializeArray();
+    //     //         formData.push({name:"_token", value:token});
+    //             $.ajax({
+    //                 type: 'GET',
+    //                 url: 'http://acp.rebut.xyz/tes',
+    //                 // headers: {
+    //                 //     // 'Content-Type':'application/json',
+    //                 //     'Access-Control-Allow-Headers': '*',
+    //                 //     'Access-Control-Allow-Origin': 'http://acp.rebut.xyz/',
+    //                 //     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+    //                 // },
+    //                 dataType: 'json',
+    //                 // enctype: 'multipart/form-data',
+    //                 // contentType: false,
+    //                 // cache: false,
+    //                 // processData: false,
+    //                 data: formData,
+    //                 success: function(data) {
+    //                     console.log(data);
+    //                     // notify(data.message, data.type);
+    //                 },
+    //                 error: function(error) {
+    //                     console.log(error);
+    //                 }
+    //             });
+    //     //     },
+    //     //     error: function(error) {
+    //     //         console.log(error);
+    //     //     }
+    //     // });
+    // });
 </script>
 @endpush

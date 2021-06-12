@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="product-description">
-                        <div class="product-category">{{ $product->category_model->name }}</div>
+                        <div class="product-category">{{ $product->category_model->title }}</div>
                         <div class="product-title">
                             <h3><a href="#">{{ $product->title }}</a></h3>
                         </div>
@@ -40,7 +40,7 @@
                         <div class="seperator m-b-10"></div>
                         <p>{!! htmlspecialchars_decode($product->description) !!}</p>
                         <div class="product-meta">
-                            <p>Tags: <a href="#" rel="tag">Clothing</a>, <a rel="tag" href="#">T-shirts</a></p>
+                            <!-- <p>Tags: <a href="#" rel="tag">Clothing</a>, <a rel="tag" href="#">T-shirts</a></p> -->
                         </div>
                         <div class="seperator m-t-20 m-b-10"></div>
                     </div>
@@ -361,8 +361,9 @@ function calculatePrice(form, qty) {
         dataType: 'json',
         data: formData,
         success: function(data) {
-            let totalPrice = data * quantity;
-            let priceFormatted = formatCurrency(totalPrice);
+            // let totalPrice = data * quantity;
+            // let priceFormatted = formatCurrency(totalPrice);
+            let priceFormatted = data;
             $('#product-price').html('<ins>'+priceFormatted+'</ins>');
         },
         error: function(error) {

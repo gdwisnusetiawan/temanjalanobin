@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Page title -->
-<section id="page-title">
+<section id="page-title" data-bg-parallax="{{ asset('img/image-9.jpg') }}">
     <div class="container">
         <div class="page-title">
             <h1>Shopping Cart</h1>
@@ -67,8 +67,8 @@
                             <td class="cart-product-description">
                             @if($product->variants->isNotEmpty())
                                 <p>
-                                    @foreach($variants as $variant)
-                                        {{ ucfirst($variant) }} @if(!$loop->last) {{ ',' }} @endif
+                                    @foreach($variants as $group => $variant)
+                                    {{ ($group) }} : {{ ucfirst($variant) }} @if(!$loop->last) {{ ',' }} @endif
                                     @endforeach
                                 </p>
                             @endif
@@ -147,7 +147,7 @@
                                         <strong>Discount</strong>
                                     </td>
                                     <td class="cart-product-name text-right">
-                                        <span class="amount" id="discount">-{{ $functions->formatCurrency(session('cart')['summary']['total_discount']) }}</span>
+                                        <span class="amount" id="discount">-{{ session('cart')['summary']['total_discount'] > 0 ? $functions->formatCurrency(session('cart')['summary']['total_discount']) : '' }}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -212,7 +212,7 @@ $(document).ready(function(){
         $('#add-cart').prop('disabled', true);
     @endif
 
-    provinces();
+    // provinces();
 });
 
 function updateQuantity(id, qty) {
@@ -239,7 +239,9 @@ function updateCart(form, qty, id) {
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
             // $('#shipping').html(formatCurrency(data.summary.shipping.cost));
             // $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            if(data.summary.total_discount > 0) {
+                $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            }
             $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
             Object.values(data.list).forEach(function (item, index) {
                 $('#product-'+item.product.id).find('.qty').val(item.quantity);
@@ -253,7 +255,7 @@ function updateCart(form, qty, id) {
             // update shipping
             $('input[name="weight"]').val(data.summary.total_weight);
             if($('select[name="origin"] option:selected').val() != '' && $('select[name="destination"] option:selected').val() != '') {
-                shippingCost('#form-shipping');
+                // shippingCost('#form-shipping');
             }
             // notify(data.message, data.type);
         },
@@ -276,7 +278,9 @@ function deleteCart(form) {
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
             $('#shipping').html(formatCurrency(data.summary.shipping.cost));
             // $('#coupon').html('-'+data.summary.coupon+'%');
-            $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            if(data.summary.total_discount > 0) {
+                $('#discount').html('-'+formatCurrency(data.summary.total_discount));
+            }
             $('#total').html('<strong>'+formatCurrency(data.summary.total)+'</strong>');
 
             let cartIcon = $('#cart-icon-quantity');

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\Registered;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
 
@@ -102,6 +105,8 @@ class LoginController extends Controller
             $user->avatarfile = $socialite->getAvatar();
             // $user->nohp = '';
             $user->save();
+            Mail::to($user)->send(new Registered($user));
+            $user->notify(new VerifyEmail);
         }
         Auth::login($user);
         return redirect()->intended('dashboard/welcome');

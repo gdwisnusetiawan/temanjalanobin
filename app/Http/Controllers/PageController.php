@@ -47,7 +47,8 @@ class PageController extends Controller
                 // $view = 'pages.single';
                 // $page->views = $page->views + 1;
                 // $page->save();
-                return view('pages.single', compact('page'));
+                $share_links = Functions::shareLink(url()->full());
+                return view('pages.single2', compact('page', 'share_links'));
             }
             elseif($page->page_type == 'multiple') {
                 // $view = 'pages.multiple';

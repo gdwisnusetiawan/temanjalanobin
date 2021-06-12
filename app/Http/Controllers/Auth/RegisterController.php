@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
+use App\Mail\Registered;
+use App\Rules\Captcha;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\User;
-use App\Rules\Captcha;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
@@ -81,7 +83,8 @@ class RegisterController extends Controller
         if($user_referer) {
             session()->put('user_referer', $user_referer);
         }
-        return User::create([
+        
+        $user = User::create([
             'fullname' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -92,6 +95,8 @@ class RegisterController extends Controller
             'ip' => request()->ip(),
             'refbp' => $user_referer ? $user_referer->id : null
         ]);
+        Mail::to($user)->send(new Registered($user));
+        return $user;
     }
 
     public function showRegistrationForm($referal = null)

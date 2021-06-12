@@ -41,10 +41,10 @@ class Product extends Model
         return Category::find($this->category);
     }
 
-    public function getSlugAttribute()
-    {
-        return Str::slug($this->title, '-');
-    }
+    // public function getSlugAttribute()
+    // {
+    //     return Str::slug($this->title, '-');
+    // }
 
     public function getMediaAttribute()
     {
