@@ -43,49 +43,65 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
 
-        $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
-        if($config == null || $config->is_active == false) {
-            abort(503);
-        }
+        $modal_type = null;
+        $popup = null;
+        $popup_check = null;
+        $loader = null;
+        $menus = null;
+        $config = null;
+        $footer = null;
+        $marquee = null;
+        $categories = null;
+        $currencies = null;
+        $currency = null;
 
-        $request = new Request();
-        $currency = Currency::where('name', $request->cookie('currency'))->first();
-        if($currency == null) {
-            $currency = Currency::first();
-        //     $response = new Response('Hello World');
-        //     $response->withCookie(cookie()->forever('currency', $currency->name));
-        }
+        try {
+            $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
+            if($config == null || $config->is_active == false) {
+                abort(503);
+            }
 
-        $modal_type = rand(0,7);
-        $modal_type = 0;
-        $ip = Functions::getIp('203.78.117.178');
-        $popup = Popup::where('is_active', true)->first();
-        $popup_check = false;
-        if($ip != null && $popup != null) {
-            if($popup->valid == 1) {
-                if(strtolower($popup->filter) == strtolower($ip->city)) {
-                    $popup_check = true;
+            $request = new Request();
+            $currency = Currency::where('name', $request->cookie('currency'))->first();
+            if($currency == null) {
+                $currency = Currency::first();
+            //     $response = new Response('Hello World');
+            //     $response->withCookie(cookie()->forever('currency', $currency->name));
+            }
+
+            $modal_type = rand(0,7);
+            $modal_type = 0;
+            $ip = Functions::getIp('203.78.117.178');
+            $popup = Popup::where('is_active', true)->first();
+            $popup_check = false;
+            if($ip != null && $popup != null) {
+                if($popup->valid == 1) {
+                    if(strtolower($popup->filter) == strtolower($ip->city)) {
+                        $popup_check = true;
+                    }
+                }
+                elseif($popup->valid == 2) {
+                    if(strtolower($popup->filter) == strtolower($ip->regionname)) {
+                        $popup_check = true;
+                    }
+                }
+                if($popup->valid == 3) {
+                    if(strtolower($popup->filter) == strtolower($ip->country)) {
+                        $popup_check = true;
+                    }
                 }
             }
-            elseif($popup->valid == 2) {
-                if(strtolower($popup->filter) == strtolower($ip->regionname)) {
-                    $popup_check = true;
-                }
-            }
-            if($popup->valid == 3) {
-                if(strtolower($popup->filter) == strtolower($ip->country)) {
-                    $popup_check = true;
-                }
-            }
+            $loader = 2;
+            $menus = Functions::menu();
+            // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
+            $footer = Footer::orderBy('id', 'desc')->first();
+            $marquee = Marquee::where('is_active', true)->first();
+            $categories = Category::all();
+            $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
+            $currencies = Currency::all();
+        } catch (\Exception $e) {
+            // die("Could not connect to the database.  Please check your configuration. error:" . $e );
         }
-        $loader = 2;
-        $menus = Functions::menu();
-        // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
-        $footer = Footer::orderBy('id', 'desc')->first();
-        $marquee = Marquee::where('is_active', true)->first();
-        $categories = Category::all();
-        $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
-        $currencies = Currency::all();
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
         view()->share([
             'modal_type' => $modal_type,
