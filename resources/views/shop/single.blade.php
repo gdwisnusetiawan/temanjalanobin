@@ -361,8 +361,9 @@ function calculatePrice(form, qty) {
         dataType: 'json',
         data: formData,
         success: function(data) {
-            let totalPrice = data * quantity;
-            let priceFormatted = formatCurrency(totalPrice);
+            // let totalPrice = data * quantity;
+            // let priceFormatted = formatCurrency(totalPrice);
+            let priceFormatted = data;
             $('#product-price').html('<ins>'+priceFormatted+'</ins>');
         },
         error: function(error) {

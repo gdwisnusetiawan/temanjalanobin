@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -53,7 +54,9 @@ class ShopController extends Controller
     public function pricing(Request $request, $id)
     {
         $price = Product::find($id)->getUserPrice($request->quantity);
+        $totalPrice = $price * $request->quantity;
+        $priceFormatted = Functions::currencyConvert($totalPrice);
         // $price = Product::find($id)->getUserPrice(11);
-        return response()->json($price);
+        return response()->json($priceFormatted);
     }
 }

@@ -26,6 +26,8 @@ class CartController extends Controller
             'total_quantity' => $total_quantity,
             'total_discount' => $total_discount,
             'total_weight' => $total_weight,
+            // 'subtotal_format' => Functions::currencyConvert($total),
+            // 'total_format' => Functions::currencyConvert($grand_total),
             // 'shipping' => array_key_exists('summary', $cart) ? $cart['summary']['shipping'] : null
         ];
     }

@@ -179,7 +179,7 @@ class CheckoutController extends Controller
             $etd = $result[0]->costs[0]->etd ?? 0;
         }
 
-        $payment->shipping_cost = round($cost/Currency::whereRaw("LOWER(symbol) like '%rp%'")->first()->rate);
+        $payment->shipping_cost = round($cost/Currency::rateNominal());
         // $payment->shipping_vendor = $courier_code;
         // $payment->shipping_service = $service;
         $payment->save();

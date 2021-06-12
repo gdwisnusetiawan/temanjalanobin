@@ -143,7 +143,7 @@ class HomeController extends Controller
 
     public function convertCurrency(Request $request)
     {
-        $converted = Functions::currencyConvert($request->value, $request->origin ?? 'Rp');
+        $converted = Functions::currencyConvert($request->value, $request->origin ?? Currency::first()->symbol ?? 'Rp');
         return response()->json($converted);
     }
 

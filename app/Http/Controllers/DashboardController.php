@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Payment;
 use App\PaymentProof;
+use App\Mail\Ordered;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -95,6 +97,8 @@ class DashboardController extends Controller
         $payment->merchant()->associate($request->payment_merchant);
         $payment->status = $request->status;
         $payment->save();
+        Mail::to($payment->user)->send(new Ordered($payment));
+
         $message = 'Success';
         $type = 'success';
         if($request->status == 2) {
