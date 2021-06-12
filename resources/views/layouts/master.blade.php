@@ -12,7 +12,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Document title -->
-    <title>@hasSection('title') @yield('title') @else {{ $config->description ?? "Today's Modern e-Commerce" }} @endif | {{ $config->title ?? config('app.name', 'Tutoya') }}</title>
+    <title>@hasSection('title') @yield('title') @else {{ $config->description ?? "" }} @endif | {{ $config->title ?? config('app.name', 'TJO') }}</title>
     <!-- Bootstrap datetimepicker css -->
     <link href="{{ asset('polo-5/plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
     <!-- Stylesheets & Fonts -->
@@ -60,11 +60,11 @@
 
     </div>
     <!-- Whatsapp float -->
-    @if($config->wa)
+    @isset($config->wa)
     <a id="whatsappFloat" href="https://wa.me/62{{ session('user_referer')->nohp ?? (isset($config) ? $config->wa : '') }}?text={{ $config->wa_text }}" class="btn-link wa-float" target="_BLANK">
         <i class="fab fa-whatsapp"></i><i class="fab fa-whatsapp"></i>
     </a>
-    @endif
+    @endisset
     <!-- Scroll top -->
     <a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>
     <!--Plugins-->
@@ -385,7 +385,9 @@
             getCurrency(cookies['currency']);
             $('#currency-symbol').html(currency.symbol);
             if(cookies['currency'] == '') {
-                setCookie('currency', @json($currency->id));
+                @isset($currency->id)
+                    setCookie('currency', @json($currency->id));
+                @endisset
                 console.log(cookies)
             }
             checkReload();

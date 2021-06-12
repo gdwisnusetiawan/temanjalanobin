@@ -116,10 +116,18 @@
                     <div class="social-icons social-icons">
                         @isset($footer)
                         <ul>
+                            @isset($footer->facebook)
                             <li class="social-facebook"><a href="{{ $footer->facebook }}" target="_BLANK"><i class="fab fa-facebook-f"></i></a></li>
+                            @endisset
+                            @isset($footer->instagram)
                             <li class="social-instagram"><a href="{{ $footer->instagram }}" target="_BLANK"><i class="fab fa-instagram"></i></a></li>
+                            @endisset
+                            @isset($footer->twitter)
                             <li class="social-twitter"><a href="{{ $footer->twitter }}" target="_BLANK"><i class="fab fa-twitter"></i></a></li>
+                            @endisset
+                            @isset($footer->youtube)
                             <li class="social-youtube"><a href="{{ $footer->youtube }}" target="_BLANK"><i class="fab fa-youtube"></i></a></li>
+                            @endisset
                             <!-- <li class="social-whatsapp"><a href="{{ $footer->whatsapp }}" target="_BLANK"><i class="fab fa-whatsapp"></i></a></li> -->
                             <!-- <li class="social-rss"><a href="#" target="_BLANK"><i class="fa fa-rss"></i></a></li> -->
                             <!-- <li class="social-vimeo"><a href="#" target="_BLANK"><i class="fab fa-vimeo"></i></a></li> -->

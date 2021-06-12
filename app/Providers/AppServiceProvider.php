@@ -47,19 +47,16 @@ class AppServiceProvider extends ServiceProvider
         $popup = null;
         $popup_check = null;
         $loader = null;
-        $menus = null;
+        $menus = collect([]);
         $config = null;
         $footer = null;
         $marquee = null;
-        $categories = null;
-        $currencies = null;
+        $categories = collect([]);
+        $currencies = collect([]);
         $currency = null;
 
         try {
             $config = Config::where('is_active', true)->orderBy('id', 'desc')->first();
-            if($config == null || $config->is_active == false) {
-                abort(503);
-            }
 
             $request = new Request();
             $currency = Currency::where('name', $request->cookie('currency'))->first();
@@ -103,6 +100,9 @@ class AppServiceProvider extends ServiceProvider
             // die("Could not connect to the database.  Please check your configuration. error:" . $e );
         }
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
+        if($config == null || $config->is_active == false) {
+            abort(503);
+        }
         view()->share([
             'modal_type' => $modal_type,
             'popup' => $popup,

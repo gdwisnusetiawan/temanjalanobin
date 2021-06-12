@@ -61,7 +61,12 @@ class Menu extends Model
 
     public function isMegaMenu()
     {
-        return $this->submenus->count() > 8 || $this->isContains('title', ['belanja', 'shop', 'categories']);
+        return $this->submenus->count() > 8 || $this->hasCategory();
         // return $this->submenus->count() > 8;
+    }
+
+    public function hasCategory()
+    {
+        return $this->isContains('title', ['belanja', 'shop', 'categories', 'tour']);
     }
 }

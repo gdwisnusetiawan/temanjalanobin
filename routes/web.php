@@ -72,6 +72,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
+Route::get('tour-program/{category}', function($category) {
+    return redirect()->route('categories', $category);
+});
 Route::prefix('categories')->name('shop.')->group(function () {
     Route::get('', 'ShopController@index')->name('index');
     Route::get('{category}', 'ShopController@index')->name('index');

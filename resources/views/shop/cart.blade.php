@@ -276,7 +276,7 @@ function deleteCart(form) {
             // console.log(data);
             $('#product-'+data.id).remove();
             $('#subtotal').html(formatCurrency(data.summary.subtotal));
-            $('#shipping').html(formatCurrency(data.summary.shipping.cost));
+            $('#shipping').html(formatCurrency(data.summary.shipping.cost ?? 0));
             // $('#coupon').html('-'+data.summary.coupon+'%');
             if(data.summary.total_discount > 0) {
                 $('#discount').html('-'+formatCurrency(data.summary.total_discount));

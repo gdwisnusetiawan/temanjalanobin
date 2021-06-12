@@ -109,6 +109,7 @@
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <button type="submit" class="btn"><i class="icon-shopping-cart"></i> Add to cart</button>
+                                <input type="submit" class="btn btn-outline" name="book_now" value="Book now">
                             </form>
                         </div>
                         @if($product->shopee_link || $product->tokopedia_link)

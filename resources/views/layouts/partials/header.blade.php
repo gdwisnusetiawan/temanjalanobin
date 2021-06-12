@@ -1,4 +1,4 @@
-<header id="header" class="light header-logo-center">
+<header id="header" class="light header-logo-left">
     <div class="header-inner">
         <div class="container">
             <!--Logo-->
@@ -78,9 +78,9 @@
                                             <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
                                         @endforeach
                                     </ul>
-                                    @elseif($menu->isMegaMenu())
+                                    @elseif($menu->isMegaMenu() && $categories->count() > 0)
                                     <ul class="dropdown-menu">
-                                        @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
+                                        @if($menu->hasCategory())
                                             @foreach($categories as $category)
                                                 <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach
@@ -157,9 +157,8 @@
                                     </li>
                                 </ul>
                             </li> -->
-                        </ul>
+                        <!-- </ul> -->
                         <!-- right menu -->
-                        <ul>
                         <!-- <ul> -->
                             @isset($menus[1])
                             @foreach($menus[1] as $menu)
@@ -170,9 +169,9 @@
                                             <li><a href="{{ $submenu->url }}">{{ $submenu->title }}</a></li>
                                         @endforeach
                                     </ul>
-                                    @elseif($menu->isMegaMenu())
+                                    @elseif($menu->isMegaMenu() && $categories->count() > 0)
                                     <ul class="dropdown-menu">
-                                        @if($menu->isContains('title', ['belanja', 'shop', 'categories']))
+                                        @if($menu->hasCategory())
                                             @foreach($categories as $category)
                                                 <li><a href="{{ route('shop.index', $category) }}">{{ $category->title }}</a></li>
                                             @endforeach

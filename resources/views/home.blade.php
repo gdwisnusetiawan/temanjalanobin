@@ -105,6 +105,7 @@
 <!-- end: DELIVERY INFO -->
 
 <!-- Shop products CAROUSEL -->
+@if($products->count() > 0)
 <section>
 <div class="container">
     <div class="heading-text heading-line text-center">
@@ -152,6 +153,7 @@
 </div>
 
 </section>
+@endif
 <!--END: Shop products CAROUSEL -->
 
 @if(false)

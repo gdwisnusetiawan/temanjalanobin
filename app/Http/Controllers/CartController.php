@@ -92,6 +92,10 @@ class CartController extends Controller
         // }
         $cart['summary'] = $this->summary($cart);
         session()->put('cart', $cart);
+        if($request->has('book_now')) {
+            $payment = Functions::storeCheckout();
+            return redirect()->route('checkout.index', $payment);
+        }
         return redirect()->back()->with('notify', ['message' => 'Product added to cart successfully', 'type' => 'success']);
     }
 

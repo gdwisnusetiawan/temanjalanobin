@@ -52,56 +52,58 @@ class CheckoutController extends Controller
 
     public function store()
     {
-        $cart = session()->get('cart');
-        $key = sha1(time());
-        $invoiceno = time();
-        $config = Config::first();
-        $summary = $cart['summary'];
+        // $cart = session()->get('cart');
+        // $key = sha1(time());
+        // $invoiceno = time();
+        // $config = Config::first();
+        // $summary = $cart['summary'];
 
-        $last_payment = Payment::orderBy('insertid', 'desc')->first();
-        $payment = new Payment();
-        $payment->user()->associate(auth()->user());
-        // $payment->merchant()->associate($request->payment_merchant);
-        $payment->transactionno = $invoiceno;
-        $payment->transactionmount = $summary['subtotal'];
-        $payment->transactiondate = Carbon::now();
-        $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
-        // $payment->shipping_cost = $summary['shipping']['cost'];
-        $payment->discount = $summary['total_discount'];
-        $payment->weight = $summary['total_weight'];
-        // status: pending
-        $payment->status = 1;
-        $payment->insertid = $last_payment ? $last_payment->insertid + 1 : 1;
-        $payment->currency = 'IDR';
-        $payment->address = auth()->user()->address;
-        $payment->province = auth()->user()->province;
-        $payment->city = auth()->user()->city;
-        $payment->postcode = auth()->user()->postcode;
-        $payment->country = auth()->user()->country;
-        $payment->save();
+        // $last_payment = Payment::orderBy('insertid', 'desc')->first();
+        // $payment = new Payment();
+        // $payment->user()->associate(auth()->user());
+        // // $payment->merchant()->associate($request->payment_merchant);
+        // $payment->transactionno = $invoiceno;
+        // $payment->transactionmount = $summary['subtotal'];
+        // $payment->transactiondate = Carbon::now();
+        // $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
+        // // $payment->shipping_cost = $summary['shipping']['cost'];
+        // $payment->discount = $summary['total_discount'];
+        // $payment->weight = $summary['total_weight'];
+        // // status: pending
+        // $payment->status = 1;
+        // $payment->insertid = $last_payment ? $last_payment->insertid + 1 : 1;
+        // $payment->currency = 'IDR';
+        // $payment->address = auth()->user()->address;
+        // $payment->province = auth()->user()->province;
+        // $payment->city = auth()->user()->city;
+        // $payment->postcode = auth()->user()->postcode;
+        // $payment->country = auth()->user()->country;
+        // $payment->save();
 
-        foreach($cart['list'] as $cart)
-        {
-            $product = $cart['product'];
-            $variants = $cart['variants'] ?? [];
-            $transaction = new Transaction();
-            $transaction->payment()->associate($payment);
-            $transaction->transactionno = $payment->transactionno;
-            $transaction->product()->associate($product->id);
-            $transaction->itemname = $product->title;
-            $transaction->quantity = $cart['quantity'];
-            $transaction->price = $product->price;
-            $variant_string = '';
-            foreach($variants as $group => $variant) {
-                $variant_string .= $group .' : '. ucfirst($variant). ',';
-            }
-            $variant_string = rtrim($variant_string, ',');
-            // $transaction->variants = $variant_string;
-            $transaction->save();
-        }
+        // foreach($cart['list'] as $cart)
+        // {
+        //     $product = $cart['product'];
+        //     $variants = $cart['variants'] ?? [];
+        //     $transaction = new Transaction();
+        //     $transaction->payment()->associate($payment);
+        //     $transaction->transactionno = $payment->transactionno;
+        //     $transaction->product()->associate($product->id);
+        //     $transaction->itemname = $product->title;
+        //     $transaction->quantity = $cart['quantity'];
+        //     $transaction->price = $product->price;
+        //     $variant_string = '';
+        //     foreach($variants as $group => $variant) {
+        //         $variant_string .= $group .' : '. ucfirst($variant). ',';
+        //     }
+        //     $variant_string = rtrim($variant_string, ',');
+        //     // $transaction->variants = $variant_string;
+        //     $transaction->save();
+        // }
         
-        session()->forget('cart');
+        // session()->forget('cart');
+        $payment = Functions::storeCheckout();
         return redirect()->route('checkout.index', $payment);
+        // return redirect()->route('dashboard.payment', $payment);
     }
 
     public function update(Request $request, Payment $payment)
