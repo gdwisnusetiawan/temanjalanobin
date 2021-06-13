@@ -15,6 +15,7 @@ use App\Subpartner;
 use App\Testimonial;
 use App\Subtestimonial;
 use App\Video;
+use App\Webcategory;
 use App\Subcategory;
 use App\Helpers\Functions;
 use Illuminate\Http\Request;
@@ -58,51 +59,49 @@ class HomeController extends Controller
         $populars = Product::inRandomOrder()->limit(3)->get();
         $services = collect([]);
 
-        return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars', 'services'));
-        
-        // $sliders = Slider::all();
-        // $products = Product::where('special', true)->get();
-        // $top_rateds = Product::inRandomOrder()->limit(3)->get();
-        // $on_sales = Product::inRandomOrder()->limit(3)->get();
-        // $recommendeds = Product::inRandomOrder()->limit(3)->get();
-        // $populars = Product::inRandomOrder()->limit(3)->get();
-        // $promotion = Promotion::first();
-        // $flashsale = Flashsale::first();
-        // $flashsaleproducts = Flashsaleproduct::all();
-        // $singleblock = Singleblock::first();
-        // $testimonial = Testimonial::first();
-        // $partner = Partner::first();
-        // $subpartners = Subpartner::all();
-        // $subtestimonials = Subtestimonial::limit($testimonial->total)->get();
-        // if($testimonial->random) {
-        //     $subtestimonials_count = Subtestimonial::all()->count();
-        //     $testimonial_total = $testimonial->total;
-        //     if($subtestimonials_count < $testimonial->total) {
-        //         $testimonial_total = $subtestimonials_count;
-        //     }
-        //     $subtestimonials = Subtestimonial::all()->random($testimonial_total);
-        // }
-        // $videos = Video::all();
-        // $subcategories = Subcategory::all();
+        $promotion = Promotion::where('is_active', true)->first();
+        $flashsale = Flashsale::where('is_active', true)->first();
+        $flashsaleproducts = Flashsaleproduct::all();
+        $singleblock = Singleblock::where('is_active', true)->first();
+        $testimonial = Testimonial::where('is_active', true)->first();
+        $partner = Partner::where('is_active', true)->first();
+        $subpartners = Subpartner::all();
+        $subtestimonials = collect([]);
+        if(isset($testimonial)) {
+            $subtestimonials = Subtestimonial::limit($testimonial->total)->get();
+            if($testimonial->random) {
+                $subtestimonials_count = Subtestimonial::all()->count();
+                $testimonial_total = $testimonial->total;
+                if($subtestimonials_count < $testimonial->total) {
+                    $testimonial_total = $subtestimonials_count;
+                }
+                $subtestimonials = Subtestimonial::all()->random($testimonial_total);
+            }
+        }
+        $videos = Video::all();
+        $webcategory = Webcategory::where('is_active', true)->first();
+        $subcategories = Subcategory::all();
 
-        // return view('home', compact(
-        //     'sliders', 
-        //     'products', 
-        //     'top_rateds', 
-        //     'on_sales', 
-        //     'recommendeds', 
-        //     'populars', 
-        //     'promotion', 
-        //     'flashsale', 
-        //     'flashsaleproducts', 
-        //     'singleblock',
-        //     'partner',
-        //     'subpartners',
-        //     'testimonial',
-        //     'subtestimonials',
-        //     'videos',
-        //     'subcategories'
-        // ));
+        return view('home', compact(
+            'sliders', 
+            'products', 
+            'top_rateds', 
+            'on_sales', 
+            'recommendeds', 
+            'populars', 
+            'promotion', 
+            'flashsale', 
+            'flashsaleproducts', 
+            'singleblock',
+            'partner',
+            'subpartners',
+            'testimonial',
+            'subtestimonials',
+            'videos',
+            'webcategory',
+            'subcategories',
+            'services'
+        ));
     }
 
     // public function welcome()

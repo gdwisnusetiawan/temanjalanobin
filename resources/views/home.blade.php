@@ -31,131 +31,6 @@
 <!--end: Inspiro Slider -->
 @endisset
 
-<!-- BOXES -->
-<!-- <section>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="shop-promo-box text-right" style="background-image: url({{ asset('polo-5/homepages/shop-v2/images/collection-left.jpg') }});">
-                <h2>BURNOUT</h2>
-                <p>
-                    We offer a range of services for
-                    <br /> both businesses and individuals companies,
-                    <br /> Beautiful nature, and rare feathers!. Morbi sagittis,
-                    <br /> sem quis lacinia faucibus, orci ipsum
-                    <br /> gravida tortor.</p>
-                <a class="btn btn-dark" href="#">View Collection</a>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="shop-promo-box text-left" style="background-image: url({{ asset('polo-5/homepages/shop-v2/images/collection-right.jpg') }});">
-                <h2>OVER</h2>
-                <p>
-                    We offer a range of services for
-                    <br /> both businesses and individuals companies,
-                    <br /> Beautiful nature, and rare feathers!. Morbi sagittis,
-                    <br /> sem quis lacinia faucibus, orci ipsum
-                    <br /> gravida tortor.</p>
-                <a class="btn btn-dark" href="#">View Collection</a>
-            </div>
-        </div>
-    </div>
-
-</div>
-</section> -->
-<!-- end: BOXES -->
-
-<!-- DELIVERY INFO -->
-<!-- <section class="background-grey p-t-40 p-b-0">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="icon-box effect small clean">
-                <div class="icon">
-                    <a href="#"><i class="fa fa-gift"></i></a>
-                </div>
-                <h3>Free shipping on orders $60+</h3>
-                <p>Order more than 60$ and you will get free shippining Worldwide. More info.</p>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="icon-box effect small clean">
-                <div class="icon">
-                    <a href="#"><i class="fa fa-plane"></i></a>
-                </div>
-                <h3>Worldwide delivery</h3>
-                <p>We deliver to the following countries: USA, Canada, Europe, Australia</p>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="icon-box effect small clean">
-                <div class="icon">
-                    <a href="#"><i class="fa fa-history"></i></a>
-                </div>
-                <h3>60 days money back guranty!</h3>
-                <p>Not happy with our product, feel free to return it, we will refund 100% your money!</p>
-            </div>
-        </div>
-    </div>
-</div>
-</section> -->
-<!-- end: DELIVERY INFO -->
-
-<!-- Shop products CAROUSEL -->
-@if($products->count() > 0)
-<section>
-<div class="container">
-    <div class="heading-text heading-line text-center">
-        <h4>Tour Programs</h4>
-    </div>
-    <div class="carousel shop-products" data-margin="20" data-dots="false">
-        @foreach($products as $product)
-        <div class="product">
-            <div class="product-image">
-                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="link-fit"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" class="img-fit"></a>
-                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" class="link-fit"></a>
-                <!-- <span class="product-new">NEW</span> -->
-                <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
-                </span>
-                <!-- <div class="product-overlay">
-                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
-                </div> -->
-            </div>
-
-            <div class="product-description">
-                <!-- <div class="product-category">Women</div> -->
-                <div class="product-title">
-                    <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
-                </div>
-                <div class="product-title">
-                    @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
-                        <del>{{ $product->real_price }}</del>
-                    @endif
-                    <ins>{{ $product->getPriceFormat() }}</ins>
-                </div>
-                <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
-                <!-- <div class="product-rate">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
-                </div>
-                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
-
-</section>
-@endif
-<!--END: Shop products CAROUSEL -->
-
 @if($services->count() > 0)
 <section>
     <div class="container">
@@ -222,6 +97,365 @@
     </div>
 </section>
 @endif
+
+<!-- Shop products CAROUSEL -->
+@if($products->count() > 0)
+<section>
+<div class="container">
+    <div class="heading-text heading-line text-center">
+        <h4>New Arrival </h4>
+    </div>
+    <div class="carousel shop-products" data-margin="20" data-dots="false">
+        @foreach($products as $product)
+        <div class="product">
+            <div class="product-image">
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="link-fit"><img alt="Shop product image!" src="{{ $product->media['url'][0] }}" class="img-fit"></a>
+                <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" class="link-fit"></a>
+                <!-- <span class="product-new">NEW</span> -->
+                <span class="product-wishlist">
+                    <a href="#"><i class="fa fa-heart"></i></a>
+                </span>
+                <!-- <div class="product-overlay">
+                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
+                </div> -->
+            </div>
+
+            <div class="product-description">
+                <!-- <div class="product-category">Women</div> -->
+                <div class="product-title">
+                    <h3><a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}">{{ $product->title }}</a></h3>
+                </div>
+                <div class="product-title">
+                    @if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0)
+                        <del>{{ $product->real_price }}</del>
+                    @endif
+                    <ins>{{ $product->getPriceFormat() }}</ins>
+                </div>
+                <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
+                <!-- <div class="product-rate">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                </div>
+                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+</section>
+@endif
+<!--END: Shop products CAROUSEL -->
+
+@isset($webcategory)
+<!-- SHOP CATEGORIES -->
+<section class="p-t-0">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="heading-text heading-line text-center">
+                <h4>{{ $webcategory->title }}</h4>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- <div class="shop-category">
+        <div class="row">
+            @foreach($categories->take(4) as $category)
+            <div class="col-lg-3">
+                <div class="shop-category-box">
+                    <a href="{{ route('shop.index', $category->slug) }}"><img alt="" src="{{ asset('polo-5/images/shop/shop-category/1.jpg') }}">
+                        <div class="shop-category-box-title text-center">
+                            <h6>{{ ucwords($category->title) }}</h6><small>{{ $category->products->count() }} products</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div> -->
+    
+    <div class="carousel" data-items="3">
+        @foreach($subcategories as $subcategory)
+        @if($subcategory->categoryModel)
+        <div class="product">
+            <div class="product-image">
+                <a href="{{ route('shop.index', $subcategory->categoryModel->slug) }}"><img alt="Shop product image!" src="{{ $subcategory->image_url }}"></a>
+            </div>
+            <div class="product-description">
+                <div class="product-category">{{ $subcategory->products ? $subcategory->products->count() : 0 }} products</div>
+                <div class="product-title">
+                    <h3><a href="{{ route('shop.index', $subcategory->categoryModel->slug) }}">{{ ucwords($subcategory->title) }}</a></h3>
+                </div>
+            </div>
+        </div>
+        @endif
+        @endforeach
+    </div>
+</div>
+</section>
+@endisset
+<!-- end: SHOP CATEGORIES -->
+
+<!-- BOXES -->
+@isset($promotion)
+<section class="p-t-0">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="shop-promo-box text-right" style="background-image: url({{ $promotion->media['url'][0] }});">
+                <h2>{{ $promotion->title1 }}</h2>
+                <p>{!! $promotion->description1 !!}</p>
+                <a class="btn btn-dark" href="{{ $promotion->links[0] }}" target="{{ $promotion->target1 }}">{{ $promotion->button1 }}</a>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="shop-promo-box text-left" style="background-image: url({{ $promotion->media['url'][1] }});">
+                <h2>{{ $promotion->title2 }}</h2>
+                <p>{!! $promotion->description2 !!}</p>
+                <a class="btn btn-dark" href="{{ $promotion->links[1] }}" target="{{ $promotion->target2 }}">{{ $promotion->button2 }}</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</section>
+@endisset
+<!-- end: BOXES -->
+
+<!-- SUMMER SALE -->
+@isset($flashsale)
+<section class="section-pattern p-t-60 p-b-30" style="background: url({{ asset('polo-5/images/pattern/pattern19.png') }})">
+<div class="container">
+    <div class="text-center mb-5">
+        <h1>{{ $flashsale->title }}</h1>
+        <div class="countdown medium" data-countdown="{{ $flashsale->countdown }}" data-animate="fadeInUp"></div>
+    </div>
+    <div class="carousel shop-products" data-margin="20" data-dots="false">
+        @foreach($flashsaleproducts as $product)
+        <div class="product">
+            <div class="product-image">
+                <a href="{{ $product->link }}" class="link-fit"><img alt="Shop product image!" src="{{ $product->image_url }}" class="img-fit"></a>
+                <a href="{{ $product->link }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->image_url }}" class="link-fit"></a>
+                <!-- <span class="product-new">NEW</span> -->
+                <span class="product-wishlist">
+                    <a href="#"><i class="fa fa-heart"></i></a>
+                </span>
+                <!-- <div class="product-overlay">
+                    <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
+                </div> -->
+            </div>
+
+            <div class="product-description">
+                <!-- <div class="product-category">Women</div> -->
+                <div class="product-title">
+                    <h3><a href="{{ $product->link }}" target="{{ $product->target == 'newtab' ? '_blank' : '_self' }}">{{ $product->title }}</a></h3>
+                </div>
+                <div class="product-title">
+                </div>
+                <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
+                <!-- <div class="product-rate">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-o"></i>
+                </div>
+                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+</section>
+@endisset
+<!-- end: SUMMER SALE -->
+
+<!-- Shop products CAROUSEL -->
+<!-- <section>
+<div class="container">
+    <div class="heading-text heading-line text-center">
+        <h4>New Arrival </h4>
+    </div>
+    
+</div>
+</section> -->
+<!--END: Shop products CAROUSEL -->
+
+<!-- SECTION DEFAULT (LIGHT) -->
+@isset($singleblock)
+<section class="p-b-0">
+<div class="container">
+    <div class="row align-items-center">
+        @if($singleblock->posistion == 'left')
+        <div class="col-lg-6"> 
+            <div class="carousel" data-items="1" data-dots="false"> 
+                @foreach($singleblock->media['url'] as $media)
+                    <img src="{{ $media }}" alt="image" />
+                @endforeach
+                @if($singleblock->video)
+                    <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
+                    </video> -->
+                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="heading-text heading-section">
+                <h4>{{ $singleblock->title }}</h4>
+                <p>{!! $singleblock->description !!}</p>
+                @if($singleblock->button != null)
+                <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
+                @endif
+            </div>
+        </div>
+        @else
+        <div class="col-lg-6">
+            <div class="heading-text heading-section">
+                <h4>{{ $singleblock->title }}</h4>
+                <p>{!! $singleblock->description !!}</p>
+                @if($singleblock->button != null)
+                <a class="btn" href="{{ $singleblock->links }}" target="{{ $singleblock->target }}">{{ $singleblock->button }}</a>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-6"> 
+            <div class="carousel" data-items="1" data-dots="false"> 
+                @foreach($singleblock->media['url'] as $media)
+                    <img src="{{ $media }}" alt="image" />
+                @endforeach
+                @if($singleblock->video)
+                    <!-- <video id="video-js" class="video-js" controls loop preload="false" poster="{{ asset('polo-5/video/for-benny/for-benny.jpg') }}">
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.mp4') }}" type="video/mp4" />
+                        <source src="{{ asset('polo-5/video/for-benny/for-benny.webm') }}" type="video/webm" />
+                    </video> -->
+                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/P7k2MkVYLDE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
+                @endif
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
+</section>
+@endisset
+<!-- end: SECTION DEFAULT (LIGHT) -->
+
+<!-- Clients CAROUSEL -->
+@isset($partner)
+<section>
+<div class="container">
+    <!-- <h4>Carousel</h4> -->
+    <div class="heading-text heading-line text-center">
+        <h4>{{ $partner->title }}</h4>
+    </div>
+    <div class="carousel client-logos dots-grey" data-items="5" data-arrows="false">
+        @foreach($subpartners as $subpartner)
+        <div>
+            <a href="{{ $subpartner->link }}"><img alt="{{ $subpartner->title }}" src="{{ $subpartner->image_url }}"></a>
+        </div>
+        @endforeach
+    </div>
+</div>
+</section>
+@endisset
+
+<!-- Testimonial Carousel -->
+@isset($testimonial)
+<section class="background-grey">
+<div class="container-fluid">
+    <div class="heading-text heading-line text-center">
+        <h4>{{ $testimonial->title }}</h4>
+    </div>
+    <!-- Testimonials -->
+    <div class="carousel equalize testimonial testimonial-box" data-margin="20" data-arrows="false" data-items="4" data-items-sm="2" data-items-xxs="1" data-equalize-item=".testimonial-item">
+        @foreach($subtestimonials as $subtestimonial)
+        <!-- Testimonials item -->
+        <a href="{{ route('page.testimonial', $subtestimonial) }}">
+        <div class="testimonial-item">
+            <img src="{{ $subtestimonial->image_url }}" alt="">
+            <p>{!! $subtestimonial->content !!}</p>
+            <span>{{ $subtestimonial->name }}</span>
+            <span>{!! $subtestimonial->shortdescr !!}</span>
+        </div>
+        </a>
+        <!-- end: Testimonials item-->
+        @endforeach
+    </div>
+    <!-- end: Testimonials -->
+</div>
+</section>
+@endisset
+<!-- end: Testimonial Carousel -->
+
+<!--Image Carousel -->
+@if($videos->count() > 0)
+<section>
+<div class="container">
+    <!-- <h4 class="mb-4">Images</h4> -->
+    <div class="heading-text heading-line text-center">
+        <h4>Promotion Video</h4>
+    </div>
+    @foreach($videos as $video)
+        <!-- <video controls>
+        <source src="{{ $video->video_url }}" type="video/mp4">
+        </video> -->
+        @endforeach
+    <div class="carousel" data-items="3" data-dots="false">
+        @foreach($videos as $video)
+        <div data-lightbox="gallery">
+            <div class="grid-item">
+                <div class="grid-item-wrap">
+                    <div class="grid-image"> <img alt="Image Lightbox" src="{{ $video->thumbnail }}" /> </div>
+                    <div class="grid-description">
+                        @if($video->video != null)
+                        <!-- <a href="video-ajax.blade.php" data-lightbox="ajax"><i class="icon-play"></i></a> -->
+                        <a href="#" data-target="#modal-video-{{ $video->id }}" data-toggle="modal"><i class="icon-play"></i></a>
+                        @else
+                        <a href="{{ $video->video_url }}" data-lightbox="iframe"><i class="icon-play"></i></a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <iframe width="1280" height="720" src="{{ $video->video_url }}" allowfullscreen></iframe> -->
+        @endforeach
+    </div>
+</div>
+</section>
+@foreach($videos as $video)
+    @if($video->video != null)
+    <div class="modal fade" id="modal-video-{{ $video->id }}" tabindex="-1" role="modal" aria-labelledby="modal-label-3" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- <div class="modal-header">
+                    <h4 id="modal-label-3" class="modal-title">Large Modal</h4>
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                </div> -->
+                <div class="modal-body">
+                    <div class="portfolio-ajax-page" id="video-ajax">
+                        <video width="1280" height="720" controls>
+                            <source src="{{ $video->video_url }}">
+                        </video>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-b" type="button">Close</button>
+                    <button class="btn btn-b" type="button">Save Changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    @endif
+@endforeach
+@endif
+<!--end: Image Carousel -->
 
 @if(false)
 <!-- SHOP WIDGET PRODUTCS -->
@@ -372,71 +606,4 @@
 @endif
 <!-- end: SHOP WIDGET PRODUTCS -->
 
-
-
-<!-- SUMMER SALE -->
-<!-- <section class="section-pattern p-t-60 p-b-30 text-center" style="background: url({{ asset('polo-5/images/pattern/pattern19.png') }})">
-<div class="container">
-    <h1><strong>Summer Sale</strong> Countdown</h1>
-    <div class="countdown medium" data-countdown="2020/09/19 11:34:51" data-animate="fadeInUp"></div>
-</div>
-</section> -->
-<!-- end: SUMMER SALE -->
-
-
-<!-- end: SHOP CATEGORIES -->
-<!-- <section>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="heading-text heading-line text-center">
-                <h4>Browser our categories </h4>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="shop-category">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="shop-category-box">
-                    <a href="#"><img alt="" src="{{ asset('polo-5/images/shop/shop-category/1.jpg') }}">
-                        <div class="shop-category-box-title text-center">
-                            <h6>Women</h6><small>64 products</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="shop-category-box">
-                    <a href="#"><img alt="" src="{{ asset('polo-5/images/shop/shop-category/2.jpg') }}">
-                        <div class="shop-category-box-title text-center">
-                            <h6>Wallet's</h6><small>36 products</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="shop-category-box">
-                    <a href="#"><img alt="" src="{{ asset('polo-5/images/shop/shop-category/3.jpg') }}">
-                        <div class="shop-category-box-title text-center">
-                            <h6>Man</h6><small>25 products</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="shop-category-box">
-                    <a href="#"><img alt="" src="{{ asset('polo-5/images/shop/shop-category/4.jpg') }}">
-                        <div class="shop-category-box-title text-center">
-                            <h6>Socks</h6><small>80 products</small>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section> -->
-<!-- end: SHOP CATEGORIES -->
 @endsection
