@@ -66,7 +66,7 @@ class UserController extends Controller
         $user->province = $request->province;
         $user->city = $request->city;
         $user->postcode = $request->postcode;
-        $user->country = $request->country;
+        // $user->country = $request->country;
         if($request->region == 'national') {
             $user->country = null;
         }

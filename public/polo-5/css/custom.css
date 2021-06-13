@@ -92,3 +92,8 @@ a.btn:not([href]):not([tabindex]).btn-whatsapp {
     height: 240px;
     object-fit: cover;
 }
+
+.social-icons.social-icons-colored .social-tiktok a, 
+.social-icons.social-icons-colored-hover .social-tiktok a:hover {
+    background-color: black;
+}

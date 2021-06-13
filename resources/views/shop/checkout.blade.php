@@ -307,7 +307,7 @@
             <a href="{{ route('login') }}" class="btn icon-left m-r-10"><span>Go to login page</span></a>
             @endif
             <a class="btn icon-left" href="{{ route('dashboard.order') }}"><span>View your orders</span></a>
-            <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Shop</span></a>
+            <a class="btn icon-left" href="{{ url('/') }}"><span>Return To Home</span></a>
         </div>
     </div>
 </section>

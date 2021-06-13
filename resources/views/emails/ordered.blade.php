@@ -1,7 +1,7 @@
 @component('mail::message')
 
 #### Hello, {{ $payment->user->fullname }}
-Thanks for using PixInvent. This is an invoice for your recent purchase.
+Thanks for using Taman Jalan Obin. This is an invoice for your recent purchase.
 
 **Amount Due**: {{ $payment->total_format }} <br>
 **Due By**: {{ $payment->invoice_duedate_format }}

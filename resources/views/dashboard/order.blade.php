@@ -65,7 +65,7 @@
                             <th>Due Date</th>
                             <th>Total</th>
                             <th>Status</th>
-                            <th>Shipment</th>
+                            <!-- <th>Shipment</th> -->
                             <th class="noExport">Actions</th>
                         </tr>
                     </thead>
@@ -77,7 +77,7 @@
                             <td>{{ $payment->invoice_duedate_format }}</td>
                             <td>{{ $payment->total_format }}</td>
                             <td><span class="badge badge-pill badge-{{ $payment->status_desc['color'] }}">{{ $payment->status_desc['text'] }}</span></td>
-                            <td>{{ $payment->shipping_receipt }}</td>
+                            <!-- <td>{{ $payment->shipping_receipt }}</td> -->
                             <td>
                                 <a class="ml-2" href="{{ route('checkout.index', $payment) }}" data-toggle="tooltip" data-original-title="Pay"><i class="icon-shopping-bag"></i></a>
                                 <!-- <a class="ml-2" href="#" data-toggle="tooltip" data-original-title="Delete"><i class="icon-trash-2"></i></a>
@@ -97,7 +97,7 @@
                             <th>Due Date</th>
                             <th>Total</th>
                             <th>Status</th>
-                            <th>Shipment</th>
+                            <!-- <th>Shipment</th> -->
                             <th class="noExport">Actions</th>
                         </tr>
                     </tfoot>

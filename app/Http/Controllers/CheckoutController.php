@@ -65,7 +65,7 @@ class CheckoutController extends Controller
         // $payment->transactionno = $invoiceno;
         // $payment->transactionmount = $summary['subtotal'];
         // $payment->transactiondate = Carbon::now();
-        // $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
+        // $payment->transactionexpire = Carbon::now()->addHours($config->paymentcounter ?? 60);
         // // $payment->shipping_cost = $summary['shipping']['cost'];
         // $payment->discount = $summary['total_discount'];
         // $payment->weight = $summary['total_weight'];

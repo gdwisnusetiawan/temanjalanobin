@@ -47,12 +47,12 @@
                                 @enderror
                             </div>
                             <div class="form-group form-inline m-b-10 ">
-                                <div class="form-check">
+                                <!-- <div class="form-check">
                                     <label>
                                         <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                         <small class="m-l-10"> {{ __('Remember Me') }}</small>
                                     </label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn" id="button-submit">

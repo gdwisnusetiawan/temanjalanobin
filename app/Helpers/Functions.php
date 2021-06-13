@@ -258,7 +258,7 @@ class Functions
         $payment->transactionno = $invoiceno;
         $payment->transactionmount = $summary['subtotal'];
         $payment->transactiondate = Carbon::now();
-        $payment->transactionexpire = Carbon::now()->addHours($config->payment_expiration ?? 1);
+        $payment->transactionexpire = Carbon::now()->addHours($config->paymentcounter ?? 60);
         // $payment->shipping_cost = $summary['shipping']['cost'];
         $payment->discount = $summary['total_discount'];
         $payment->weight = $summary['total_weight'];
@@ -270,7 +270,7 @@ class Functions
         $payment->province = auth()->user()->province;
         $payment->city = auth()->user()->city;
         $payment->postcode = auth()->user()->postcode;
-        $payment->country = auth()->user()->country;
+        // $payment->country = auth()->user()->country;
         $payment->save();
 
         foreach($cart['list'] as $cart)

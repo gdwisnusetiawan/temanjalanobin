@@ -35,7 +35,7 @@
 <section>
     <div class="container">
         <div class="heading-text heading-section text-center">
-            <h2>What we do</h2>
+            <h2>Our Services</h2>
             <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
         </div>
         <div class="row">
@@ -103,7 +103,7 @@
 <section>
 <div class="container">
     <div class="heading-text heading-line text-center">
-        <h4>New Arrival </h4>
+        <h4>Tour Programs</h4>
     </div>
     <div class="carousel shop-products" data-margin="20" data-dots="false">
         @foreach($products as $product)
@@ -187,7 +187,7 @@
                 <a href="{{ route('shop.index', $subcategory->categoryModel->slug) }}"><img alt="Shop product image!" src="{{ $subcategory->image_url }}"></a>
             </div>
             <div class="product-description">
-                <div class="product-category">{{ $subcategory->products ? $subcategory->products->count() : 0 }} products</div>
+                <div class="product-category">{{ $subcategory->categoryModel->products ? $subcategory->categoryModel->products->count() : 0 }} products</div>
                 <div class="product-title">
                     <h3><a href="{{ route('shop.index', $subcategory->categoryModel->slug) }}">{{ ucwords($subcategory->title) }}</a></h3>
                 </div>

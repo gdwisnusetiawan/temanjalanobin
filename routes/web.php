@@ -119,6 +119,7 @@ Route::post('currency', 'HomeController@currency')->name('currency');
 Route::get('currency/convert/{value}/{origin?}', 'HomeController@convertCurrency')->name('currency.convert');
 Route::post('cookie/get', 'HomeController@getCookie')->name('cookie.get');
 Route::post('cookie/set', 'HomeController@setCookie')->name('cookie.set');
+Route::post('send-message', 'HomeController@sendMessage')->name('sendMessage');
 
 Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');

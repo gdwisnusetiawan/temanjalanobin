@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Slider;
 use App\Product;
+use App\Config;
 use App\User;
 use App\Currency;
 use App\Promotion;
@@ -18,9 +19,12 @@ use App\Video;
 use App\Webcategory;
 use App\Subcategory;
 use App\Helpers\Functions;
+use App\Mail\MessageSent;
+use App\Rules\Captcha;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -159,5 +163,25 @@ class HomeController extends Controller
     public function getCookie(Request $request){
         $value = $request->cookie($request->key);
         return $value;
+    }
+
+    public function sendMessage(Request $request)
+    {
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:255'],
+            'g-recaptcha-response' => new Captcha()
+        ]);
+        $config = Config::first();
+        $recipient = $config->email ?? env('MAIL_USERNAME');
+        $name = $request->name;
+        $email = $request->email;
+        $subject = $request->subject;
+        $message = $request->message;
+        // Mail::to($recipient)->send(new MessageSent($name, $email, $subject, $message));
+        return redirect()->back()->with('notify', ['message' => 'Message sent', 'type' => 'success']);
     }
 }

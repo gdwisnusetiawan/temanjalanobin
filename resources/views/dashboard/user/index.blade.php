@@ -234,9 +234,10 @@
                                             <div class="form-group col-md-6">
                                                 <label for="country">Country</label>
                                                 <div class="input-group">
-                                                    <select name="country" class="form-control select2" required>
+                                                    <!-- <select name="country" class="form-control select2" required>
                                                         <option selected disabled>Select country</option>
-                                                    </select>
+                                                    </select> -->
+                                                    <input type="text" class="form-control" name="country" value="{{ $user->country }}" placeholder="Enter Country">
                                                     <div class="spinner-loader-inside" id="spinner-country" style="display: none">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </div>
@@ -247,10 +248,10 @@
                                             <div class="form-group col-md-6">
                                                 <label for="province">Province</label>
                                                 <div class="input-group">
-                                                    <select name="province" class="form-control select2" required onchange="cities(this)">
+                                                    <!-- <select name="province" class="form-control select2" required onchange="cities(this)">
                                                         <option selected disabled>Select province</option>
-                                                        <!-- <option value="jawa timur" {{ $user->province == 'jawa timur' ? 'selected' : '' }}>Jawa Timur</option> -->
-                                                    </select>
+                                                    </select> -->
+                                                    <input type="text" class="form-control" name="province" value="{{ $user->province }}" placeholder="Enter Province" required>
                                                     <div class="spinner-loader-inside" id="spinner-province" style="display: none">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </div>
@@ -259,10 +260,10 @@
                                             <div class="form-group col-md-6">
                                                 <label for="city">City</label>
                                                 <div class="input-group">
-                                                    <select name="city" class="form-control select2" required onchange="postalCode(this); subdistricts(this)">
+                                                    <!-- <select name="city" class="form-control select2" required onchange="postalCode(this); subdistricts(this)">
                                                         <option selected disabled>Select city</option>
-                                                        <!-- <option value="surabaya" {{ $user->city == 'surabaya' ? 'selected' : '' }}>Surabaya</option> -->
-                                                    </select>
+                                                    </select> -->
+                                                    <input type="text" class="form-control" name="city" value="{{ $user->city }}" placeholder="Enter City" required>
                                                     <div class="spinner-loader-inside" id="spinner-city" style="display: none">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </div>
@@ -284,7 +285,7 @@
                                             <div class="form-group col-md-6">
                                                 <label>Post Code:</label>
                                                 <div class="input-group">
-                                                    <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required readonly>
+                                                    <input type="number" class="form-control" name="postcode" value="{{ $user->postcode }}" placeholder="Enter Post Code" required>
                                                     <div class="spinner-loader-inside" id="spinner-postcode" style="display: none">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </div>
@@ -357,8 +358,8 @@
             defaultDate: '{{ $user->dateofbirth }}'
         });
 
-        countries();
-        provinces();
+        // countries();
+        // provinces();
     });
     Dropzone.autoDiscover = false;
 
