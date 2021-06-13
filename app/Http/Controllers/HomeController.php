@@ -56,8 +56,9 @@ class HomeController extends Controller
         $on_sales = Product::inRandomOrder()->limit(3)->get();
         $recommendeds = Product::inRandomOrder()->limit(3)->get();
         $populars = Product::inRandomOrder()->limit(3)->get();
+        $services = collect([]);
 
-        return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars'));
+        return view('home', compact('sliders', 'products', 'top_rateds', 'on_sales', 'recommendeds', 'populars', 'services'));
         
         // $sliders = Slider::all();
         // $products = Product::where('special', true)->get();

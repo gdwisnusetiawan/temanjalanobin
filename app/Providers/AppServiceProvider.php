@@ -68,26 +68,26 @@ class AppServiceProvider extends ServiceProvider
 
             $modal_type = rand(0,7);
             $modal_type = 0;
-            $ip = Functions::getIp('203.78.117.178');
+            // $ip = Functions::getIp('203.78.117.178');
             $popup = Popup::where('is_active', true)->first();
-            $popup_check = false;
-            if($ip != null && $popup != null) {
-                if($popup->valid == 1) {
-                    if(strtolower($popup->filter) == strtolower($ip->city)) {
-                        $popup_check = true;
-                    }
-                }
-                elseif($popup->valid == 2) {
-                    if(strtolower($popup->filter) == strtolower($ip->regionname)) {
-                        $popup_check = true;
-                    }
-                }
-                if($popup->valid == 3) {
-                    if(strtolower($popup->filter) == strtolower($ip->country)) {
-                        $popup_check = true;
-                    }
-                }
-            }
+            $popup_check = true;
+            // if($ip != null && $popup != null) {
+            //     if($popup->valid == 1) {
+            //         if(strtolower($popup->filter) == strtolower($ip->city)) {
+            //             $popup_check = true;
+            //         }
+            //     }
+            //     elseif($popup->valid == 2) {
+            //         if(strtolower($popup->filter) == strtolower($ip->regionname)) {
+            //             $popup_check = true;
+            //         }
+            //     }
+            //     if($popup->valid == 3) {
+            //         if(strtolower($popup->filter) == strtolower($ip->country)) {
+            //             $popup_check = true;
+            //         }
+            //     }
+            // }
             $loader = 2;
             $menus = Functions::menu();
             // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
@@ -100,6 +100,7 @@ class AppServiceProvider extends ServiceProvider
             // die("Could not connect to the database.  Please check your configuration. error:" . $e );
         }
         // dd($menus[1][1]->isContains('title', ['belanja', 'shop', 'categories']));
+        
         if($config == null || $config->is_active == false) {
             abort(503);
         }

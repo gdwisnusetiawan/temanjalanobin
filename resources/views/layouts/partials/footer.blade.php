@@ -114,21 +114,24 @@
                 <div class="col-lg-6">
                     <!-- Social icons -->
                     <div class="social-icons social-icons">
-                        @isset($footer)
+                        @isset($config)
                         <ul>
-                            @isset($footer->facebook)
-                            <li class="social-facebook"><a href="{{ $footer->facebook }}" target="_BLANK"><i class="fab fa-facebook-f"></i></a></li>
+                            @isset($config->facebook)
+                            <li class="social-facebook"><a href="{{ $config->facebook }}" target="_BLANK"><i class="fab fa-facebook-f"></i></a></li>
                             @endisset
-                            @isset($footer->instagram)
-                            <li class="social-instagram"><a href="{{ $footer->instagram }}" target="_BLANK"><i class="fab fa-instagram"></i></a></li>
+                            @isset($config->instagram)
+                            <li class="social-instagram"><a href="{{ $config->instagram }}" target="_BLANK"><i class="fab fa-instagram"></i></a></li>
                             @endisset
-                            @isset($footer->twitter)
-                            <li class="social-twitter"><a href="{{ $footer->twitter }}" target="_BLANK"><i class="fab fa-twitter"></i></a></li>
+                            @isset($config->twitter)
+                            <li class="social-twitter"><a href="{{ $config->twitter }}" target="_BLANK"><i class="fab fa-twitter"></i></a></li>
                             @endisset
-                            @isset($footer->youtube)
-                            <li class="social-youtube"><a href="{{ $footer->youtube }}" target="_BLANK"><i class="fab fa-youtube"></i></a></li>
+                            @isset($config->youtube)
+                            <li class="social-youtube"><a href="{{ $config->youtube }}" target="_BLANK"><i class="fab fa-youtube"></i></a></li>
                             @endisset
-                            <!-- <li class="social-whatsapp"><a href="{{ $footer->whatsapp }}" target="_BLANK"><i class="fab fa-whatsapp"></i></a></li> -->
+                            @isset($config->tiktok)
+                            <li class="social-tiktok"><a href="{{ $config->tiktok }}" target="_BLANK"><i class="fab fa-tiktok"></i></a></li>
+                            @endisset
+                            <!-- <li class="social-whatsapp"><a href="{{ $config->whatsapp }}" target="_BLANK"><i class="fab fa-whatsapp"></i></a></li> -->
                             <!-- <li class="social-rss"><a href="#" target="_BLANK"><i class="fa fa-rss"></i></a></li> -->
                             <!-- <li class="social-vimeo"><a href="#" target="_BLANK"><i class="fab fa-vimeo"></i></a></li> -->
                             <!-- <li class="social-pinterest"><a href="#" target="_BLANK"><i class="fab fa-pinterest"></i></a></li> -->

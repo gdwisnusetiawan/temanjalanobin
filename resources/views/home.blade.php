@@ -109,7 +109,7 @@
 <section>
 <div class="container">
     <div class="heading-text heading-line text-center">
-        <h4>New Arrival </h4>
+        <h4>Tour Programs</h4>
     </div>
     <div class="carousel shop-products" data-margin="20" data-dots="false">
         @foreach($products as $product)
@@ -155,6 +155,73 @@
 </section>
 @endif
 <!--END: Shop products CAROUSEL -->
+
+@if($services->count() > 0)
+<section>
+    <div class="container">
+        <div class="heading-text heading-section text-center">
+            <h2>What we do</h2>
+            <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="fa fa-plug"></i></a>
+                    </div>
+                    <h3>Powerful template</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="fa fa-desktop"></i></a>
+                    </div>
+                    <h3>Flexible Layouts</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="fa fa-cloud"></i></a>
+                    </div>
+                    <h3>Retina Ready</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="far fa-lightbulb"></i></a>
+                    </div>
+                    <h3>Fast processing</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="fa fa-trophy"></i></a>
+                    </div>
+                    <h3>Unlimited Colors</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="icon-box effect medium border center">
+                    <div class="icon">
+                        <a href="#"><i class="fa fa-thumbs-up"></i></a>
+                    </div>
+                    <h3>Premium Sliders</h3>
+                    <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
 
 @if(false)
 <!-- SHOP WIDGET PRODUTCS -->

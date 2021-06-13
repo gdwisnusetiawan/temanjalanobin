@@ -20,6 +20,7 @@
     <link href="{{ asset('polo-5/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('polo-5/css/custom.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="{{ asset('fontawesome/css/all.min.css') }}" rel="stylesheet">
     <!--Pageloader plugin files-->
     <link href="{{ asset('polo-5/plugins/pageloader/pageloader.css') }}" rel="stylesheet">
     <!-- SLIDER REVOLUTION 5.x STYLES  -->
