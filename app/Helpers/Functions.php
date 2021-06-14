@@ -296,4 +296,20 @@ class Functions
         session()->forget('cart');
         return $payment;
     }
+
+    public static function translate($string)
+    {
+        $lang = session('language') ?? 'id';
+        $pos = strpos($string, '|');
+        $result = $string;
+        if($pos > 0) {
+            if($lang == 'id') {
+                $result = substr($string, 0, $pos);
+            }
+            elseif($lang == 'en') {
+                $result = substr($string, $pos + 1);
+            }
+        }
+        return $result;
+    }
 }

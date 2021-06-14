@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Cookie;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -62,8 +63,8 @@ class AppServiceProvider extends ServiceProvider
             $currency = Currency::where('name', $request->cookie('currency'))->first();
             if($currency == null) {
                 $currency = Currency::first();
-            //     $response = new Response('Hello World');
-            //     $response->withCookie(cookie()->forever('currency', $currency->name));
+                // $response = new Response('Hello World');
+                // $response->withCookie(cookie()->forever('currency', $currency->name));
             }
 
             $modal_type = rand(0,7);
@@ -115,7 +116,7 @@ class AppServiceProvider extends ServiceProvider
             'marquee' => $marquee,
             'categories' => $categories,
             'currencies' => $currencies,
-            'currency' => $currency
+            'currency' => $currency,
         ]);
     }
 }

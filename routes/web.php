@@ -117,6 +117,7 @@ Route::prefix('shipment')->name('shipment.')->group(function () {
 
 Route::post('currency', 'HomeController@currency')->name('currency');
 Route::get('currency/convert/{value}/{origin?}', 'HomeController@convertCurrency')->name('currency.convert');
+// Route::post('language/change/{value}', 'HomeController@changeLanguage')->name('language.change');
 Route::post('cookie/get', 'HomeController@getCookie')->name('cookie.get');
 Route::post('cookie/set', 'HomeController@setCookie')->name('cookie.set');
 Route::post('send-message', 'HomeController@sendMessage')->name('sendMessage');

@@ -1,10 +1,10 @@
 @component('mail::message')
 
-#### New Message from
-###### Name: {{ $name }}
-###### Email: {{ $email }}
+**New Message from** <br>
+Name: {{ $name }} <br>
+Email: {{ $email }} <br>
 
-**Subject**: {{ $subject }} <br>
+**Subject: {{ $subjects }}** <br>
 
 {{ $message }}
 

@@ -20,6 +20,16 @@ class Product extends Model
         return 'slug';
     }
 
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getSlugAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
     // public function category()
     // {
     //     return $this->belongsTo('App\Category', 'category', 'id');

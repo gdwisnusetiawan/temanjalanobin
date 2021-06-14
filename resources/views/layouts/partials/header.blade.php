@@ -34,6 +34,15 @@
                     <!-- <li><a class="btn">
                         <i class="icon-shopping-cart"></i> <span class="badge badge-light">4</span>
                     </a></li> -->
+                    <li>
+                        <div class="p-dropdown">
+                            <a href="#"><i class="icon-globe"></i><span>{{ strtoupper(session('language') ?? 'id') }}</span></a>
+                            <ul class="p-dropdown-content">
+                                <li><a href="#" onclick="changeLanguage('id')">Indonesia</a></li>
+                                <li><a href="#" onclick="changeLanguage('en')">English</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     @if($currencies->count() > 1)
                     <li>
                         <div class="p-dropdown"> <a href="#" id="currency-symbol">{{ $currency->symbol }}</a>

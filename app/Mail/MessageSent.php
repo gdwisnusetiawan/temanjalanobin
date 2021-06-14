@@ -15,7 +15,7 @@ class MessageSent extends Mailable
     public $config;
     public $name;
     public $email;
-    public $subject;
+    public $subjects;
     public $message;
 
     /**
@@ -23,12 +23,12 @@ class MessageSent extends Mailable
      *
      * @return void
      */
-    public function __construct($name, $email, $subject, $message)
+    public function __construct($name, $email, $subjects, $message)
     {
         $this->config = Config::first();
         $this->name = $name;
         $this->email = $email;
-        $this->subject = $subject;
+        $this->subjects = $subjects;
         $this->message = $message;
     }
 
@@ -39,9 +39,9 @@ class MessageSent extends Mailable
      */
     public function build()
     {
-        return $this->subject('New Message - '.$this->subject)
+        return $this->subject('New Message - '.$this->subjects)
             ->markdown('emails.message-sent')->with([
-                'url' => 'mailto:'.$email
+                'url' => 'mailto:'.$this->email
             ]);
     }
 }

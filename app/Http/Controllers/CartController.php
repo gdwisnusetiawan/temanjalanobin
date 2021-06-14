@@ -55,6 +55,11 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->has('book_now')) {
+            if(auth()->guest()) {
+                return redirect()->guest('login');
+            }
+        }
         $product = Product::find($request->product_id);
         $price = $product->getUserPrice($request->quantity);
         // set price back to real price without discount

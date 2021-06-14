@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,4 +36,14 @@ class Category extends Model
     // {
     //     return Str::slug($this->title, '-');
     // }
+    
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getSlugAttribute($value)
+    {
+        return Functions::translate($value);
+    }
 }

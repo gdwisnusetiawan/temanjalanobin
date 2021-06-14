@@ -108,14 +108,15 @@
             }
         });
 
-        function setCookie(key, value) {
+        function setCookie(key, value, _callback) {
             $.ajax({
                 method: 'POST',
                 url: @json(route('cookie.set')),
                 data: { key: key, value: value }
             })
             .done(function( data ) {
-                console.log(data);
+                // console.log(data);
+                typeof _callback === 'function' && _callback(data);
             });
         }
 
@@ -171,6 +172,17 @@
             // form.submit();
             setCookie('currency', value);
             location.replace(location.href+'?reload');
+        }
+
+        function changeLanguage(value) {
+            // var form = $('#form-change-currency');
+            // form.find('[name="value"]').val(value);
+            // form.submit();
+            // console.log(value)
+            setCookie('language', value, function(result) {
+                location.reload();
+                // console.log(result)
+            });
         }
 
         function checkReload() {

@@ -156,8 +156,10 @@ class HomeController extends Controller
         // return (Cookie::get('currency'));
         $response = new Response('Hello World');
         $response->withCookie(cookie()->forever($request->key, $request->value));
+        $request->session()->put($request->key, $request->value);
         // return $request->cookie($request->key);
-        return $response;
+        // return $response;
+        return response()->json($request->session()->get('language'));
     }
 
     public function getCookie(Request $request){
@@ -181,7 +183,15 @@ class HomeController extends Controller
         $email = $request->email;
         $subject = $request->subject;
         $message = $request->message;
-        // Mail::to($recipient)->send(new MessageSent($name, $email, $subject, $message));
+        Mail::to($recipient)->send(new MessageSent($name, $email, $subject, $message));
         return redirect()->back()->with('notify', ['message' => 'Message sent', 'type' => 'success']);
+    }
+
+    public function changeLanguage(Request $request)
+    {
+        $response = new Response('Hello World');
+        $response->withCookie(cookie()->forever($request->key, $request->value));
+        // return $request->cookie($request->key);
+        return response()->json($request->value);
     }
 }
