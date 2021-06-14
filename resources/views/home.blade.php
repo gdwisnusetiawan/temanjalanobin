@@ -150,7 +150,7 @@
 @endif
 <!--END: Shop products CAROUSEL -->
 
-@isset($webcategory)
+@if(isset($webcategory) && false)
 <!-- SHOP CATEGORIES -->
 <section class="p-t-0">
 <div class="container">
@@ -198,7 +198,7 @@
     </div>
 </div>
 </section>
-@endisset
+@endif
 <!-- end: SHOP CATEGORIES -->
 
 <!-- BOXES -->
