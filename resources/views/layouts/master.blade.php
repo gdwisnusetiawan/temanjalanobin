@@ -28,6 +28,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/layers.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('polo-5/plugins/slider-revolution/css/navigation.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Rating -->
+    <link rel="stylesheet" href="{{ asset('polo-5/plugins/rateit/rateit.css') }}">
     <style>
         .cart-product-quantity .qty {
             max-width: 60px;
@@ -84,6 +86,8 @@
     <script src="{{ asset('polo-5/plugins/pageloader/pageloader.init.js') }}"></script>
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Rating -->
+    <script src="{{ asset('polo-5/plugins/rateit/jquery.rateit.min.js') }}"></script>
 
     <!-- SLIDER REVOLUTION 5.x SCRIPTS  -->
     <script type="text/javascript" src="{{ asset('polo-5/plugins/slider-revolution/js/jquery.themepunch.tools.min.js') }}"></script>
@@ -175,13 +179,8 @@
         }
 
         function changeLanguage(value) {
-            // var form = $('#form-change-currency');
-            // form.find('[name="value"]').val(value);
-            // form.submit();
-            // console.log(value)
             setCookie('language', value, function(result) {
                 location.reload();
-                // console.log(result)
             });
         }
 
@@ -396,7 +395,7 @@
             // loading();
             getCookie('currency');
             getCurrency(cookies['currency']);
-            $('#currency-symbol').html(currency.symbol);
+            tpj('#currency-symbol').html(currency.symbol);
             if(cookies['currency'] == '') {
                 @isset($currency->id)
                     setCookie('currency', @json($currency->id));
@@ -405,6 +404,7 @@
             }
             checkReload();
             // console.log(currency, cookies)
+
             if (tpj("#rev_slider_33_1").revolution == undefined) {
                 revslider_showDoubleJqueryError("#rev_slider_33_1");
             } else {

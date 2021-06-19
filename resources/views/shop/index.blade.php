@@ -77,7 +77,7 @@
                                     <!-- <span class="product-new">NEW</span> -->
                                     <!-- <span class="product-hot">HOT</span> -->
                                     <span class="product-wishlist">
-                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <!-- <a href="#"><i class="fa fa-heart"></i></a> -->
                                     </span>
                                     <div class="product-overlay">
                                         <!-- <a href="{{ route('shop.single-ajax') }}" data-lightbox="ajax">Quick View</a> -->
@@ -95,14 +95,15 @@
                                         {{ $product->getpriceFormat(1) }}
                                     </div>
                                     <!-- <div class="product-price" style="float: none; display: block">{{ $product->getpriceFormat(1) }}</div> -->
-                                    <!-- <div class="product-rate">
+                                    <div class="product-rate">
+                                        <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $product->rating_avg }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                        <!-- <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
+                                        <i class="fa fa-star-half-o"></i> -->
                                     </div>
-                                    <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
+                                    <div class="product-reviews"><a href="#">{{ $product->reviews->count() }} customer reviews</a></div>
                                 </div>
                             </div>
                         </div>

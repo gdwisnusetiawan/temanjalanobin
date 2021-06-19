@@ -129,10 +129,10 @@
                             <span class="mr-1">Subtotal:</span>
                             <span class="">{{ $payment->subtotal_format }}</span>
                         </div>
-                        <div class="d-flex justify-content-between">
+                        <!-- <div class="d-flex justify-content-between">
                             <span class="mr-1">Shipping:</span>
                             <span class="">{{ $payment->shipping_cost_format }}</span>
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-between">
                             <span class="mr-1">Discount:</span>
                             <span class="">-{{ $payment->discount > 0 ? $payment->discount_format : '' }}</span>

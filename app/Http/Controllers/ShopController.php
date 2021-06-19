@@ -18,7 +18,7 @@ class ShopController extends Controller
         $category = Category::where('slug', 'like', '%'.$category.'%')->first();
         $products = $category->products;
 
-        // dd($products[0]->media);
+        // dd($products->where('slug', 'bali')->first()->rating_avg);
 
         return view('shop.index', compact('category', 'products'));
     }

@@ -66,12 +66,12 @@ class Payment extends Model
 
     public function getInvoiceDateFormatAttribute()
     {
-        return Functions::datetimeFormat($this->invoicedate);
+        return Functions::datetimeFormat($this->invoicedate ?? $this->transactiondate);
     }
 
     public function getInvoiceDuedateFormatAttribute()
     {
-        return Functions::datetimeFormat($this->invoiceduedate);
+        return Functions::datetimeFormat($this->invoiceduedate ?? $this->transactionexpire);
     }
 
     public function getGrandTotalAttribute()

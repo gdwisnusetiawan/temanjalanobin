@@ -35,7 +35,6 @@ class Product extends Model
     //     return $this->belongsTo('App\Category', 'category', 'id');
     // }
 
-
     public function variants()
     {
         return $this->hasMany('App\Variant', 'product_id', 'id');
@@ -44,6 +43,21 @@ class Product extends Model
     public function distributor()
     {
         return $this->belongsTo('App\Distributor');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany('App\Review', 'productid', 'id');
+    }
+
+    public function userReview(User $user)
+    {
+        return $this->reviews->where('customerid', $user->id)->first();
+    }
+    
+    public function getRatingAvgAttribute()
+    {
+        return round($this->reviews->avg('rating'));
     }
     
     public function getCategoryModelAttribute()

@@ -29,14 +29,15 @@
                             @endif
                             <ins>{{ $product->getPriceFormat() }}</ins>
                         </div>
-                        <!-- <div class="product-rate">
+                        <div class="product-rate">
+                            <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $product->rating_avg }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            <!-- <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-half-o"></i>
+                            <i class="fa fa-star-half-o"></i> -->
                         </div>
-                        <div class="product-reviews"><a href="#">3 customer reviews</a></div> -->
+                        <div class="product-reviews"><a href="#">{{ $product->reviews->count() }} customer reviews</a></div>
                         <div class="seperator m-b-10"></div>
                         <p>{!! htmlspecialchars_decode($product->description) !!}</p>
                         <div class="product-meta">
@@ -140,15 +141,15 @@
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="true"><i class="fa fa-info"></i>Additional
                             Info</a></a>
                     </li>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false"><i class="fa fa-star"></i>Reviews</a></a>
-                    </li> -->
+                    </li>
                 </ul>
                 <div class="tab-content" id="myTabContent3">
                     <div class="tab-pane fade active show" id="home3" role="tabpanel" aria-labelledby="home-tab">
                         <p>{!! htmlspecialchars_decode($product->content) !!}</p>
                     </div>
-                    <div class="tab-pane fade " id="profile3" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab">
                         {!! htmlspecialchars_decode($product->detailinfo) !!}
                         <!-- <table class="table table-striped table-bordered">
                             <tbody>
@@ -183,80 +184,36 @@
                             </tbody>
                         </table> -->
                     </div>
-                    <div class="tab-pane fade d-none" id="contact3" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="comments" id="comments">
                             <div class="comment_number">
-                                Reviews <span>(3)</span>
+                                Reviews <span>({{ $product->reviews->count() }})</span>
                             </div>
                             <div class="comment-list">
+                                @foreach($product->reviews as $review)
                                 <!-- Comment -->
                                 <div class="comment" id="comment-1">
-                                    <div class="image"><img alt="" src="{{ asset('polo-5/images/blog/author.jpg') }}" class="avatar">
+                                    <div class="image"><img alt="" src="{{ $review->customer->avatar }}" class="avatar">
                                     </div>
                                     <div class="text">
                                         <div class="product-rate">
+                                            <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $review->rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                            <!-- <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-half-o"></i>
+                                            <i class="fa fa-star-half-o"></i> -->
                                         </div>
-                                        <h5 class="name">John Doe</h5>
-                                        <span class="comment_date">Posted at 15:32h, 06 December</span>
-                                        <a class="comment-reply-link" href="#">Reply</a>
+                                        <h5 class="name">{{ $review->customer->fullname }}</h5>
+                                        <span class="comment_date">Posted at {{ $review->datetime_format }}</span>
+                                        <!-- <a class="comment-reply-link" href="#">Reply</a> -->
                                         <div class="text_holder">
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem Ipsum has been the industry's standard dummy
-                                                text ever since the 1500s.</p>
+                                            {!! $review->content !!}
                                         </div>
                                     </div>
                                 </div>
                                 <!-- end: Comment -->
-                                <!-- Comment -->
-                                <div class="comment" id="comment-1-1">
-                                    <div class="image"><img alt="" src="{{ asset('polo-5/images/blog/author2.jpg') }}" class="avatar">
-                                    </div>
-                                    <div class="text">
-                                        <div class="product-rate">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-half-o"></i>
-                                        </div>
-                                        <h5 class="name">John Doe</h5>
-                                        <span class="comment_date">Posted at 15:32h, 06 December</span>
-                                        <a class="comment-reply-link" href="#">Reply</a>
-                                        <div class="text_holder">
-                                            <p>It is a long established fact that a reader will be distracted by
-                                                the readable content.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end: Comment -->
-                                <!-- Comment -->
-                                <div class="comment" id="comment-1-2">
-                                    <div class="image"><img alt="" src="{{ asset('polo-5/images/blog/author3.jpg') }}" class="avatar">
-                                    </div>
-                                    <div class="text">
-                                        <div class="product-rate">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-half-o"></i>
-                                        </div>
-                                        <h5 class="name">John Doe</h5>
-                                        <span class="comment_date">Posted at 15:32h, 06 December</span>
-                                        <a class="comment-reply-link" href="#">Reply</a>
-                                        <div class="text_holder">
-                                            <p>There are many variations of passages of Lorem Ipsum available,
-                                                but the majority have suffered alteration in some form, by
-                                                injected humour.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end: Comment -->
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -283,7 +240,7 @@
                     <a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $related->media['url'][1] ?? $related->media['url'][0] }}" class="img-fit"></a>
                     <!-- <span class="product-new">NEW</span> -->
                     <span class="product-wishlist">
-                        <a href="#"><i class="fa fa-heart"></i></a>
+                        <!-- <a href="#"><i class="fa fa-heart"></i></a> -->
                     </span>
                     <!-- <div class="product-overlay">
                         <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>

@@ -94,7 +94,7 @@ class AppServiceProvider extends ServiceProvider
             // $footer = Footer::where('is_active', true)->orderBy('id', 'desc')->first();
             $footer = Footer::orderBy('id', 'desc')->first();
             $marquee = Marquee::where('is_active', true)->first();
-            $categories = Category::all();
+            $categories = Category::orderBy('id')->get();
             $user_referer = User::whereNotNull('referalid')->where('referalid', request()->get('referal'))->first();
             $currencies = Currency::all();
         } catch (\Exception $e) {

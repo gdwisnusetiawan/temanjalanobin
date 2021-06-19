@@ -66,7 +66,7 @@
                             <th>Total</th>
                             <th>Status</th>
                             <!-- <th>Shipment</th> -->
-                            <!-- <th class="noExport">Actions</th> -->
+                            <th class="noExport">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,11 +78,15 @@
                             <td>{{ $payment->total_format }}</td>
                             <td><span class="badge badge-pill badge-{{ $payment->status_desc['color'] }}">{{ $payment->status_desc['text'] }}</span></td>
                             <!-- <td>{{ $payment->shipping_receipt }}</td> -->
-                            <!-- <td> -->
+                            <td>
                                 <!-- <a class="ml-2" href="{{ route('checkout.index', $payment) }}" data-toggle="tooltip" data-original-title="Pay"><i class="icon-shopping-bag"></i></a> -->
                                 <!-- <a class="ml-2" href="#" data-toggle="tooltip" data-original-title="Delete"><i class="icon-trash-2"></i></a>
                                 <a class="ml-2" href="#" data-toggle="tooltip" data-original-title="Settings"><i class="icon-settings"></i></a> -->
-                            <!-- </td> -->
+                                @if($payment->status == 3)
+                                    <!-- <div class="rateit" data-rateit-mode="font" data-productid="0"></div> -->
+                                    <a href="{{ route('review.index', ['transactionno' => $payment]) }}" class="btn btn-outline btn-sm">Give Review</a>
+                                @endif
+                            </td>
                         </tr>
                         @empty
                         <tr>

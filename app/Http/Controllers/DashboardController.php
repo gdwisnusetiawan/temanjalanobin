@@ -35,6 +35,13 @@ class DashboardController extends Controller
         return view('dashboard.invoice', compact('payment', 'payments', 'user'));
     }
 
+    public function review(Payment $payment)
+    {
+        $user = $payment->user;
+        $transactions = $payment->transactions;
+        return view('dashboard.review', compact('payment', 'user'));
+    }
+
     public function payment(Payment $payment)
     {
         $user = $payment->user;

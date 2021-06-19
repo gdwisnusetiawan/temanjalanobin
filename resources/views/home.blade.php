@@ -113,7 +113,7 @@
                 <a href="{{ route('shop.single', [$product->category_model->slug, $product->slug]) }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->media['url'][1] ?? $product->media['url'][0] }}" class="link-fit"></a>
                 <!-- <span class="product-new">NEW</span> -->
                 <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
+                    <!-- <a href="#"><i class="fa fa-heart"></i></a> -->
                 </span>
                 <!-- <div class="product-overlay">
                     <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
@@ -132,14 +132,15 @@
                     <ins>{{ $product->getPriceFormat() }}</ins>
                 </div>
                 <!-- <div class="product-price"><ins>{{ $product->price_format }}</ins></div> -->
-                <!-- <div class="product-rate">
+                <div class="product-rate">
+                    <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $product->rating_avg }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                    <!-- <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
+                    <i class="fa fa-star-half-o"></i> -->
                 </div>
-                <div class="product-reviews"><a href="#">6 customer reviews</a></div> -->
+                <div class="product-reviews"><a href="#">{{ $product->reviews->count() }} customer reviews</a></div>
             </div>
         </div>
         @endforeach
@@ -244,7 +245,7 @@
                 <a href="{{ $product->link }}" class="img-fit"><img alt="Shop product image!" src="{{ $product->image_url }}" class="link-fit"></a>
                 <!-- <span class="product-new">NEW</span> -->
                 <span class="product-wishlist">
-                    <a href="#"><i class="fa fa-heart"></i></a>
+                    <!-- <a href="#"><i class="fa fa-heart"></i></a> -->
                 </span>
                 <!-- <div class="product-overlay">
                     <a href="shop-product-ajax-page.html" data-lightbox="ajax">Quick View</a>
