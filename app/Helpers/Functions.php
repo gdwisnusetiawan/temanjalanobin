@@ -302,7 +302,10 @@ class Functions
         $lang = session('language') ?? 'id';
         $pos = strpos($string, '|');
         $result = $string;
-        if($pos > 0) {
+        if($pos !== false && $pos == 0) {
+            $result = str_replace('|', '', $string);
+        }
+        if($pos !== false && $pos > 0) {
             if($lang == 'id') {
                 $result = substr($string, 0, $pos);
             }
