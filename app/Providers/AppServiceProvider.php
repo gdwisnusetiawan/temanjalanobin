@@ -71,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
             $modal_type = 0;
             // $ip = Functions::getIp('203.78.117.178');
             $popup = Popup::where('is_active', true)->first();
-            $popup_check = true;
+            $popup_check = $popup ? true : false;
             // if($ip != null && $popup != null) {
             //     if($popup->valid == 1) {
             //         if(strtolower($popup->filter) == strtolower($ip->city)) {
