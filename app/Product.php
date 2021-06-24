@@ -30,6 +30,21 @@ class Product extends Model
         return Functions::translate($value);
     }
 
+    public function getDescriptionAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getContentAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDetailinfoAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
     // public function category()
     // {
     //     return $this->belongsTo('App\Category', 'category', 'id');
@@ -47,17 +62,22 @@ class Product extends Model
 
     public function reviews()
     {
+        return $this->hasMany('App\Review', 'productid', 'id')->where('approve', true);
+    }
+
+    public function allReviews()
+    {
         return $this->hasMany('App\Review', 'productid', 'id');
     }
 
-    public function userReview(User $user)
+    public function userReview(User $user, Payment $payment)
     {
-        return $this->reviews->where('customerid', $user->id)->first();
+        return $this->allReviews->where('customerid', $user->id)->where('transactionno', $payment->transactionno)->first();
     }
     
     public function getRatingAvgAttribute()
     {
-        return round($this->reviews->avg('rating'));
+        return round($this->reviews->where('approve', true)->avg('rating'));
     }
     
     public function getCategoryModelAttribute()

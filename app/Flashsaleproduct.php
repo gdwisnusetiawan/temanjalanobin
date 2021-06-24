@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,10 @@ class Flashsaleproduct extends Model
         else {
             return $url.'image';
         }
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

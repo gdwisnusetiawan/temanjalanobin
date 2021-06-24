@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,5 +41,15 @@ class Popup extends Model
         else {
             return '#';
         }
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

@@ -44,4 +44,44 @@ class Promotion extends Model
     {
         return Functions::media($this);
     }
+
+    public function getTitle1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescription1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getButton1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getLink1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getTitle2Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescription2Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getButton2Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getLink2Attribute($value)
+    {
+        return Functions::translate($value);
+    }
 }

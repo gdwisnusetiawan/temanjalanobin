@@ -86,6 +86,8 @@ class HomeController extends Controller
         $webcategory = Webcategory::where('is_active', true)->first();
         $subcategories = Subcategory::all();
 
+        // dd($testimonial);
+
         return view('home', compact(
             'sliders', 
             'products', 

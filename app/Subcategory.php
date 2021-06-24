@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -42,5 +43,10 @@ class Subcategory extends Model
         else {
             return $url.'picture';
         }
+    }
+
+    public function getNameAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

@@ -31,4 +31,14 @@ class Singleblock extends Model
     {
         return Functions::media($this);
     }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return Functions::translate($value);
+    }
 }

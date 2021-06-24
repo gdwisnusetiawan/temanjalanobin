@@ -16,6 +16,11 @@ class Page extends Model
     {
         return 'single';
     }
+
+    public function scopeWhereSlug($query, $type)
+    {
+        return $query->where('slug', 'like', '%'.$type.'%');
+    }
     
     public function menu()
     {
@@ -55,5 +60,25 @@ class Page extends Model
         //     $media['url'] = $images;
         // }
         // return $media;
+    }
+
+    public function getSlugAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getContentAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

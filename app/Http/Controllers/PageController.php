@@ -23,9 +23,11 @@ class PageController extends Controller
         //     $query->where('slug', $slug);
         // })->first();
         
-        if(Str::contains($slug, ['new', 'arrival'])) {
+        $menu = Menu::where('title', 'like', '%'.$slug.'%')->first();
+        if(Str::contains($slug, ['new', 'arrival', 'terlaris']) || (isset($menu) && $menu->id == 1)) {
             $products = Product::where('special', true)->get();
-            return view('new-arrival', compact('products'));
+            $title = ucwords(str_replace('-', ' ', $slug));
+            return view('new-arrival', compact('products', 'title'));
         }
 
         if(Str::contains($slug, 'distributor')) {
@@ -38,9 +40,10 @@ class PageController extends Controller
         if(Str::contains($slug, 'faq')) {
             return view('pages.faq');
         }
-        $page = Page::where('slug', $slug)->where('is_active', true)->first() 
-            ?? Multipage::with('submultipages')->where('slug', $slug)->where('is_active', true)->first();
+        $page = Page::whereSlug($slug)->where('is_active', true)->first() 
+            ?? Multipage::with('submultipages')->whereSlug($slug)->where('is_active', true)->first();
 
+        // dd($page);
         if(isset($page))
         {
             if($page->page_type == 'single') {
@@ -65,8 +68,8 @@ class PageController extends Controller
 
     public function show($parent, $slug)
     {
-        $page = Multisubpage::where('slug', $slug)->where('is_active', true)->first();
-        $multipage = Multipage::with('submultipages')->where('slug', $parent)->first();
+        $page = Multisubpage::whereSlug($slug)->where('is_active', true)->first();
+        $multipage = Multipage::with('submultipages')->whereSlug($parent)->first();
         $share_links = Functions::shareLink(url()->full());
         $prev_page = null;
         $next_page = null;

@@ -18,6 +18,7 @@ class ReviewController extends Controller
         $payment = Payment::where('transactionno', $request->transactionno)->firstOrFail();
         $user = $payment->user;
         $transactions = $payment->transactions;
+        // dd($transactions[0]->product->reviews);
         return view('dashboard.review', compact('payment', 'user', 'transactions'));
     }
 
@@ -40,8 +41,17 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         $review = Review::updateOrCreate(
-            ['productid' => $request->productid, 'customerid' => $request->customerid],
-            ['rating' => $request->rating, 'content' => $request->content, 'datetime' => now()]
+            [
+                'productid' => $request->productid, 
+                'customerid' => $request->customerid,
+                'transactionno' => $request->transactionno
+            ],
+            [
+                'rating' => $request->rating, 
+                'content' => $request->content, 
+                'datetime' => now(),
+                'approve' => false
+            ]
         );
         // $review->product()->associate($request->productid);
         // $review->customer()->associate($request->customerid);

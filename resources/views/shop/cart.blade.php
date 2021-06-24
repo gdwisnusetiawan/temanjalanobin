@@ -62,7 +62,7 @@
                                 <div class="cart-product-thumbnail-name">{{ $product->title }}</div>
                             </td>
                             <td class="cart-product-description">
-                                <p>{!! htmlspecialchars_decode($product->description) !!}</p>
+                                <p>{!! $functions->paragraphChunk(htmlspecialchars_decode($product->description)) !!}</p>
                             </td>
                             <td class="cart-product-description">
                             @if($product->variants->isNotEmpty())

@@ -80,11 +80,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAddressLineAttribute()
     {
         if($this->national()) {
-            return $this->address .', '. ucwords($this->city_name) .', '. ucwords($this->province_name) .', '. $this->postcode;
+            $address = $this->address;
+            if($this->city != null) {
+                $address .= ', '. ucwords($this->city_name);
+            }
+            if($this->province != null) {
+                $address .= ', '. ucwords($this->province_name);
+            }
+            if($this->postcode != null) {
+                $address .= ', '. $this->postcode;
+            }
         }
         else {
-            return $this->address .', '. ucwords($this->country_name);
+            $address = $this->address;
+            if($this->country != null) {
+                $address .= ', '. ucwords($this->country_name);
+            }
         }
+        return ltrim($address, ',');
     }
 
     public function pricing($product_id)

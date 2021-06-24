@@ -26,7 +26,7 @@
             <div class="content col-lg-12">
                 <!--Heading text-->
                 <div class="heading-text heading-line text-center m-b-80">
-                    <h4>New Arrival</h4>
+                    <h4>{{ $title }}</h4>
                 </div>
                 <!--end: Heading text-->
 

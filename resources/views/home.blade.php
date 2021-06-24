@@ -3,6 +3,14 @@
 @section('content')
 @include('layouts.partials.modal')
 
+@push('styles')
+<style>
+.testimonial .testimonial-item {
+    height: auto !important;
+}
+</style>
+@endpush
+
 @isset($sliders)
 <!-- Inspiro Slider -->
 <div id="slider" class="inspiro-slider slider-fullscreen dots-creative" data-height-xs="360">
@@ -151,7 +159,7 @@
 @endif
 <!--END: Shop products CAROUSEL -->
 
-@if(isset($webcategory) && false)
+@if(isset($webcategory))
 <!-- SHOP CATEGORIES -->
 <section class="p-t-0">
 <div class="container">
@@ -208,18 +216,22 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <div class="shop-promo-box text-right" style="background-image: url({{ $promotion->media['url'][0] }});">
+            <div class="shop-promo-box text-right" style="background-image: url({{ $promotion->media['url'][0] ?? '' }});">
                 <h2>{{ $promotion->title1 }}</h2>
                 <p>{!! $promotion->description1 !!}</p>
+                @if($promotion->button1 != '')
                 <a class="btn btn-dark" href="{{ $promotion->links[0] }}" target="{{ $promotion->target1 }}">{{ $promotion->button1 }}</a>
+                @endif
             </div>
         </div>
 
         <div class="col-lg-6">
-            <div class="shop-promo-box text-left" style="background-image: url({{ $promotion->media['url'][1] }});">
+            <div class="shop-promo-box text-left" style="background-image: url({{ $promotion->media['url'][1] ?? '' }});">
                 <h2>{{ $promotion->title2 }}</h2>
                 <p>{!! $promotion->description2 !!}</p>
+                @if($promotion->button2 != '')
                 <a class="btn btn-dark" href="{{ $promotion->links[1] }}" target="{{ $promotion->target2 }}">{{ $promotion->button2 }}</a>
+                @endif
             </div>
         </div>
     </div>
@@ -359,7 +371,7 @@
     <div class="carousel client-logos dots-grey" data-items="5" data-arrows="false">
         @foreach($subpartners as $subpartner)
         <div>
-            <a href="{{ $subpartner->link }}"><img alt="{{ $subpartner->title }}" src="{{ $subpartner->image_url }}"></a>
+            <a href="{{ $subpartner->link }}" target="_BLANK"><img alt="{{ $subpartner->title }}" src="{{ $subpartner->image_url }}"></a>
         </div>
         @endforeach
     </div>

@@ -124,6 +124,7 @@ Route::post('cookie/get', 'HomeController@getCookie')->name('cookie.get');
 Route::post('cookie/set', 'HomeController@setCookie')->name('cookie.set');
 Route::post('send-message', 'HomeController@sendMessage')->name('sendMessage');
 
+Route::get('testimonial/{testimonial}', 'PageController@testimonial')->name('page.testimonial');
 Route::get('{slug}', 'PageController@index')->name('page.index');
 Route::get('{parent}/{slug}', 'PageController@show')->name('page.show');
 

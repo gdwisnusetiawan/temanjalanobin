@@ -102,7 +102,7 @@
                             <th>Total</th>
                             <th>Status</th>
                             <!-- <th>Shipment</th> -->
-                            <!-- <th class="noExport">Actions</th> -->
+                            <th class="noExport">Actions</th>
                         </tr>
                     </tfoot>
                 </table>

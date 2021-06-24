@@ -16,6 +16,11 @@ class Multipage extends Model
         return 'multiple';
     }
 
+    public function scopeWhereSlug($query, $type)
+    {
+        return $query->where('slug', 'like', '%'.$type.'%');
+    }
+
     public function menu()
     {
         return $this->belongsTo('App\Menu', 'menuid', 'id');
@@ -39,5 +44,25 @@ class Multipage extends Model
     public function getContentPreviewAttribute()
     {
         return Functions::paragraphChunk($this->content);
+    }
+
+    public function getSlugAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getContentAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

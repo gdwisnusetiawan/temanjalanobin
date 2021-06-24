@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@inject('functions', 'App\Helpers\Functions')
+
 @section('content')
 <!-- SHOP PRODUCT PAGE -->
 <section id="product-page" class="product-page p-b-0">
@@ -134,13 +136,17 @@
             <!-- Product additional tabs -->
             <div class="tabs tabs-folder">
                 <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                    @if($product->content != '')
                     <li class="nav-item">
                         <a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="false"><i class="fa fa-align-justify"></i>Description</a></a>
                     </li>
+                    @endif
+                    @if($product->detailinfo != '')
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="true"><i class="fa fa-info"></i>Additional
                             Info</a></a>
                     </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false"><i class="fa fa-star"></i>Reviews</a></a>
                     </li>
@@ -197,12 +203,13 @@
                                     </div>
                                     <div class="text">
                                         <div class="product-rate">
-                                            <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $review->rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                                            <!-- <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star-half-o"></i> -->
+                                            <!-- <div class="rateit" data-rateit-mode="font" data-rateit-value="{{ $review->rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div> -->
+                                            @for($i = 1; $i <= $review->rating; $i++)
+                                            <i class="fas fa-star"></i>
+                                            @endfor
+                                            @for($j = 1; $j <= (5 - $review->rating); $j++)
+                                            <i class="far fa-star"></i>
+                                            @endfor
                                         </div>
                                         <h5 class="name">{{ $review->customer->fullname }}</h5>
                                         <span class="comment_date">Posted at {{ $review->datetime_format }}</span>
@@ -225,13 +232,14 @@
 </section>
 <!-- end: SHOP PRODUCT PAGE -->
 <!-- SHOP WIDGET PRODUTCS -->
+@if($relateds->count() > 0)
 <section class="p-t-0">
     <div class="container">
         <div class="heading-text heading-line text-center">
             <h4>Related Products you may be interested!</h4>
         </div>
         <!--Shop products Carousel -->
-        <h4 class="mb-4">Shop products Carousel </h4>
+        <!-- <h4 class="mb-4">Shop products Carousel </h4> -->
         <div class="carousel" data-items="3">
             @foreach($relateds as $related)
             <div class="product">
@@ -252,10 +260,10 @@
                         <h3><a href="{{ route('shop.single', [$related->category_model->slug, $related->slug]) }}">{{ $related->title }}</a></h3>
                     </div>
                     <div class="product-title">
-                        @if(auth()->check() && auth()->user()->pricing($related->id)->isNotEmpty())
+                        @if(auth()->check() && auth()->user()->pricing($related->id)->isNotEmpty() || $product->discount > 0)
                             <del>{{ $related->real_price }}</del>
                         @endif
-                        <ins>{{ $related->getpriceFormat(1) }}</ins>
+                        <ins>{{ $related->getPriceFormat(1) }}</ins>
                     </div>
                     <!-- <div class="product-rate">
                         <i class="fa fa-star"></i>
@@ -272,6 +280,7 @@
         <!--end: Shop products Carousel -->
     </div>
 </section>
+@endif
 <!-- end: SHOP WIDGET PRODUTCS -->
 
 <!-- DELIVERY INFO -->
@@ -321,8 +330,15 @@ function calculatePrice(form, qty) {
         success: function(data) {
             // let totalPrice = data * quantity;
             // let priceFormatted = formatCurrency(totalPrice);
-            let priceFormatted = data;
-            $('#product-price').html('<ins>'+priceFormatted+'</ins>');
+            let priceFormatted = data.price;
+            let realPriceFormatted = data.realPrice;
+            let html = '';
+            console.log()
+            if(realPriceFormatted != null) {
+                html += `<del>${realPriceFormatted}</del>`;
+            }
+            html += `<ins>${priceFormatted}</ins>`;
+            $('#product-price').html(html);
         },
         error: function(error) {
             console.log(error);

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,15 @@ class Subtestimonial extends Model
         else {
             return $url.'picture';
         }
+    }
+
+    public function getShortdescrAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getContentAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

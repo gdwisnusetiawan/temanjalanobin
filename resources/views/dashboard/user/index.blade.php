@@ -145,7 +145,7 @@
                                                 <input class="form-control" type="tel" name="telephone" placeholder="Enter your Telephone number" value="{{ $user->nohp }}" required>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn mt-3">Submit</button>
+                                        <button type="submit" class="btn mt-3">Update</button>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade {{ $tab == 'password' ? 'show active' : '' }}" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -211,7 +211,7 @@
                                     <form method="POST" action="{{ route('dashboard.user.billing', $user) }}">
                                         @csrf
                                         @method('PUT')
-                                        <div class="h5 mb-4">Mailing Address</div>
+                                        <div class="h5 mb-4">Address</div>
                                         @if($config->poslnr)
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
@@ -333,7 +333,7 @@
                                             </div>
                                         </div> -->
                                         <div class="mt-4">
-                                            <button type="submit" class="btn">Update Mailing</button>
+                                            <button type="submit" class="btn">Update</button>
                                         </div>
                                     </form>
                                 </div>

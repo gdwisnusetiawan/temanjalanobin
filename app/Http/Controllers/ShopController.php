@@ -35,6 +35,7 @@ class ShopController extends Controller
             return redirect()->route('shop.index', [$category, $product]);
         }
         $variants = $product->variants;
+        // dd($product->discount);
         $relateds = Product::where('category', $category->id)->where('id', '!=', $product->id)->limit(9)->get();
         // dd($product->category_model);
         return view('shop.single', compact('product', 'variants', 'relateds'));
@@ -53,10 +54,15 @@ class ShopController extends Controller
 
     public function pricing(Request $request, $id)
     {
-        $price = Product::find($id)->getUserPrice($request->quantity);
+        $product = Product::find($id);
+        $price = $product->getUserPrice($request->quantity);
         $totalPrice = $price * $request->quantity;
         $priceFormatted = Functions::currencyConvert($totalPrice);
+        $realPrice = null;
+        if(auth()->check() && auth()->user()->pricing($product->id)->isNotEmpty() || $product->discount > 0) {
+            $realPrice = $product->real_price;
+        }
         // $price = Product::find($id)->getUserPrice(11);
-        return response()->json($priceFormatted);
+        return response()->json(['price' => $priceFormatted, 'realPrice' => $realPrice]);
     }
 }

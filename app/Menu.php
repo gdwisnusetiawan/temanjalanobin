@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -41,6 +42,11 @@ class Menu extends Model
         return $this->slug ? route('page.index', $this->slug) : url($this->slug);
     }
 
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
     // public function getSubmenusAttribute()
     // {
     //     $submenuids = explode(',', $this->submenu);
@@ -67,6 +73,6 @@ class Menu extends Model
 
     public function hasCategory()
     {
-        return $this->isContains('title', ['belanja', 'shop', 'categories', 'tour']);
+        return $this->isContains('title', ['belanja', 'shop', 'categories', 'tour', 'kategori']) || $this->id == 2;
     }
 }

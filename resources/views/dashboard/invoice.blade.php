@@ -86,7 +86,9 @@
                         <h5 class="card-title">Invoice To:</h5>
                         <strong>{{ $user->fullname }}</strong> <br>
                         <!-- Shelby Company Limited <br> -->
+                        @if($payment->address_line != '')
                         {{ $payment->address_line }} <br>
+                        @endif
                         {{ $user->email }} <br>
                         {{ $user->nohp }} <br>
                     </div>
@@ -94,7 +96,9 @@
                         <h5 class="card-title">Payment Details:</h5>
                         <!-- Total Due: <strong>Rp1.000.000</strong> -->
                         <strong>{{ $config->name }}</strong> <br>
+                        @if($config->address_line != '')
                         {{ $config->address }} <br>
+                        @endif
                         {{ $config->email }} <br>
                         {{ $config->telp }} <br>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,5 +35,30 @@ class Slider extends Model
         else {
             return route('page.index', $column);
         }
+    }
+
+    public function getSlidertxtAttribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getButton1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getSliderlink1Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getButton2Attribute($value)
+    {
+        return Functions::translate($value);
+    }
+
+    public function getSliderlink2Attribute($value)
+    {
+        return Functions::translate($value);
     }
 }

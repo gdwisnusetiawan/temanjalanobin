@@ -25,6 +25,11 @@ class Review extends Model
         return $this->belongsTo('App\User', 'customerid', 'id');
     }
 
+    public function payment()
+    {
+        return $this->belongsTo('App\Payment', 'transactionno', 'transactionno');
+    }
+
     public function getDatetimeFormatAttribute()
     {
         return Functions::datetimeFormat($this->datetime);

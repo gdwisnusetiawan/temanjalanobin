@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Functions;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,7 +48,9 @@ class Video extends Model
             return asset('polo-5/images/other/youtube.gif');
         }
         elseif($this->youtube != null) {
-            return 'https://img.youtube.com/vi/'.$this->youtube.'/0.jpg';
+            $id_position = strpos($this->youtube, 'v=');
+            $youtube_id = substr($this->youtube, $id_position + 2);
+            return 'https://img.youtube.com/vi/'.$youtube_id.'/0.jpg';
         }
         else {
             return 'https://img.youtube.com/vi/S7SLep244ss/0.jpg';
@@ -62,5 +65,10 @@ class Video extends Model
         else {
             return 'youtube';
         }
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return Functions::translate($value);
     }
 }

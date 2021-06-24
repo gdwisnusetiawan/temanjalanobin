@@ -58,6 +58,7 @@
 
                                     <input type="hidden" name="productid" value="{{ $transaction->product->id }}">
                                     <input type="hidden" name="customerid" value="{{ $user->id }}">
+                                    <input type="hidden" name="transactionno" value="{{ $payment->transactionno }}">
                                     <input type="hidden" name="rating">
                                     <div class="form-group">
                                         <label for="review">Product</label>
@@ -65,13 +66,15 @@
                                     </div>
                                     <div class="form-group" id="product">
                                         <label for="review">Rating</label>
-                                        <div class="rateit" data-rateit-mode="font" data-productid="0" data-rateit-value="{{ $transaction->product->userReview($user)->rating ?? 0 }}"></div>
+                                        <div class="rateit" data-rateit-mode="font" data-productid="0" data-rateit-value="{{ $transaction->product->userReview($user, $payment)->rating ?? 0 }}" data-rateit-ispreset="{{ ($transaction->product->userReview($user, $payment)->approve ?? false) ? true : false }}" data-rateit-readonly="{{ ($transaction->product->userReview($user, $payment)->approve ?? false) ? true : false }}"></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="review">Review</label>
-                                        <textarea class="form-control" id="review" rows="3" name="content">{!! $transaction->product->userReview($user)->content ?? '' !!}</textarea>
+                                        <textarea class="form-control" id="review" rows="3" name="content" {{ ($transaction->product->userReview($user, $payment)->approve ?? false) ? 'readonly' : '' }}>{!! $transaction->product->userReview($user, $payment)->content ?? '' !!}</textarea>
                                     </div>
+                                    @if(!($transaction->product->userReview($user, $payment)->approve ?? false))
                                     <button type="submit" class="btn btn-primary">Kirim</button>
+                                    @endif
                                 </form>
                             </div>
                         </div>
@@ -98,7 +101,7 @@
         var value = ri.rateit('value');
         var productID = ri.data('productid'); // if the product id was in some hidden field: ri.closest('li').find('input[name="productid"]').val()
         //maybe we want to disable voting?
-        ri.rateit('readonly', true);
+        // ri.rateit('readonly', true);
         $('[name="rating"]').val(value);
         // $.ajax({
         //     // url: 'rateit.php', //your server side script
