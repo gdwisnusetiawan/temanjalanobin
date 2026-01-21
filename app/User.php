@@ -119,7 +119,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
+            'key' => env('RAJAONGKIR_API_KEY')
             ])->get('https://api.rajaongkir.com/starter/province?id='.$this->province);
         $result = json_decode($response->body())->rajaongkir->results;
         $province = '';
@@ -133,7 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
+            'key' => env('RAJAONGKIR_API_KEY')
             ])->get('https://api.rajaongkir.com/starter/city?id='.$this->city);
         $result = json_decode($response->body())->rajaongkir->results;
         $city = '';
@@ -147,7 +147,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
+            'key' => env('RAJAONGKIR_API_KEY')
             ])->get('https://pro.rajaongkir.com/api/v2/internationalDestination?id='.$this->country);
         $result = json_decode($response->body())->rajaongkir->results;
         $country = '';

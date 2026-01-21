@@ -11,7 +11,7 @@ class RajaOngkirController extends Controller
     {
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
+            'key' => env('RAJAONGKIR_API_KEY')
             ])->get('https://api.rajaongkir.com/starter/province?id='.$id);
         $result = json_decode($response->body())->rajaongkir->results;
         return response()->json($result);
@@ -21,7 +21,7 @@ class RajaOngkirController extends Controller
     {
         $response = Http::withHeaders([
             'content-type' => 'application/x-www-form-urlencoded',
-            'key' => 'a668420368d4731d3ca94321058bcea2'
+            'key' => env('RAJAONGKIR_API_KEY')
             ])->get('https://api.rajaongkir.com/starter/city?province='.$province.'&id='.$id);
         $result = json_decode($response->body())->rajaongkir->results;
         return response()->json($result);
@@ -31,7 +31,7 @@ class RajaOngkirController extends Controller
     {
         // $response = Http::withHeaders([
         //     'content-type' => 'application/x-www-form-urlencoded',
-        //     'key' => 'a668420368d4731d3ca94321058bcea2'
+        //     'key' => env('RAJAONGKIR_API_KEY')
         //     ])->get('https://api.rajaongkir.com/starter/province');
         // $result = json_decode($response->body())->rajaongkir->results;
         // dd($result);

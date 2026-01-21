@@ -187,7 +187,7 @@ class CartController extends Controller
         foreach($couriers as $courier) {
             $response = Http::withHeaders([
                 'content-type' => 'application/x-www-form-urlencoded',
-                'key' => 'a668420368d4731d3ca94321058bcea2'
+                'key' => env('RAJAONGKIR_API_KEY')
                 ])->asForm()->post('https://api.rajaongkir.com/starter/cost', [
                     'origin' => $request->origin,
                     'destination' => $request->destination,
